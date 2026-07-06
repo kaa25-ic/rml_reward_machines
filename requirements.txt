@@ -1,0 +1,14 @@
+gymnasium==0.28.1
+numpy==1.26.4
+PyYAML==6.0.3
+websocket_client==1.7.0
+
+# Training/evaluation dependencies used by DQN/PPO experiments.
+pandas==2.3.3
+stable_baselines3==2.3.2
+torch==2.2.0
+tqdm==4.67.0
+
+# Plotting/reporting dependencies used by experiment analysis scripts.
+matplotlib==3.8.2
+seaborn==0.13.2

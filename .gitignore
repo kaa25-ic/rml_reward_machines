@@ -1,0 +1,45 @@
+# macOS/editor files
+.DS_Store
+*.swp
+*.swo
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+build/
+dist/
+
+# Logs and temporary files
+*.log
+*.tmp
+tmp/
+
+# Experiment outputs and large artifacts
+results/
+**/results/
+runs/
+wandb/
+tensorboard/
+checkpoints/
+*.zip
+*.pkl
+*.pt
+*.pth
+*.onnx
+*.qlf
+
+# Local SWI-Prolog app bundles. Prefer installing swipl on PATH.
+SWI-Prolog.app/
+**/SWI-Prolog.app/
+
+# Generated native/prolog artifacts
+*.so
+*.dylib
