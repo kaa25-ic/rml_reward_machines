@@ -1,109 +1,98 @@
 # RML Reward Machines
 
-This repository is the clean, submission-ready version of the RML reward
-machine experiments. It is being rebuilt from the original research workspace
-in small reviewed stages so that the final code is independent, reproducible,
-and easy to back up.
+This repository contains reinforcement learning experiments with reward
+machines specified in RML. The project compares monitor-state encodings and
+training protocols across several environments, including LetterEnv,
+OfficeWorld, LunarLander, CSTR, and safety-oriented point environments.
 
-The original workspace is used only as source material. It should not be edited
-as part of this migration.
+The repository is organized to separate reusable implementation code from
+environment-specific experiments and reproduction scripts.
 
-## Current Status
-
-This repository currently contains only the top-level project metadata:
-
-- `README.md`
-- `pyproject.toml`
-- `requirements.txt`
-- `.gitignore`
-
-Code, environment packages, experiment scripts, tests, and curated results will
-be migrated in later reviewed stages.
-
-## Planned Repository Layout
+## Repository Layout
 
 ```text
 rml_reward_machines/
-  README.md
-  pyproject.toml
-  requirements.txt
-  .gitignore
-
-  rml_rm/
-    monitors/
-    encodings/
-    wrappers/
-    agents/
-    utils/
-
-  envs/
-    letterenv/
-    officeworld/
-    multitask_letterenv/
-    lunarlander/
-    cstr/
-    safety_point_button/
-    safety_point_goal/
-
-  scripts/
-  tests/
-  results/
-  legacy/
+  rml_rm/       # shared monitor, encoding, wrapper, agent, and utility code
+  envs/         # environment-specific packages and experiment entry points
+  scripts/      # cross-environment reproduction and analysis scripts
+  tests/        # smoke tests and regression tests
+  results/      # generated outputs, ignored by git
+  legacy/       # selected baseline code required for reproduction
 ```
 
-## Environment Setup
+The final repository tracks source code, configuration files, monitor
+specifications, tests, and documentation. Generated results, checkpoints, logs,
+and large local runtime bundles are excluded from version control.
 
-Create and activate a fresh Python environment from the repository root:
+## Python Setup
+
+Use Python 3.11. From the repository root:
 
 ```bash
-python3 -m venv .venv
+python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 python -m pip install -e .
 ```
 
-The Python dependencies are pinned in `requirements.txt` to match the research
-workspace as closely as possible.
+If `python3.11` is not available, install Python 3.11 first. On macOS with
+Homebrew:
+
+```bash
+brew install python@3.11
+```
 
 ## SWI-Prolog
 
-Some RML monitor workflows require SWI-Prolog. The preferred setup for a clean
-submission is to install SWI-Prolog system-wide so that `swipl` is available on
-the command line.
-
-On macOS, one option is Homebrew:
-
-```bash
-brew install swi-prolog
-```
-
-You can verify the installation with:
+RML monitor execution requires SWI-Prolog. The recommended setup is to install
+SWI-Prolog so that `swipl` is available on the command line:
 
 ```bash
 swipl --version
 ```
 
-For local offline work on macOS, a copy of `SWI-Prolog.app` may also be placed
-inside this repository, but it is intentionally ignored by git because it is a
-large platform-specific application bundle. The final submitted repository
-should document how to install SWI-Prolog rather than commit the app bundle.
+On macOS with Homebrew:
 
-## Results Policy
+```bash
+brew install swi-prolog
+```
 
-Generated experiment outputs, checkpoints, logs, and large result directories
-are ignored by git. Final figures, summary tables, and small manifest files may
-be committed later when they are curated and clearly tied to reproducible
-commands.
+For local macOS use, `SWI-Prolog.app` can be placed in the repository root or a
+documented runtime directory. The app bundle is ignored by git because it is
+large and platform-specific. Submitted code should remain portable and should
+not depend on committing `SWI-Prolog.app`.
 
-## Migration Policy
+## Running Experiments
 
-Migration is done in small checkpoints:
+Each environment package will provide its own README with:
 
-1. Create submission metadata and dependency files.
-2. Make the repository independent from the original workspace.
-3. Add local SWI-Prolog support without tracking the app bundle.
-4. Connect the repository to GitHub for regular backup.
-5. Migrate shared core code.
-6. Migrate environments and experiments one at a time.
-7. Add tests, reproduction commands, and final documentation.
+- environment description
+- required monitor specifications
+- training commands
+- evaluation commands
+- expected output locations
+
+Experiment outputs should be written under `results/` or an environment-local
+`results/` directory. These directories are ignored by git. Reproduction
+commands should be kept deterministic where possible and should expose seed
+arguments for repeated runs.
+
+## Results
+
+This repository does not track raw experiment outputs. Results should be
+regenerated from the submitted code. Final figures or compact summary tables may
+be added only when they are clearly documented and small enough for normal
+version control.
+
+## Development Checks
+
+After installing the environment, basic checks can be run with:
+
+```bash
+python -m pip check
+python -m pytest
+```
+
+Additional environment-specific smoke tests will be documented as the
+environment packages are added.
