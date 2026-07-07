@@ -81,6 +81,7 @@ results_and_evaluation/
     dqn/
     ddqn/
     ppo/
+  figures/
 ```
 
 Each neural run writes its own folder containing the run configuration, final
@@ -212,6 +213,30 @@ For multi-seed experiments, use one output folder per seed, for example
 `one_hot_n_1to5_seed0`, `one_hot_n_1to5_seed1`, and so on. A reproduction
 script will be added later to run the selected experiment batches from a single
 command.
+
+## Reproduction Scripts
+
+Selected experiment batches can be regenerated from the repository root using
+the scripts in `reproduction/`:
+
+```bash
+bash envs/letter_env/reproduction/run_ddqn_encodings.sh
+bash envs/letter_env/reproduction/run_dqn_baselines.sh
+bash envs/letter_env/reproduction/run_ppo_baselines.sh
+bash envs/letter_env/reproduction/run_zero_shot.sh
+bash envs/letter_env/reproduction/run_figures.sh
+```
+
+The full selected LetterEnv batch can be run with:
+
+```bash
+bash envs/letter_env/reproduction/run_all_selected.sh
+```
+
+The scripts write outputs to `results_and_evaluation/` using the same folder
+layout documented above. They do not delete existing results before running.
+For learned encodings, the canonical GRU and GNN checkpoints under
+`encoder_pretraining/` are used directly.
 
 ## Zero-Shot Evaluation
 
