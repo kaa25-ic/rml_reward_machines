@@ -25,6 +25,22 @@ tmp/
 # Experiment outputs and large artifacts
 results/
 **/results/
+results_and_evaluation/**
+**/results_and_evaluation/**
+!results_and_evaluation/**/
+!**/results_and_evaluation/**/
+!results_and_evaluation/**/eval_metrics.csv
+!**/results_and_evaluation/**/eval_metrics.csv
+!results_and_evaluation/**/train_metrics.csv
+!**/results_and_evaluation/**/train_metrics.csv
+!results_and_evaluation/**/summary.json
+!**/results_and_evaluation/**/summary.json
+!results_and_evaluation/**/config.json
+!**/results_and_evaluation/**/config.json
+!results_and_evaluation/**/monitor_train_config.yaml
+!**/results_and_evaluation/**/monitor_train_config.yaml
+!results_and_evaluation/**/monitor_eval_config.yaml
+!**/results_and_evaluation/**/monitor_eval_config.yaml
 runs/
 wandb/
 tensorboard/

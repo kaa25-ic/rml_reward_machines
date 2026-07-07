@@ -1,0 +1,35 @@
+{
+  "experiment": "letter_env_neural_zero_shot",
+  "created_at_utc": "2026-07-07T13:31:00.952129+00:00",
+  "runtime_seconds": 0.9815620830049738,
+  "algorithm": "ppo",
+  "encoding": "numerical",
+  "train_seed": 0,
+  "eval_n": 20,
+  "model_path": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ppo/numerical_n_1to5_seed0/model_final.zip",
+  "n_eval_episodes": 20,
+  "eval_seed_base": 0,
+  "max_episode_steps": 200,
+  "monitor_progress_bonus": 10.0,
+  "monitor_regression_penalty": 0.0,
+  "step_penalty": 0.05,
+  "aggregate": {
+    "algorithm": "ppo",
+    "encoding": "numerical",
+    "train_seed": 0,
+    "eval_n": 20,
+    "n_eval_episodes": 20,
+    "eval_mean_return": 337.2499999999999,
+    "eval_std_return": 5.684341886080802e-14,
+    "eval_mean_episode_length": 55.0,
+    "eval_success_rate": 1.0,
+    "eval_mean_terminal_base_reward": 1.0,
+    "eval_mean_terminal_task_progress": 23.0,
+    "eval_task_failure_rate": 0.0
+  },
+  "artifacts": {
+    "summary": "envs/letter_env/results_and_evaluation/generalization_experiments_with_zero_shot_on_larger_n/ppo/numerical_zeroshot_n20_seed0/summary.json",
+    "eval_metrics": "envs/letter_env/results_and_evaluation/generalization_experiments_with_zero_shot_on_larger_n/ppo/numerical_zeroshot_n20_seed0/eval_metrics.csv",
+    "episode_metrics": "envs/letter_env/results_and_evaluation/generalization_experiments_with_zero_shot_on_larger_n/ppo/numerical_zeroshot_n20_seed0/episode_metrics.csv"
+  }
+}

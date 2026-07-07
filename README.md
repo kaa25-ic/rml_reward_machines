@@ -73,10 +73,10 @@ Each environment package will provide its own README with:
 - evaluation commands
 - expected output locations
 
-Experiment outputs should be written under `results/` or an environment-local
-`results/` directory. These directories are ignored by git. Reproduction
-commands should be kept deterministic where possible and should expose seed
-arguments for repeated runs.
+Experiment outputs should be written under each environment's
+`results_and_evaluation/` directory. These directories are ignored by git.
+Reproduction commands should be kept deterministic where possible and should
+expose seed arguments for repeated runs.
 
 ## Results
 

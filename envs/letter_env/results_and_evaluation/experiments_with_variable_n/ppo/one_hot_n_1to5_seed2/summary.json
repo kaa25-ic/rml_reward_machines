@@ -1,0 +1,44 @@
+{
+  "completed_at_utc": "2026-07-06T19:38:33.862967+00:00",
+  "algorithm": "ppo",
+  "encoding": "one_hot",
+  "n_value": 5,
+  "fixed_n": null,
+  "total_timesteps": 500000,
+  "seed": 2,
+  "runtime_seconds": 406.2074924169865,
+  "timesteps_per_second": 1230.8980246152923,
+  "train_episodes_completed": 17409,
+  "train_mean_return": 149.31791602044922,
+  "train_mean_length": 29.173875581595727,
+  "evaluation_count": 25,
+  "best_evaluation": {
+    "training_steps": 160000,
+    "eval_mean_return": 176.86999999999998,
+    "eval_std_return": 11.962215513858634,
+    "eval_mean_episode_length": 22.6,
+    "eval_success_rate": 1.0,
+    "eval_mean_terminal_base_reward": 1.0,
+    "eval_mean_terminal_task_progress": 6.8,
+    "eval_task_failure_rate": 0.0
+  },
+  "final_evaluation": {
+    "training_steps": 500000,
+    "eval_mean_return": 176.86999999999998,
+    "eval_std_return": 11.962215513858634,
+    "eval_mean_episode_length": 22.6,
+    "eval_success_rate": 1.0,
+    "eval_mean_terminal_base_reward": 1.0,
+    "eval_mean_terminal_task_progress": 6.8,
+    "eval_task_failure_rate": 0.0
+  },
+  "artifacts": {
+    "config": "envs/letter_env/results_and_evaluation/experiments_with_n_1to5/ppo/one_hot_n_1to5_seed2/config.json",
+    "summary": "envs/letter_env/results_and_evaluation/experiments_with_n_1to5/ppo/one_hot_n_1to5_seed2/summary.json",
+    "final_model": "envs/letter_env/results_and_evaluation/experiments_with_n_1to5/ppo/one_hot_n_1to5_seed2/model_final.zip",
+    "best_model": "envs/letter_env/results_and_evaluation/experiments_with_n_1to5/ppo/one_hot_n_1to5_seed2/best_model.zip",
+    "train_monitor": "envs/letter_env/results_and_evaluation/experiments_with_n_1to5/ppo/one_hot_n_1to5_seed2/train_monitor.csv",
+    "eval_monitor": "envs/letter_env/results_and_evaluation/experiments_with_n_1to5/ppo/one_hot_n_1to5_seed2/eval_monitor.csv",
+    "eval_metrics": "envs/letter_env/results_and_evaluation/experiments_with_n_1to5/ppo/one_hot_n_1to5_seed2/eval_metrics.csv"
+  }
+}

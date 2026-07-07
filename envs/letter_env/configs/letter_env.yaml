@@ -1,0 +1,35 @@
+env_name: letter-env
+host: 127.0.0.1
+port: 8081
+max_episode_steps : 200
+variables:
+    - name: x
+      type: float
+      location: obs
+      identifier: 0
+    - name: yy 
+      type: float
+      location: obs
+      identifier: 1
+    - name: a
+      type: float
+      location: obs
+      identifier: 2
+    - name: b
+      type: float
+      location: obs
+      identifier: 3
+    - name: c
+      type: float
+      location: obs
+      identifier: 4
+    - name: d
+      type: float
+      location: obs
+      identifier: 5
+reward:
+      name: task
+      true: 100
+      currently_true: 100
+      currently_false: 0
+      false: -40
