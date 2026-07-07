@@ -6,6 +6,11 @@ samples or fixes a target sequence length `n`. The agent must complete the
 letter sequence while an RML monitor tracks progress through the task and
 provides the monitor state used by the observation encodings.
 
+The task is to visit letters in the order `A`, `B`, `C`, then `D` repeated
+`n` times. In compact form, the target sequence is `A B C D^n`. Episodes use
+variable `n` in the main training setting, with `n` sampled from 1 to 5 unless a
+fixed value is specified.
+
 This environment is used to compare tabular learning, DQN, Double DQN, and PPO
 under monitor-state encodings that expose the same reward-machine state in
 different forms.
@@ -20,8 +25,7 @@ The environment package contains:
 - `configs/letter_env.yaml`: the monitor runtime configuration template.
 - `configs/monitor_state_catalogue.json`: the monitor-state catalogue used by
   one-hot, numerical, and semantic progress encodings.
-- `specs/letter_env_spec_numerical_runtime_compatible.pl`: the RML monitor
-  specification used by the current experiments.
+- `specs/letter_env_monitor.pl`: the RML monitor specification.
 - `experiments/`: command-line entry points for training and evaluation.
 
 RML monitoring requires SWI-Prolog. Install the project and verify SWI-Prolog
@@ -50,20 +54,20 @@ The neural experiments use five monitor-state encodings:
 The tabular reproduction also includes `simple`, which is used for comparison
 with the baseline tabular state abstraction for this environment.
 
-The learned encoders are stored under
-`results_and_evaluation/encoder_pretraining/`. The canonical checkpoints used by
-the experiments are `gru_dim16_seed0/best_student.pt` and
-`gnn_basic_seed0/best_dynamics_encoder.pt`.
+Learned encoder checkpoints are stored under
+`results_and_evaluation/encoder_pretraining/`. The experiments use
+`gru_dim16_seed0/best_student.pt` for GRU encodings and
+`gnn_basic_seed0/best_dynamics_encoder.pt` for graph encodings.
 
 ## Experiment Groups
 
-Generated outputs should be written under:
+Generated outputs are written under:
 
 ```text
 envs/letter_env/results_and_evaluation/
 ```
 
-This directory is ignored by git. The current experiment layout is:
+The experiment layout is:
 
 ```text
 results_and_evaluation/
@@ -84,10 +88,9 @@ results_and_evaluation/
   figures/
 ```
 
-Each neural run writes its own folder containing the run configuration, final
-model checkpoint, monitor logs, training monitor CSVs, evaluation metrics, and
-summary JSON. Tabular reproduction runs write episode-level metrics and a
-summary JSON.
+Each neural run writes its own folder containing the run configuration, model
+checkpoint, monitor logs, training monitor CSVs, evaluation metrics, and summary
+JSON. Tabular reproduction runs write episode-level metrics and a summary JSON.
 
 ## Learned Encoder Pretraining
 
@@ -122,9 +125,9 @@ python -m envs.letter_env.experiments.train_gnn_encoder \
   --seed 0
 ```
 
-The generated datasets, full training logs, and noncanonical checkpoints are
-not required in git. The tracked checkpoint files are enough to rerun the
-learned-encoding RL experiments without repeating pretraining.
+The generated datasets and training logs document encoder pretraining. The GRU
+and graph checkpoints listed above are sufficient to rerun the learned-encoding
+RL experiments without repeating pretraining.
 
 ## Training
 
@@ -210,14 +213,12 @@ python -m envs.letter_env.experiments.train_tabular \
 ```
 
 For multi-seed experiments, use one output folder per seed, for example
-`one_hot_n_1to5_seed0`, `one_hot_n_1to5_seed1`, and so on. A reproduction
-script will be added later to run the selected experiment batches from a single
-command.
+`one_hot_n_1to5_seed0`, `one_hot_n_1to5_seed1`, and so on.
 
 ## Reproduction Scripts
 
-Selected experiment batches can be regenerated from the repository root using
-the scripts in `reproduction/`:
+Experiment batches can be regenerated from the repository root using the
+scripts in `reproduction/`:
 
 ```bash
 bash envs/letter_env/reproduction/run_ddqn_encodings.sh
@@ -227,16 +228,15 @@ bash envs/letter_env/reproduction/run_zero_shot.sh
 bash envs/letter_env/reproduction/run_figures.sh
 ```
 
-The full selected LetterEnv batch can be run with:
+The full LetterEnv reproduction batch can be run with:
 
 ```bash
 bash envs/letter_env/reproduction/run_all_selected.sh
 ```
 
-The scripts write outputs to `results_and_evaluation/` using the same folder
-layout documented above. They do not delete existing results before running.
-For learned encodings, the canonical GRU and GNN checkpoints under
-`encoder_pretraining/` are used directly.
+The scripts write outputs to `results_and_evaluation/` using the folder layout
+documented above. They do not delete existing results before running. Learned
+encoding runs use the GRU and GNN checkpoints under `encoder_pretraining/`.
 
 ## Zero-Shot Evaluation
 
@@ -272,9 +272,8 @@ runtime monitor configuration, and summary JSON.
 
 ## Tests And Smoke Checks
 
-Smoke checks should write to `/private/tmp` or another temporary location, not
-to `results_and_evaluation/`. This keeps repository-local results reserved for
-intentional experiment runs.
+Smoke checks can write to `/private/tmp` or another temporary location so that
+`results_and_evaluation/` remains reserved for full experiment outputs.
 
 Basic command checks:
 
@@ -286,6 +285,3 @@ python -m envs.letter_env.experiments.train_gru_encoder --help
 python -m envs.letter_env.experiments.train_gnn_encoder --help
 python -m envs.letter_env.experiments.evaluate_zero_shot --help
 ```
-
-Environment-specific tests will be added under a dedicated test directory once
-the final experiment set is fixed.

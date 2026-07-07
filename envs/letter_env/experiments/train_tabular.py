@@ -27,7 +27,7 @@ from rml_rm.wrappers import tabular_state_key
 REPO_ROOT = Path(__file__).resolve().parents[3]
 LETTER_ENV_ROOT = REPO_ROOT / "envs" / "letter_env"
 DEFAULT_MONITOR_CONFIG = LETTER_ENV_ROOT / "configs" / "letter_env.yaml"
-DEFAULT_MONITOR_SPEC = LETTER_ENV_ROOT / "specs" / "letter_env_spec_numerical_runtime_compatible.pl"
+DEFAULT_MONITOR_SPEC = LETTER_ENV_ROOT / "specs" / "letter_env_monitor.pl"
 EXPERIMENT_NAME = "tabular_reproduction_from_previous_thesis"
 DEFAULT_SUCCESS_REWARDS = (110.0, 112.0)
 
