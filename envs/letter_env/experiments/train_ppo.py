@@ -249,7 +249,16 @@ def _write_run_config(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--encoding", choices=["one_hot", "numerical", "simple"], default="numerical")
+    parser.add_argument(
+        "--encoding",
+        choices=[
+            "one_hot",
+            "numerical",
+            "semantic_progress",
+            "simple",
+        ],
+        default="numerical",
+    )
     parser.add_argument("--n-value", type=int, default=5)
     parser.add_argument("--fixed-n", type=int, default=None)
     parser.add_argument("--seed", type=int, default=0)

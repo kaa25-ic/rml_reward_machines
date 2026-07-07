@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import json
 from importlib import resources
+from pathlib import Path
 
 import numpy as np
 
+from rml_rm.encodings.frozen import FrozenGRUMonitorStateEncoder, FrozenGraphMonitorStateEncoder
 from rml_rm.encodings.monitor_state import (
     extract_events,
     extract_numerical_values,
@@ -14,7 +16,24 @@ from rml_rm.encodings.monitor_state import (
     replace_numerical_parts,
     split_top_level_factors,
 )
+from rml_rm.encodings.semantic_progress import SemanticPhase, SemanticProgressEncoder
 
+
+LETTER_ENV_ROOT = Path(__file__).resolve().parent
+DEFAULT_GRU_CHECKPOINT = (
+    LETTER_ENV_ROOT
+    / "results_and_evaluation"
+    / "encoder_pretraining"
+    / "gru_dim16_seed0"
+    / "best_student.pt"
+)
+DEFAULT_GRAPH_CHECKPOINT = (
+    LETTER_ENV_ROOT
+    / "results_and_evaluation"
+    / "encoder_pretraining"
+    / "gnn_basic_seed0"
+    / "best_dynamics_encoder.pt"
+)
 
 RUNTIME_COMPATIBLE_INITIAL_SIGNATURE = (
     "(star(not_abcd:eps)*var(n,(a_match(var(n)):eps)*app(gen([n],star(not_abcd:eps)*"
@@ -62,7 +81,12 @@ def load_letter_env_monitor_state_catalogue() -> dict[int, str]:
     return {int(key): str(value) for key, value in states.items()}
 
 
-def build_letter_env_monitor_encoding(encoding: str):
+def build_letter_env_monitor_encoding(
+    encoding: str,
+    *,
+    learned_gru_checkpoint: str | Path | None = None,
+    learned_graph_checkpoint: str | Path | None = None,
+):
     """Return encoder, initial state, and monitor space for LetterEnv."""
     if encoding == "simple":
         return None, 0, None
@@ -129,7 +153,118 @@ def build_letter_env_monitor_encoding(encoding: str):
             None,
         )
 
+    if encoding == "semantic_progress":
+        encoder = build_letter_env_semantic_progress_encoder(states_by_id)
+        return (
+            VectorMonitorStateEncoder(encoder),
+            encoder.encode_phase("waiting_for_a"),
+            None,
+        )
+
+    if encoding == "learned_gru":
+        encoder = FrozenGRUMonitorStateEncoder(learned_gru_checkpoint or DEFAULT_GRU_CHECKPOINT)
+        return (
+            VectorMonitorStateEncoder(encoder),
+            encoder(initial_state),
+            None,
+        )
+
+    if encoding == "learned_graph":
+        encoder = FrozenGraphMonitorStateEncoder(learned_graph_checkpoint or DEFAULT_GRAPH_CHECKPOINT)
+        return (
+            VectorMonitorStateEncoder(encoder),
+            encoder(initial_state),
+            None,
+        )
+
     raise ValueError(f"Unsupported LetterEnv monitor encoding: {encoding}")
+
+
+def build_letter_env_semantic_progress_encoder(
+    states_by_id: dict[int, str] | None = None,
+) -> SemanticProgressEncoder:
+    """Build the five-phase semantic progress encoder for LetterEnv."""
+    states_by_id = states_by_id or load_letter_env_monitor_state_catalogue()
+    signatures_by_phase = _letter_env_semantic_phase_signatures(states_by_id)
+    return SemanticProgressEncoder(
+        (
+            SemanticPhase(
+                "waiting_for_a",
+                _matches_signature(signatures_by_phase["waiting_for_a"]),
+            ),
+            SemanticPhase(
+                "waiting_for_b",
+                _matches_signature(signatures_by_phase["waiting_for_b"]),
+            ),
+            SemanticPhase(
+                "waiting_for_c",
+                _matches_signature(signatures_by_phase["waiting_for_c"]),
+            ),
+            SemanticPhase(
+                "waiting_for_d",
+                _matches_signature(signatures_by_phase["waiting_for_d"]),
+            ),
+            SemanticPhase("terminal_or_failure", _matches_terminal_state),
+        )
+    )
+
+
+def _letter_env_semantic_phase_signatures(
+    states_by_id: dict[int, str],
+) -> dict[str, set[tuple[str, ...]]]:
+    phase_state_ids = {
+        "waiting_for_a": (0,),
+        "waiting_for_b": (1, 2, 3, 4, 5, 6, 7, 8, 22, 23),
+        "waiting_for_c": (10, 11, 12, 13, 16, 17, 20, 21, 24, 25),
+        "waiting_for_d": (
+            14,
+            15,
+            18,
+            19,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            35,
+            36,
+            37,
+        ),
+    }
+    signatures_by_phase = {
+        phase: {tuple(extract_events(states_by_id[state_id])) for state_id in state_ids}
+        for phase, state_ids in phase_state_ids.items()
+    }
+    signatures_by_phase["waiting_for_a"].add(
+        tuple(extract_events(RUNTIME_COMPATIBLE_INITIAL_SIGNATURE))
+    )
+    signatures_by_phase["waiting_for_b"].update(
+        {
+            tuple(extract_events(RUNTIME_COMPATIBLE_B_APP_SIGNATURE)),
+            tuple(extract_events(RUNTIME_COMPATIBLE_B_STAR_SIGNATURE)),
+        }
+    )
+    signatures_by_phase["waiting_for_c"].add(
+        tuple(extract_events(RUNTIME_COMPATIBLE_C_SIGNATURE))
+    )
+    signatures_by_phase["waiting_for_d"].add(
+        tuple(extract_events(RUNTIME_COMPATIBLE_D_SIGNATURE))
+    )
+    return signatures_by_phase
+
+
+def _matches_signature(signatures: set[tuple[str, ...]]):
+    def matches(monitor_state: str) -> bool:
+        return tuple(extract_events(monitor_state)) in signatures
+
+    return matches
+
+
+def _matches_terminal_state(monitor_state: str) -> bool:
+    return normalize_monitor_state(monitor_state) in {"1", "false_verdict"}
 
 
 def _add_runtime_compatible_one_hot_aliases(

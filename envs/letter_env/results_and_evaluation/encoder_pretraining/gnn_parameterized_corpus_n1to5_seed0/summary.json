@@ -1,0 +1,20 @@
+{
+  "artifacts": {
+    "config": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_parameterized_corpus_n1to5_seed0/config.json",
+    "corpus": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_parameterized_corpus_n1to5_seed0/monitor_states.jsonl",
+    "summary": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_parameterized_corpus_n1to5_seed0/summary.json"
+  },
+  "corpus_path": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_parameterized_corpus_n1to5_seed0/monitor_states.jsonl",
+  "failed_traces": 20,
+  "max_count": 5,
+  "num_rows": 1435,
+  "num_templates": 4,
+  "num_unique_monitor_states": 155,
+  "num_unique_normalized_monitor_states": 76,
+  "verdict_counts": {
+    "False": 20,
+    "True": 20,
+    "currently_false": 1335,
+    "currently_true": 60
+  }
+}

@@ -49,6 +49,8 @@ checkpoints/
 *.pkl
 *.pt
 *.pth
+!envs/letter_env/results_and_evaluation/encoder_pretraining/gru_dim16_seed0/best_student.pt
+!envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_basic_seed0/best_dynamics_encoder.pt
 *.onnx
 *.qlf
 

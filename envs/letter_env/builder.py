@@ -25,6 +25,8 @@ class LetterEnvConfig:
     """Configuration for the cleaned LetterEnv environment stack."""
 
     encoding: str = "one_hot"
+    learned_gru_checkpoint: str | Path | None = None
+    learned_graph_checkpoint: str | Path | None = None
     n_value: int = 1
     fixed_n: int | None = None
     task_prefix: str = "ABC"
@@ -143,7 +145,9 @@ def build_letter_env(config: LetterEnvConfig, *, monitor_config_path: str | Path
         raw_env = FixedLetterNWrapper(raw_env, fixed_n=config.fixed_n)
 
     monitor_encoder, initial_monitor_state, monitor_space = build_letter_env_monitor_encoding(
-        config.encoding
+        config.encoding,
+        learned_gru_checkpoint=config.learned_gru_checkpoint,
+        learned_graph_checkpoint=config.learned_graph_checkpoint,
     )
     env: gym.Env = RMLMonitorWrapper(
         PropositionVectorObservation(raw_env),

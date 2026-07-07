@@ -1,0 +1,69 @@
+{
+  "config": {
+    "dataset_path": "envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_parameterized_corpus_n1to5_seed0/monitor_states.jsonl",
+    "output_dir": "envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_basic_seed0",
+    "seed": 0,
+    "epochs": 80,
+    "batch_size": 128,
+    "learning_rate": 0.001,
+    "weight_decay": 1e-05,
+    "validation_fraction": 0.2,
+    "max_grad_norm": 5.0,
+    "node_embedding_dim": 32,
+    "hidden_dim": 64,
+    "output_dim": 32,
+    "num_layers": 2,
+    "dropout": 0.0,
+    "event_embedding_dim": 16,
+    "phase_loss_weight": 1.0,
+    "device": "auto"
+  },
+  "dataset": {
+    "path": "envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_parameterized_corpus_n1to5_seed0/monitor_states.jsonl",
+    "source_format": "monitor_corpus",
+    "examples": 1270,
+    "train_examples": 1016,
+    "validation_examples": 254
+  },
+  "graph": {
+    "node_value_embedding_dim": 0,
+    "num_node_kinds": 8,
+    "num_node_values": 31,
+    "num_edge_types": 5,
+    "event_vocab": {
+      "<UNK>": 0,
+      "A": 1,
+      "_": 2,
+      "B": 3,
+      "C": 4,
+      "D": 5
+    },
+    "phase_vocab": {
+      "<UNK>": 0,
+      "B": 1,
+      "C": 2,
+      "A": 3
+    }
+  },
+  "best": {
+    "epoch": 78,
+    "val_loss": 0.0968682162874327,
+    "encoder_path": "envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_basic_seed0/best_dynamics_encoder.pt"
+  },
+  "final_metrics": {
+    "epoch": 80,
+    "train_loss": 0.07928229152686952,
+    "train_transition_accuracy": 0.9714566929133859,
+    "train_phase_accuracy": 1.0,
+    "val_loss": 0.1020327877458625,
+    "val_transition_accuracy": 0.9566929133858267,
+    "val_phase_accuracy": 1.0
+  },
+  "artifacts": {
+    "config": "envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_basic_seed0/config.json",
+    "best_encoder": "envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_basic_seed0/best_dynamics_encoder.pt",
+    "final_encoder": "envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_basic_seed0/dynamics_encoder_final.pt",
+    "metrics": "envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_basic_seed0/metrics.jsonl",
+    "summary": "envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_basic_seed0/summary.json"
+  }
+}

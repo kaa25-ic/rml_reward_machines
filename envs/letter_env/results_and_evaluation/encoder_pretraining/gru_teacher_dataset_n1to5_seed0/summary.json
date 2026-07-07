@@ -1,0 +1,40 @@
+{
+  "created_at_utc": "2026-07-07T15:48:47.878388+00:00",
+  "runtime_seconds": 5.637049792014295,
+  "dataset_path": "envs/letter_env/results_and_evaluation/encoder_pretraining/gru_teacher_dataset_n1to5_seed0/dataset.jsonl",
+  "rows": 8644,
+  "config": {
+    "teacher_model_path": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/numerical_n_1to5_seed0/model_final.zip",
+    "output_dir": "envs/letter_env/results_and_evaluation/encoder_pretraining/gru_teacher_dataset_n1to5_seed0",
+    "n_value": 5,
+    "fixed_n": null,
+    "greedy_episodes": 200,
+    "epsilon_episodes": 200,
+    "epsilon": 0.05,
+    "seed": 0,
+    "max_episode_steps": 200,
+    "monitor_progress_bonus": 10.0,
+    "monitor_regression_penalty": 0.0
+  },
+  "splits": [
+    {
+      "split": "greedy",
+      "episodes": 200,
+      "rows": 4252,
+      "successes": 200,
+      "success_rate": 1.0
+    },
+    {
+      "split": "epsilon",
+      "episodes": 200,
+      "rows": 4392,
+      "successes": 190,
+      "success_rate": 0.95
+    }
+  ],
+  "artifacts": {
+    "dataset": "envs/letter_env/results_and_evaluation/encoder_pretraining/gru_teacher_dataset_n1to5_seed0/dataset.jsonl",
+    "summary": "envs/letter_env/results_and_evaluation/encoder_pretraining/gru_teacher_dataset_n1to5_seed0/summary.json",
+    "monitor_config": "envs/letter_env/results_and_evaluation/encoder_pretraining/gru_teacher_dataset_n1to5_seed0/monitor_dataset_config.yaml"
+  }
+}

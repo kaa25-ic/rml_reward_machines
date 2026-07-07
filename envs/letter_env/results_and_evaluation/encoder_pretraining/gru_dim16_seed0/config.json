@@ -1,0 +1,24 @@
+{
+  "experiment": "letter_env_gru_distillation",
+  "config": {
+    "dataset_path": "envs/letter_env/results_and_evaluation/encoder_pretraining/gru_teacher_dataset_n1to5_seed0/dataset.jsonl",
+    "output_dir": "envs/letter_env/results_and_evaluation/encoder_pretraining/gru_dim16_seed0",
+    "seed": 0,
+    "max_len": 192,
+    "token_dim": 32,
+    "hidden_dim": 64,
+    "monitor_embedding_dim": 16,
+    "batch_size": 1024,
+    "epochs": 60,
+    "learning_rate": 0.001,
+    "weight_decay": 1e-05,
+    "action_loss_weight": 0.1,
+    "stage_loss_weight": 0.5,
+    "count_loss_weight": 0.1,
+    "projection_activation": "tanh",
+    "validation_fraction": 0.15,
+    "normalize_numbers": false,
+    "max_grad_norm": 10.0,
+    "device": "auto"
+  }
+}

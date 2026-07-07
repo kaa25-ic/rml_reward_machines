@@ -43,6 +43,29 @@ def configure_global_seed(seed: int | None) -> None:
     np.random.seed(seed)
 
 
+def configure_torch_seed(seed: int | None) -> None:
+    """Configure Python, NumPy, and PyTorch random seeds."""
+    configure_global_seed(seed)
+    if seed is None:
+        return
+    import torch
+
+    torch.manual_seed(seed)
+
+
+def resolve_torch_device(device_name: str):
+    """Resolve an auto/cpu/cuda/mps device string for PyTorch code."""
+    import torch
+
+    if device_name == "auto":
+        if torch.cuda.is_available():
+            return torch.device("cuda")
+        if getattr(torch.backends, "mps", None) is not None and torch.backends.mps.is_available():
+            return torch.device("mps")
+        return torch.device("cpu")
+    return torch.device(device_name)
+
+
 def utc_now() -> str:
     """Return the current UTC timestamp in ISO format."""
     return datetime.now(timezone.utc).isoformat()
@@ -51,6 +74,14 @@ def utc_now() -> str:
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     """Write JSON after converting common non-JSON values."""
     path.write_text(json.dumps(json_ready(payload), indent=2), encoding="utf-8")
+
+
+def write_jsonl(path: Path, rows: list[dict[str, Any]], *, sort_keys: bool = False) -> None:
+    """Write JSON lines after converting common non-JSON values."""
+    path.write_text(
+        "".join(json.dumps(json_ready(row), sort_keys=sort_keys) + "\n" for row in rows),
+        encoding="utf-8",
+    )
 
 
 def json_ready(value: Any) -> Any:

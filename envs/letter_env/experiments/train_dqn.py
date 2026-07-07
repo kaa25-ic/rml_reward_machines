@@ -42,6 +42,8 @@ class LetterEnvDQNTrainingConfig:
 
     algorithm: str = "ddqn"
     encoding: str = "numerical"
+    learned_gru_checkpoint: Path | None = None
+    learned_graph_checkpoint: Path | None = None
     n_value: int = 5
     fixed_n: int | None = None
     total_timesteps: int = 500_000
@@ -50,7 +52,7 @@ class LetterEnvDQNTrainingConfig:
     buffer_size: int = 100_000
     learning_starts: int = 5_000
     batch_size: int = 64
-    gamma: float = 0.99
+    gamma: float = 0.9
     tau: float = 1.0
     train_freq: int = 4
     gradient_steps: int = 1
@@ -63,7 +65,7 @@ class LetterEnvDQNTrainingConfig:
     eval_seed_base: int = 0
     max_episode_steps: int = 200
     monitor_progress_bonus: float = 10.0
-    monitor_regression_penalty: float = -10.0
+    monitor_regression_penalty: float = 0.0
     neutralize_legacy_transition_bonus: bool = True
     legacy_transition_bonus: float = 10.0
     step_penalty: float = 0.0
@@ -220,6 +222,8 @@ def train_letter_env_dqn(
 def _env_config(config: LetterEnvDQNTrainingConfig, *, evaluation: bool) -> LetterEnvConfig:
     return LetterEnvConfig(
         encoding=config.encoding,
+        learned_gru_checkpoint=config.learned_gru_checkpoint,
+        learned_graph_checkpoint=config.learned_graph_checkpoint,
         n_value=config.n_value,
         fixed_n=config.fixed_n,
         max_episode_steps=config.max_episode_steps,
@@ -259,8 +263,21 @@ def _write_run_config(
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--algorithm", choices=["dqn", "ddqn"], default="ddqn")
-    parser.add_argument("--encoding", choices=["one_hot", "numerical", "simple"], default="numerical")
+    parser.add_argument(
+        "--encoding",
+        choices=[
+            "one_hot",
+            "numerical",
+            "semantic_progress",
+            "learned_gru",
+            "learned_graph",
+            "simple",
+        ],
+        default="numerical",
+    )
     parser.add_argument("--n-value", type=int, default=5)
+    parser.add_argument("--learned-gru-checkpoint", type=Path, default=None)
+    parser.add_argument("--learned-graph-checkpoint", type=Path, default=None)
     parser.add_argument("--fixed-n", type=int, default=None)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--output-dir", type=Path, required=True)
@@ -269,7 +286,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--buffer-size", type=int, default=100_000)
     parser.add_argument("--learning-starts", type=int, default=5_000)
     parser.add_argument("--batch-size", type=int, default=64)
-    parser.add_argument("--gamma", type=float, default=0.99)
+    parser.add_argument("--gamma", type=float, default=0.9)
     parser.add_argument("--tau", type=float, default=1.0)
     parser.add_argument("--train-freq", type=int, default=4)
     parser.add_argument("--gradient-steps", type=int, default=1)
@@ -282,7 +299,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--eval-seed-base", type=int, default=0)
     parser.add_argument("--max-episode-steps", type=int, default=200)
     parser.add_argument("--monitor-progress-bonus", type=float, default=10.0)
-    parser.add_argument("--monitor-regression-penalty", type=float, default=-10.0)
+    parser.add_argument("--monitor-regression-penalty", type=float, default=0.0)
     parser.add_argument("--legacy-transition-bonus", type=float, default=10.0)
     parser.add_argument("--include-legacy-transition-bonus", action="store_true")
     parser.add_argument("--step-penalty", type=float, default=0.0)
@@ -300,6 +317,8 @@ def main() -> None:
     config = LetterEnvDQNTrainingConfig(
         algorithm=args.algorithm,
         encoding=args.encoding,
+        learned_gru_checkpoint=args.learned_gru_checkpoint,
+        learned_graph_checkpoint=args.learned_graph_checkpoint,
         n_value=args.n_value,
         fixed_n=args.fixed_n,
         total_timesteps=args.total_timesteps,

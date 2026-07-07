@@ -1,0 +1,16 @@
+{
+  "experiment": "letter_env_gru_teacher_dataset",
+  "config": {
+    "teacher_model_path": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/numerical_n_1to5_seed0/model_final.zip",
+    "output_dir": "envs/letter_env/results_and_evaluation/encoder_pretraining/gru_teacher_dataset_n1to5_seed0",
+    "n_value": 5,
+    "fixed_n": null,
+    "greedy_episodes": 200,
+    "epsilon_episodes": 200,
+    "epsilon": 0.05,
+    "seed": 0,
+    "max_episode_steps": 200,
+    "monitor_progress_bonus": 10.0,
+    "monitor_regression_penalty": 0.0
+  }
+}

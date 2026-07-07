@@ -70,6 +70,8 @@ def evaluate_zero_shot(
     train_seed: int,
     eval_n: int,
     model_path: Path,
+    learned_gru_checkpoint: Path | None,
+    learned_graph_checkpoint: Path | None,
     output_dir: Path,
     n_eval_episodes: int,
     eval_seed_base: int,
@@ -103,6 +105,8 @@ def evaluate_zero_shot(
         env = build_letter_env(
             LetterEnvConfig(
                 encoding=encoding,
+                learned_gru_checkpoint=learned_gru_checkpoint,
+                learned_graph_checkpoint=learned_graph_checkpoint,
                 n_value=eval_n,
                 fixed_n=eval_n,
                 max_episode_steps=max_episode_steps,
@@ -148,6 +152,8 @@ def evaluate_zero_shot(
         "train_seed": train_seed,
         "eval_n": eval_n,
         "model_path": str(model_path),
+        "learned_gru_checkpoint": str(learned_gru_checkpoint) if learned_gru_checkpoint else None,
+        "learned_graph_checkpoint": str(learned_graph_checkpoint) if learned_graph_checkpoint else None,
         "n_eval_episodes": n_eval_episodes,
         "eval_seed_base": eval_seed_base,
         "max_episode_steps": max_episode_steps,
@@ -299,10 +305,22 @@ def _scalar_action(action) -> int:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--algorithm", choices=["dqn", "ddqn", "ppo"], required=True)
-    parser.add_argument("--encoding", choices=["one_hot", "numerical"], required=True)
+    parser.add_argument(
+        "--encoding",
+        choices=[
+            "one_hot",
+            "numerical",
+            "semantic_progress",
+            "learned_gru",
+            "learned_graph",
+        ],
+        required=True,
+    )
     parser.add_argument("--train-seed", type=int, default=0)
     parser.add_argument("--eval-n", type=int, required=True)
     parser.add_argument("--model-path", type=Path, required=True)
+    parser.add_argument("--learned-gru-checkpoint", type=Path, default=None)
+    parser.add_argument("--learned-graph-checkpoint", type=Path, default=None)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--n-eval-episodes", type=int, default=20)
     parser.add_argument("--eval-seed-base", type=int, default=0)
@@ -321,6 +339,8 @@ def main() -> None:
         train_seed=args.train_seed,
         eval_n=args.eval_n,
         model_path=args.model_path,
+        learned_gru_checkpoint=args.learned_gru_checkpoint,
+        learned_graph_checkpoint=args.learned_graph_checkpoint,
         output_dir=args.output_dir,
         n_eval_episodes=args.n_eval_episodes,
         eval_seed_base=args.eval_seed_base,
