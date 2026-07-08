@@ -1,0 +1,44 @@
+{
+  "completed_at_utc": "2026-07-08T12:09:46.428721+00:00",
+  "algorithm": "ddqn",
+  "encoding": "hidden_monitor_state",
+  "n_value": 5,
+  "fixed_n": null,
+  "total_timesteps": 500000,
+  "seed": 1,
+  "runtime_seconds": 585.1831662080076,
+  "timesteps_per_second": 854.4333276707268,
+  "train_episodes_completed": 39730,
+  "train_mean_return": -22.314875409010824,
+  "train_mean_length": 12.584898061917945,
+  "evaluation_count": 25,
+  "best_evaluation": {
+    "training_steps": 20000,
+    "eval_mean_return": -20.0,
+    "eval_std_return": 0.0,
+    "eval_mean_episode_length": 10.0,
+    "eval_success_rate": 0.0,
+    "eval_mean_terminal_base_reward": 0.0,
+    "eval_mean_terminal_task_progress": 2.0,
+    "eval_task_failure_rate": 1.0
+  },
+  "final_evaluation": {
+    "training_steps": 500000,
+    "eval_mean_return": -20.0,
+    "eval_std_return": 0.0,
+    "eval_mean_episode_length": 10.0,
+    "eval_success_rate": 0.0,
+    "eval_mean_terminal_base_reward": 0.0,
+    "eval_mean_terminal_task_progress": 2.0,
+    "eval_task_failure_rate": 1.0
+  },
+  "artifacts": {
+    "config": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/hidden_monitor_state_n_1to5_seed1/config.json",
+    "summary": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/hidden_monitor_state_n_1to5_seed1/summary.json",
+    "final_model": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/hidden_monitor_state_n_1to5_seed1/model_final.zip",
+    "best_model": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/hidden_monitor_state_n_1to5_seed1/best_model.zip",
+    "train_monitor": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/hidden_monitor_state_n_1to5_seed1/train_monitor.csv",
+    "eval_monitor": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/hidden_monitor_state_n_1to5_seed1/eval_monitor.csv",
+    "eval_metrics": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/hidden_monitor_state_n_1to5_seed1/eval_metrics.csv"
+  }
+}
