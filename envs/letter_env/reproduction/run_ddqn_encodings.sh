@@ -9,7 +9,7 @@ require_file "${GRU_CHECKPOINT}"
 require_file "${GNN_CHECKPOINT}"
 
 for seed in 0 1 2 3 4; do
-  for encoding in numerical one_hot semantic_progress learned_gru learned_graph; do
+  for encoding in numerical one_hot semantic_progress learned_gru learned_graph hidden_monitor_state; do
     output_dir="${RESULTS_DIR}/experiments_with_variable_n/ddqn/${encoding}_n_1to5_seed${seed}"
     extra_args=()
     if [[ "${encoding}" == "learned_gru" ]]; then

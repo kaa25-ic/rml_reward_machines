@@ -26,7 +26,21 @@ DEFAULT_RESULTS_DIR = LETTER_ENV_ROOT / "results_and_evaluation"
 DEFAULT_OUTPUT_DIR = DEFAULT_RESULTS_DIR / "figures"
 
 ALGORITHM_ORDER = ["dqn", "ddqn", "ppo"]
-ENCODING_ORDER = ["numerical", "one_hot", "semantic_progress", "learned_gru", "learned_graph"]
+ENCODING_ORDER = [
+    "numerical",
+    "one_hot",
+    "semantic_progress",
+    "learned_gru",
+    "learned_graph",
+    "hidden_monitor_state",
+]
+FIGURE_NAMES = (
+    "learning_by_algorithm",
+    "learning_by_encoding",
+    "sample_efficiency",
+    "zero_shot_success",
+    "zero_shot_episode_length",
+)
 ZERO_SHOT_N_VALUES = [10, 15, 20]
 
 ALGORITHM_LABELS = {
@@ -40,6 +54,7 @@ ENCODING_LABELS = {
     "semantic_progress": "Semantic progress",
     "learned_gru": "Learned GRU",
     "learned_graph": "Learned GNN",
+    "hidden_monitor_state": "Hidden monitor",
 }
 COLORS = {
     "dqn": "#4C78A8",
@@ -50,6 +65,7 @@ COLORS = {
     "semantic_progress": "#54A24B",
     "learned_gru": "#B279A2",
     "learned_graph": "#E45756",
+    "hidden_monitor_state": "#79706E",
 }
 MARKERS = {
     "dqn": "o",
@@ -60,6 +76,7 @@ MARKERS = {
     "semantic_progress": "^",
     "learned_gru": "D",
     "learned_graph": "P",
+    "hidden_monitor_state": "X",
 }
 
 
@@ -70,6 +87,7 @@ class FigureConfig:
     formats: tuple[str, ...]
     success_threshold: float
     max_learning_steps: int
+    figures: tuple[str, ...]
 
 
 def main() -> None:
@@ -78,18 +96,23 @@ def main() -> None:
     config.output_dir.mkdir(parents=True, exist_ok=True)
 
     learning = load_learning_metrics(config.results_dir)
-    zero_shot = load_zero_shot_metrics(config.results_dir)
+    zero_shot = load_zero_shot_metrics(config.results_dir) if _needs_zero_shot(config.figures) else pd.DataFrame()
 
     if learning.empty:
         raise FileNotFoundError(f"No learning eval_metrics.csv files found under {config.results_dir}")
-    if zero_shot.empty:
+    if _needs_zero_shot(config.figures) and zero_shot.empty:
         raise FileNotFoundError(f"No zero-shot eval_metrics.csv files found under {config.results_dir}")
 
-    plot_learning_by_algorithm(learning, config)
-    plot_learning_by_encoding(learning, config)
-    plot_sample_efficiency(learning, config)
-    plot_zero_shot_success(zero_shot, config)
-    plot_zero_shot_episode_length(zero_shot, config)
+    if "learning_by_algorithm" in config.figures:
+        plot_learning_by_algorithm(learning, config)
+    if "learning_by_encoding" in config.figures:
+        plot_learning_by_encoding(learning, config)
+    if "sample_efficiency" in config.figures:
+        plot_sample_efficiency(learning, config)
+    if "zero_shot_success" in config.figures:
+        plot_zero_shot_success(zero_shot, config)
+    if "zero_shot_episode_length" in config.figures:
+        plot_zero_shot_episode_length(zero_shot, config)
 
     print(f"Wrote figures to {config.output_dir}")
 
@@ -101,6 +124,7 @@ def parse_args() -> FigureConfig:
     parser.add_argument("--formats", nargs="+", default=("pdf", "png"), choices=("pdf", "png", "svg"))
     parser.add_argument("--success-threshold", type=float, default=0.9)
     parser.add_argument("--max-learning-steps", type=int, default=250000)
+    parser.add_argument("--figures", nargs="+", default=FIGURE_NAMES, choices=FIGURE_NAMES)
     args = parser.parse_args()
     return FigureConfig(
         results_dir=args.results_dir,
@@ -108,7 +132,12 @@ def parse_args() -> FigureConfig:
         formats=tuple(args.formats),
         success_threshold=float(args.success_threshold),
         max_learning_steps=int(args.max_learning_steps),
+        figures=tuple(args.figures),
     )
+
+
+def _needs_zero_shot(figures: tuple[str, ...]) -> bool:
+    return any(name.startswith("zero_shot") for name in figures)
 
 
 def configure_style() -> None:
@@ -345,6 +374,7 @@ def compute_sample_efficiency(learning: pd.DataFrame, *, threshold: float) -> pd
         ("ddqn", "semantic_progress"),
         ("ddqn", "learned_gru"),
         ("ddqn", "learned_graph"),
+        ("ddqn", "hidden_monitor_state"),
         ("ppo", "numerical"),
         ("ppo", "one_hot"),
     ]

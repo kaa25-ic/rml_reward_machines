@@ -91,6 +91,10 @@ def build_letter_env_monitor_encoding(
     if encoding == "simple":
         return None, 0, None
 
+    if encoding == "hidden_monitor_state":
+        hidden_state = np.zeros(1, dtype=np.float32)
+        return VectorMonitorStateEncoder(lambda state: hidden_state.copy()), hidden_state, None
+
     states_by_id = load_letter_env_monitor_state_catalogue()
     states = list(states_by_id.values())
     initial_state = states_by_id[0]

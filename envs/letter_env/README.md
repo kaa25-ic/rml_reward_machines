@@ -39,7 +39,7 @@ swipl --version
 
 ## Encodings
 
-The neural experiments use five monitor-state encodings:
+The neural experiments use six monitor-state encodings:
 
 - `one_hot`: a one-hot vector derived directly from the RML monitor state.
 - `numerical`: a compact numerical representation derived from the RML monitor
@@ -50,6 +50,8 @@ The neural experiments use five monitor-state encodings:
   teacher dataset collected from a trained LetterEnv policy.
 - `learned_graph`: a frozen 32-dimensional graph encoder trained from
   parameterized RML monitor-transition data.
+- `hidden_monitor_state`: a constant monitor-state vector. The RML monitor and
+  its rewards remain active, but the policy does not observe monitor progress.
 
 The tabular reproduction also includes `simple`, which is used for comparison
 with the baseline tabular state abstraction for this environment.
@@ -180,6 +182,28 @@ python -m envs.letter_env.experiments.train_dqn \
   --seed 0 \
   --output-dir envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/learned_graph_n_1to5_seed0 \
   --total-timesteps 500000
+```
+
+Example Double DQN run with the hidden monitor-state ablation:
+
+```bash
+python -m envs.letter_env.experiments.train_dqn \
+  --algorithm ddqn \
+  --encoding hidden_monitor_state \
+  --n-value 5 \
+  --seed 0 \
+  --output-dir envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/hidden_monitor_state_n_1to5_seed0 \
+  --total-timesteps 500000 \
+  --learning-rate 0.001 \
+  --buffer-size 100000 \
+  --learning-starts 5000 \
+  --batch-size 64 \
+  --gamma 0.9 \
+  --exploration-fraction 0.4 \
+  --eval-freq 20000 \
+  --n-eval-episodes 20 \
+  --monitor-progress-bonus 10 \
+  --monitor-regression-penalty 0
 ```
 
 Example PPO run:

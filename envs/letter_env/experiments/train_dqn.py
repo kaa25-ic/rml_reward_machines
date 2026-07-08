@@ -271,6 +271,7 @@ def parse_args() -> argparse.Namespace:
             "semantic_progress",
             "learned_gru",
             "learned_graph",
+            "hidden_monitor_state",
             "simple",
         ],
         default="numerical",
