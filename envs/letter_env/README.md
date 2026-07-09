@@ -19,7 +19,7 @@ different forms.
 
 The environment package contains:
 
-- `env.py`: the Gymnasium-compatible LetterEnv implementation.
+- `env.py`: the single-task LetterEnv task definition for `A B C D^n`.
 - `builder.py`: environment construction helpers used by training scripts.
 - `encodings.py`: LetterEnv observation and monitor-state encoding helpers.
 - `configs/letter_env.yaml`: the monitor runtime configuration template.
@@ -27,6 +27,20 @@ The environment package contains:
   one-hot, numerical, and semantic progress encodings.
 - `specs/letter_env_monitor.pl`: the RML monitor specification.
 - `experiments/`: command-line entry points for training and evaluation.
+
+Shared grid mechanics are provided by `envs.letter_env_core`, including
+movement, boundary handling, proposition placement, proposition replacement,
+rendering, and raw observation construction. This keeps the completed
+single-task environment stable while allowing multitask and randomized
+LetterEnv variants to reuse the same grid implementation.
+
+The repository also reserves separate packages for the related variants:
+
+- `envs.multitask_letter_env`
+- `envs.randomized_letter_env`
+
+Those packages keep their task definitions, encodings, monitor specifications,
+experiments, results, and analysis separate from this single-task environment.
 
 RML monitoring requires SWI-Prolog. Install the project and verify SWI-Prolog
 from the repository root:

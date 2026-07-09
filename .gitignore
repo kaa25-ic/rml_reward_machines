@@ -29,6 +29,8 @@ results_and_evaluation/**
 **/results_and_evaluation/**
 !results_and_evaluation/**/
 !**/results_and_evaluation/**/
+!results_and_evaluation/**/.gitkeep
+!**/results_and_evaluation/**/.gitkeep
 !results_and_evaluation/**/eval_metrics.csv
 !**/results_and_evaluation/**/eval_metrics.csv
 !results_and_evaluation/**/train_metrics.csv
