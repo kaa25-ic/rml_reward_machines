@@ -24,5 +24,5 @@ run_cmd "${PYTHON_BIN}" -m envs.multitask_letter_env.experiments.generate_gnn_mo
 
 run_cmd "${PYTHON_BIN}" -m envs.multitask_letter_env.experiments.train_gnn_encoder \
   --dataset-path "${GNN_CORPUS}" \
-  --output-dir "${RESULTS_DIR}/encoder_pretraining/gnn_basic_seed0" \
+  --output-dir "${RESULTS_DIR}/encoder_pretraining/gnn_small_v1_seed0" \
   --seed 0

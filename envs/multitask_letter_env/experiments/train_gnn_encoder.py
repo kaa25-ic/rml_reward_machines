@@ -22,7 +22,7 @@ DEFAULT_OUTPUT_DIR = (
     MULTITASK_ROOT
     / "results_and_evaluation"
     / "encoder_pretraining"
-    / "gnn_basic_seed0"
+    / "gnn_small_v1_seed0"
 )
 
 

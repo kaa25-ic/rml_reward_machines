@@ -12,7 +12,7 @@ export MPLCONFIGDIR
 GRU_DATASET="${RESULTS_DIR}/encoder_pretraining/gru_dataset_small_v1_seed0/dataset.jsonl"
 GRU_CHECKPOINT="${RESULTS_DIR}/encoder_pretraining/gru_dim32_seed0/best_student.pt"
 GNN_CORPUS="${RESULTS_DIR}/encoder_pretraining/gnn_corpus_small_v1_seed0/monitor_states.jsonl"
-GNN_CHECKPOINT="${RESULTS_DIR}/encoder_pretraining/gnn_basic_seed0/best_dynamics_encoder.pt"
+GNN_CHECKPOINT="${RESULTS_DIR}/encoder_pretraining/gnn_small_v1_seed0/best_dynamics_encoder.pt"
 
 cd "${REPO_ROOT}"
 mkdir -p "${MPLCONFIGDIR}"

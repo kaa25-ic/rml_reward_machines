@@ -6,7 +6,7 @@
     "task_suite": "small_v1",
     "max_n": 5,
     "learned_gru_checkpoint": null,
-    "learned_graph_checkpoint": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_basic_seed0/best_dynamics_encoder.pt",
+    "learned_graph_checkpoint": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/best_dynamics_encoder.pt",
     "total_timesteps": 500000,
     "seed": 4,
     "learning_rate": 0.001,

@@ -33,7 +33,7 @@ DEFAULT_GRAPH_CHECKPOINT = (
     MULTITASK_ROOT
     / "results_and_evaluation"
     / "encoder_pretraining"
-    / "gnn_basic_seed0"
+    / "gnn_small_v1_seed0"
     / "best_dynamics_encoder.pt"
 )
 

@@ -117,7 +117,7 @@ The default graph corpus and checkpoint are written to:
 
 ```text
 envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_corpus_small_v1_seed0/monitor_states.jsonl
-envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_basic_seed0/best_dynamics_encoder.pt
+envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/best_dynamics_encoder.pt
 ```
 
 ## DDQN Experiments
@@ -157,7 +157,7 @@ After training the graph encoder, run the learned graph encoding with:
 python -m envs.multitask_letter_env.experiments.train_ddqn \
   --encoding learned_graph \
   --seed 0 \
-  --learned-graph-checkpoint envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_basic_seed0/best_dynamics_encoder.pt \
+  --learned-graph-checkpoint envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/best_dynamics_encoder.pt \
   --output-dir envs/multitask_letter_env/results_and_evaluation/ddqn/learned_graph_n_1to5_seed0
 ```
 
