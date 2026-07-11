@@ -1,0 +1,16 @@
+algorithm,encoding,eval_n,mean,std,count
+ddqn,learned_graph,10,1.0,0.0,1
+ddqn,learned_graph,15,1.0,0.0,1
+ddqn,learned_graph,20,1.0,0.0,1
+ddqn,learned_gru,10,1.0,0.0,1
+ddqn,learned_gru,15,1.0,0.0,1
+ddqn,learned_gru,20,1.0,0.0,1
+ddqn,numerical,10,1.0,0.0,1
+ddqn,numerical,15,1.0,0.0,1
+ddqn,numerical,20,1.0,0.0,1
+ddqn,one_hot,10,1.0,0.0,1
+ddqn,one_hot,15,1.0,0.0,1
+ddqn,one_hot,20,1.0,0.0,1
+ddqn,semantic_progress,10,1.0,0.0,1
+ddqn,semantic_progress,15,1.0,0.0,1
+ddqn,semantic_progress,20,1.0,0.0,1

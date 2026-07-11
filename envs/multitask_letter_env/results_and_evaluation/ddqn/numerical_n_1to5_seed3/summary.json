@@ -1,0 +1,40 @@
+{
+  "completed_at_utc": "2026-07-09T17:45:16.501790+00:00",
+  "algorithm": "ddqn",
+  "encoding": "numerical",
+  "task_suite": "small_v1",
+  "max_n": 5,
+  "total_timesteps": 500000,
+  "seed": 3,
+  "runtime_seconds": 729.181725041999,
+  "timesteps_per_second": 685.7001249876378,
+  "train_episodes_completed": 18114,
+  "train_mean_return": 139.0626035110964,
+  "train_mean_length": 27.60196533068345,
+  "evaluation_count": 25,
+  "best_evaluation": {
+    "training_steps": 120000,
+    "eval_mean_return": 228.0,
+    "eval_std_return": 53.81449618829484,
+    "eval_mean_episode_length": 26.4,
+    "eval_success_rate": 1.0,
+    "eval_task_failure_rate": 0.0
+  },
+  "final_evaluation": {
+    "training_steps": 500000,
+    "eval_mean_return": 228.0,
+    "eval_std_return": 53.81449618829484,
+    "eval_mean_episode_length": 26.4,
+    "eval_success_rate": 1.0,
+    "eval_task_failure_rate": 0.0
+  },
+  "artifacts": {
+    "config": "envs/multitask_letter_env/results_and_evaluation/ddqn/numerical_n_1to5_seed3/config.json",
+    "summary": "envs/multitask_letter_env/results_and_evaluation/ddqn/numerical_n_1to5_seed3/summary.json",
+    "final_model": "envs/multitask_letter_env/results_and_evaluation/ddqn/numerical_n_1to5_seed3/model_final.zip",
+    "best_model": "envs/multitask_letter_env/results_and_evaluation/ddqn/numerical_n_1to5_seed3/best_model.zip",
+    "train_monitor": "envs/multitask_letter_env/results_and_evaluation/ddqn/numerical_n_1to5_seed3/train_monitor.csv",
+    "eval_monitor": "envs/multitask_letter_env/results_and_evaluation/ddqn/numerical_n_1to5_seed3/eval_monitor.csv",
+    "eval_metrics": "envs/multitask_letter_env/results_and_evaluation/ddqn/numerical_n_1to5_seed3/eval_metrics.csv"
+  }
+}

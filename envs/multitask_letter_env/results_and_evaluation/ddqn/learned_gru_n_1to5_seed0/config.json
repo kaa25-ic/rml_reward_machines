@@ -1,0 +1,66 @@
+{
+  "experiment": "multitask_letter_env_ddqn",
+  "started_at_utc": "2026-07-09T16:58:47.054081+00:00",
+  "training_config": {
+    "encoding": "learned_gru",
+    "task_suite": "small_v1",
+    "max_n": 5,
+    "learned_gru_checkpoint": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0/best_student.pt",
+    "learned_graph_checkpoint": null,
+    "total_timesteps": 500000,
+    "seed": 0,
+    "learning_rate": 0.001,
+    "buffer_size": 100000,
+    "learning_starts": 5000,
+    "batch_size": 64,
+    "gamma": 0.9,
+    "tau": 1.0,
+    "train_freq": 4,
+    "gradient_steps": 1,
+    "target_update_interval": 1000,
+    "exploration_fraction": 0.4,
+    "exploration_initial_eps": 1.0,
+    "exploration_final_eps": 0.1,
+    "eval_freq": 20000,
+    "n_eval_episodes": 25,
+    "eval_seed_base": 0,
+    "max_episode_steps": 200,
+    "monitor_transition_bonus": 10.0,
+    "include_monitor_transition_bonus": true,
+    "output_dir": "envs/multitask_letter_env/results_and_evaluation/ddqn/learned_gru_n_1to5_seed0"
+  },
+  "policy_config": {
+    "features_dim": 128,
+    "position_hidden_dim": 64,
+    "monitor_hidden_dim": 64,
+    "monitor_embedding_dim": 16,
+    "max_monitor_states": 256,
+    "network_architecture": [
+      128,
+      128
+    ]
+  },
+  "monitors": {
+    "train_config_paths": {
+      "a_b_c_d_c_d_n": "envs/multitask_letter_env/results_and_evaluation/ddqn/learned_gru_n_1to5_seed0/monitor_train_configs/a_b_c_d_c_d_n.yaml",
+      "a_b_c_d_n": "envs/multitask_letter_env/results_and_evaluation/ddqn/learned_gru_n_1to5_seed0/monitor_train_configs/a_b_c_d_n.yaml",
+      "a_b_c_d_n_c": "envs/multitask_letter_env/results_and_evaluation/ddqn/learned_gru_n_1to5_seed0/monitor_train_configs/a_b_c_d_n_c.yaml",
+      "a_b_d_c_d_n": "envs/multitask_letter_env/results_and_evaluation/ddqn/learned_gru_n_1to5_seed0/monitor_train_configs/a_b_d_c_d_n.yaml",
+      "a_b_d_n_c": "envs/multitask_letter_env/results_and_evaluation/ddqn/learned_gru_n_1to5_seed0/monitor_train_configs/a_b_d_n_c.yaml"
+    },
+    "eval_config_paths": {
+      "a_b_c_d_c_d_n": "envs/multitask_letter_env/results_and_evaluation/ddqn/learned_gru_n_1to5_seed0/monitor_eval_configs/a_b_c_d_c_d_n.yaml",
+      "a_b_c_d_n": "envs/multitask_letter_env/results_and_evaluation/ddqn/learned_gru_n_1to5_seed0/monitor_eval_configs/a_b_c_d_n.yaml",
+      "a_b_c_d_n_c": "envs/multitask_letter_env/results_and_evaluation/ddqn/learned_gru_n_1to5_seed0/monitor_eval_configs/a_b_c_d_n_c.yaml",
+      "a_b_d_c_d_n": "envs/multitask_letter_env/results_and_evaluation/ddqn/learned_gru_n_1to5_seed0/monitor_eval_configs/a_b_d_c_d_n.yaml",
+      "a_b_d_n_c": "envs/multitask_letter_env/results_and_evaluation/ddqn/learned_gru_n_1to5_seed0/monitor_eval_configs/a_b_d_n_c.yaml"
+    },
+    "spec_paths": {
+      "a_b_c_d_n": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/specs/a_b_c_d_n.pl",
+      "a_b_d_n_c": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/specs/a_b_d_n_c.pl",
+      "a_b_c_d_n_c": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/specs/a_b_c_d_n_c.pl",
+      "a_b_d_c_d_n": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/specs/a_b_d_c_d_n.pl",
+      "a_b_c_d_c_d_n": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/specs/a_b_c_d_c_d_n.pl"
+    }
+  }
+}

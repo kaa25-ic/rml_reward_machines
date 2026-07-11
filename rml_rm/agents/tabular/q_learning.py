@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import pickle
 import random
 from collections.abc import Hashable, Sequence
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 
@@ -76,6 +78,32 @@ class QLearningAgent:
                 "min_epsilon": self.config.min_epsilon,
             },
         }
+
+    def save_q_table(self, path: str | Path) -> None:
+        """Serialize the learned Q-table and compact agent metadata."""
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("wb") as handle:
+            pickle.dump(
+                {
+                    "actions": self.actions,
+                    "config": self.config,
+                    "epsilon": self.epsilon,
+                    "q_table": self.q_table,
+                },
+                handle,
+                protocol=pickle.HIGHEST_PROTOCOL,
+            )
+
+    @classmethod
+    def load_q_table(cls, path: str | Path, *, rng: random.Random | None = None) -> "QLearningAgent":
+        """Load a serialized Q-table into a QLearningAgent."""
+        with Path(path).open("rb") as handle:
+            payload = pickle.load(handle)
+        agent = cls(payload["actions"], payload["config"], rng=rng)
+        agent.epsilon = float(payload["epsilon"])
+        agent.q_table = payload["q_table"]
+        return agent
 
     def _best_action(self, state: Hashable) -> int:
         action_values = self.q_table[state]

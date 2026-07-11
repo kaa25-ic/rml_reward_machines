@@ -1,0 +1,10 @@
+algorithm,encoding,mean_first_success_steps,std_first_success_steps,solved_seeds,unsolved_seeds,total_seeds
+dqn,numerical,80000.0,14142.13562373095,5,0,5
+dqn,one_hot,60000.0,14142.13562373095,5,0,5
+ddqn,numerical,72000.0,30331.5017762062,5,0,5
+ddqn,one_hot,64000.0,16733.20053068151,5,0,5
+ddqn,semantic_progress,72000.0,10954.451150103323,5,0,5
+ddqn,learned_gru,80000.0,14142.13562373095,5,0,5
+ddqn,learned_graph,80000.0,0.0,5,0,5
+ppo,numerical,172000.0,38987.17737923586,5,0,5
+ppo,one_hot,152000.0,30331.5017762062,5,0,5

@@ -17,6 +17,7 @@ from rml_rm.encodings.monitor_state import (
     split_top_level_factors,
 )
 from rml_rm.encodings.semantic_progress import SemanticPhase, SemanticProgressEncoder
+from rml_rm.encodings.vector import VectorMonitorStateEncoder
 
 
 LETTER_ENV_ROOT = Path(__file__).resolve().parent
@@ -59,16 +60,6 @@ RUNTIME_COMPATIBLE_D_SIGNATURE = (
     "(star(not_abcd:eps)*((d_match:eps)*app(gen([n],),[{num}])),"
     "[=guarded(var(n)>0,star(not_abcd:eps)*((d_match:eps)*app(gen([n],),[var(n)-1])),1)])"
 )
-
-
-class VectorMonitorStateEncoder:
-    """Callable adapter that returns monitor-state vectors."""
-
-    def __init__(self, encode) -> None:
-        self.encode = encode
-
-    def __call__(self, monitor_state: str) -> np.ndarray:
-        return np.asarray(self.encode(monitor_state), dtype=np.float32)
 
 
 def load_letter_env_monitor_state_catalogue() -> dict[int, str]:

@@ -1,0 +1,34 @@
+{
+  "experiment": "multitask_letter_env_zero_shot",
+  "created_at_utc": "2026-07-09T19:21:15.694949+00:00",
+  "runtime_seconds": 5.461617749999277,
+  "algorithm": "tabular",
+  "encoding": "numerical",
+  "task_suite": "small_v1",
+  "train_seed": 0,
+  "eval_n": 10,
+  "artifact_path": "envs/multitask_letter_env/results_and_evaluation/tabular/numerical_n_1to5_seed0/q_table.pkl",
+  "n_eval_episodes": 25,
+  "eval_seed_base": 0,
+  "max_episode_steps": 400,
+  "monitor_transition_bonus": 10.0,
+  "include_monitor_transition_bonus": true,
+  "aggregate": {
+    "algorithm": "tabular",
+    "encoding": "numerical",
+    "train_seed": 0,
+    "eval_n": 10,
+    "n_eval_episodes": 25,
+    "eval_mean_return": 0.0,
+    "eval_std_return": 0.0,
+    "eval_mean_episode_length": 400.0,
+    "eval_success_rate": 0.0,
+    "eval_task_failure_rate": 0.0,
+    "eval_timeout_rate": 1.0
+  },
+  "artifacts": {
+    "summary": "envs/multitask_letter_env/results_and_evaluation/generalization/tabular/numerical_zeroshot_n10_seed0/summary.json",
+    "eval_metrics": "envs/multitask_letter_env/results_and_evaluation/generalization/tabular/numerical_zeroshot_n10_seed0/eval_metrics.csv",
+    "episode_metrics": "envs/multitask_letter_env/results_and_evaluation/generalization/tabular/numerical_zeroshot_n10_seed0/episode_metrics.csv"
+  }
+}

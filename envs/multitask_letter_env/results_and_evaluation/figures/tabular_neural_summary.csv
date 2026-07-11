@@ -1,0 +1,7 @@
+algorithm,encoding,in_distribution_success_rate,in_distribution_success_std,in_distribution_seeds,zero_shot_success_rate,zero_shot_success_std,zero_shot_points
+ddqn,numerical,1.0,0.0,5,1.0,0.0,3
+ddqn,one_hot,0.992,0.017888543819998333,5,1.0,0.0,3
+ddqn,learned_gru,0.8,0.4472135954999579,5,1.0,0.0,3
+ddqn,learned_graph,1.0,0.0,5,1.0,0.0,3
+tabular,numerical,1.0,0.0,5,0.0,0.0,3
+tabular,one_hot,0.984,0.021908902300206663,5,0.0,0.0,3

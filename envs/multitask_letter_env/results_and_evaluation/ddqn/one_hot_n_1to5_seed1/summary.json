@@ -1,0 +1,40 @@
+{
+  "completed_at_utc": "2026-07-09T17:20:31.684094+00:00",
+  "algorithm": "ddqn",
+  "encoding": "one_hot",
+  "task_suite": "small_v1",
+  "max_n": 5,
+  "total_timesteps": 500000,
+  "seed": 1,
+  "runtime_seconds": 715.6710740829585,
+  "timesteps_per_second": 698.6449754738047,
+  "train_episodes_completed": 18002,
+  "train_mean_return": 134.17286968114655,
+  "train_mean_length": 27.774191756471502,
+  "evaluation_count": 25,
+  "best_evaluation": {
+    "training_steps": 100000,
+    "eval_mean_return": 228.0,
+    "eval_std_return": 53.81449618829484,
+    "eval_mean_episode_length": 26.4,
+    "eval_success_rate": 1.0,
+    "eval_task_failure_rate": 0.0
+  },
+  "final_evaluation": {
+    "training_steps": 500000,
+    "eval_mean_return": 228.0,
+    "eval_std_return": 53.81449618829484,
+    "eval_mean_episode_length": 27.12,
+    "eval_success_rate": 1.0,
+    "eval_task_failure_rate": 0.0
+  },
+  "artifacts": {
+    "config": "envs/multitask_letter_env/results_and_evaluation/ddqn/one_hot_n_1to5_seed1/config.json",
+    "summary": "envs/multitask_letter_env/results_and_evaluation/ddqn/one_hot_n_1to5_seed1/summary.json",
+    "final_model": "envs/multitask_letter_env/results_and_evaluation/ddqn/one_hot_n_1to5_seed1/model_final.zip",
+    "best_model": "envs/multitask_letter_env/results_and_evaluation/ddqn/one_hot_n_1to5_seed1/best_model.zip",
+    "train_monitor": "envs/multitask_letter_env/results_and_evaluation/ddqn/one_hot_n_1to5_seed1/train_monitor.csv",
+    "eval_monitor": "envs/multitask_letter_env/results_and_evaluation/ddqn/one_hot_n_1to5_seed1/eval_monitor.csv",
+    "eval_metrics": "envs/multitask_letter_env/results_and_evaluation/ddqn/one_hot_n_1to5_seed1/eval_metrics.csv"
+  }
+}

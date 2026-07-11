@@ -1,0 +1,24 @@
+{
+  "task_suite": "small_v1",
+  "max_n": 5,
+  "rows": 33364,
+  "unique_normalized_monitor_states": 128,
+  "output_path": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dataset_small_v1_seed0/dataset.jsonl",
+  "random_traces_per_task_n": 500,
+  "max_random_trace_length": 25,
+  "seed": 0,
+  "label_spaces": {
+    "next_event_to_id": {
+      "none": 0,
+      "A": 1,
+      "B": 2,
+      "C": 3,
+      "D": 4
+    },
+    "terminal_to_id": {
+      "active": 0,
+      "success": 1,
+      "failure": 2
+    }
+  }
+}

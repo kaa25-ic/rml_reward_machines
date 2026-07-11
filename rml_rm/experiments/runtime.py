@@ -35,6 +35,14 @@ class MonitorRuntime:
     config_path: Path
 
 
+@dataclass(frozen=True)
+class MonitorGroupRuntime:
+    """Runtime files and ports for a group of monitor processes."""
+
+    ports: dict[str, int]
+    config_paths: dict[str, Path]
+
+
 def configure_global_seed(seed: int | None) -> None:
     """Configure Python and NumPy random seeds."""
     if seed is None:
@@ -121,6 +129,19 @@ def allocate_monitor_ports() -> tuple[int, int]:
     return train_port, eval_port
 
 
+def allocate_monitor_port_group(keys: list[str] | tuple[str, ...]) -> dict[str, int]:
+    """Allocate one distinct monitor port per key."""
+    ports: dict[str, int] = {}
+    used: set[int] = set()
+    for key in keys:
+        port = find_free_port()
+        while port in used:
+            port = find_free_port()
+        ports[str(key)] = port
+        used.add(port)
+    return ports
+
+
 @contextmanager
 def managed_monitor_pair(
     *,
@@ -161,6 +182,53 @@ def managed_monitor_pair(
     finally:
         train_monitor.stop()
         eval_monitor.stop()
+
+
+@contextmanager
+def managed_monitor_group(
+    *,
+    output_dir: Path,
+    monitor_specs: dict[str, Path],
+    monitor_config_templates: dict[str, Path],
+    config_dir_name: str,
+    log_dir_name: str,
+    max_episode_steps: int | None = None,
+) -> Iterator[MonitorGroupRuntime]:
+    """Start a keyed group of RML monitors and stop them on exit."""
+    keys = tuple(sorted(monitor_specs))
+    if set(keys) != set(monitor_config_templates):
+        raise ValueError("Monitor specs and config templates must use the same keys.")
+
+    ports = allocate_monitor_port_group(keys)
+    config_dir = output_dir / config_dir_name
+    log_dir = output_dir / log_dir_name
+    config_dir.mkdir(parents=True, exist_ok=True)
+    log_dir.mkdir(parents=True, exist_ok=True)
+
+    config_paths: dict[str, Path] = {}
+    monitors: list[RMLMonitorProcess] = []
+    for key in keys:
+        config_paths[key] = write_runtime_monitor_config(
+            config_dir / f"{key}.yaml",
+            template_path=monitor_config_templates[key],
+            port=ports[key],
+            max_episode_steps=max_episode_steps,
+        )
+        monitors.append(
+            RMLMonitorProcess(
+                spec_path=monitor_specs[key],
+                port=ports[key],
+                log_path=log_dir / f"{key}.log",
+            )
+        )
+
+    try:
+        for monitor in monitors:
+            monitor.start()
+        yield MonitorGroupRuntime(ports=ports, config_paths=config_paths)
+    finally:
+        for monitor in reversed(monitors):
+            monitor.stop()
 
 
 @contextmanager

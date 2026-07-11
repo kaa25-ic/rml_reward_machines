@@ -1,0 +1,54 @@
+{
+  "completed_at_utc": "2026-07-09T17:37:55.028661+00:00",
+  "algorithm": "tabular_q_learning",
+  "encoding": "one_hot",
+  "task_suite": "small_v1",
+  "max_n": 5,
+  "episodes": 25000,
+  "seed": 3,
+  "runtime_seconds": 627.1900016670115,
+  "agent": {
+    "state_count": 3957,
+    "epsilon": 0.11459833737070983,
+    "actions": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "config": {
+      "alpha": 0.5,
+      "gamma": 0.9,
+      "epsilon": 0.4,
+      "epsilon_decay": 0.99995,
+      "min_epsilon": 0.05
+    }
+  },
+  "training_record_count": 25,
+  "evaluation_count": 10,
+  "best_evaluation": {
+    "training_episodes": 10000,
+    "training_steps": 328201,
+    "eval_mean_return": 228.0,
+    "eval_std_return": 53.81449618829484,
+    "eval_mean_episode_length": 26.72,
+    "eval_success_rate": 1.0,
+    "eval_task_failure_rate": 0.0
+  },
+  "final_evaluation": {
+    "training_episodes": 25000,
+    "training_steps": 769862,
+    "eval_mean_return": 226.4,
+    "eval_std_return": 53.432574334388946,
+    "eval_mean_episode_length": 25.84,
+    "eval_success_rate": 1.0,
+    "eval_task_failure_rate": 0.0
+  },
+  "artifacts": {
+    "config": "envs/multitask_letter_env/results_and_evaluation/tabular/one_hot_n_1to5_seed3/config.json",
+    "summary": "envs/multitask_letter_env/results_and_evaluation/tabular/one_hot_n_1to5_seed3/summary.json",
+    "train_metrics": "envs/multitask_letter_env/results_and_evaluation/tabular/one_hot_n_1to5_seed3/train_metrics.csv",
+    "eval_metrics": "envs/multitask_letter_env/results_and_evaluation/tabular/one_hot_n_1to5_seed3/eval_metrics.csv",
+    "q_table": "envs/multitask_letter_env/results_and_evaluation/tabular/one_hot_n_1to5_seed3/q_table.pkl"
+  }
+}
