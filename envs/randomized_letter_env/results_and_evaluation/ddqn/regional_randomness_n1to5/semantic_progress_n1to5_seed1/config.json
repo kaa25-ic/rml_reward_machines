@@ -1,0 +1,48 @@
+{
+  "experiment": "randomized_letter_env_ddqn",
+  "started_at_utc": "2026-07-12T18:23:27.706628+00:00",
+  "training_config": {
+    "encoding": "semantic_progress",
+    "learned_gru_checkpoint": null,
+    "learned_graph_checkpoint": null,
+    "n_value": 5,
+    "fixed_n": null,
+    "total_timesteps": 800000,
+    "seed": 1,
+    "learning_rate": 0.0003,
+    "buffer_size": 300000,
+    "learning_starts": 20000,
+    "batch_size": 128,
+    "gamma": 0.9,
+    "tau": 1.0,
+    "train_freq": 4,
+    "gradient_steps": 1,
+    "target_update_interval": 8000,
+    "exploration_fraction": 0.2,
+    "exploration_initial_eps": 1.0,
+    "exploration_final_eps": 0.04,
+    "eval_freq": 20000,
+    "n_eval_episodes": 20,
+    "eval_seed_base": 0,
+    "max_episode_steps": 200,
+    "monitor_progress_bonus": 10.0,
+    "placement_mode": "regional",
+    "output_dir": "envs/randomized_letter_env/results_and_evaluation/ddqn/regional_randomness_n1to5/semantic_progress_n1to5_seed1"
+  },
+  "policy_config": {
+    "features_dim": 128,
+    "position_hidden_dim": 64,
+    "monitor_hidden_dim": 64,
+    "monitor_embedding_dim": 16,
+    "max_monitor_states": 256,
+    "network_architecture": [
+      128,
+      128
+    ]
+  },
+  "monitor": {
+    "train_config_path": "envs/randomized_letter_env/results_and_evaluation/ddqn/regional_randomness_n1to5/semantic_progress_n1to5_seed1/monitor_train_config.yaml",
+    "eval_config_path": "envs/randomized_letter_env/results_and_evaluation/ddqn/regional_randomness_n1to5/semantic_progress_n1to5_seed1/monitor_eval_config.yaml",
+    "spec_path": "/Users/khalid/Desktop/rml_reward_machines/envs/randomized_letter_env/specs/letter_env_monitor.pl"
+  }
+}

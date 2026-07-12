@@ -1,0 +1,44 @@
+{
+  "completed_at_utc": "2026-07-12T16:42:48.488157+00:00",
+  "algorithm": "ddqn",
+  "encoding": "semantic_progress",
+  "n_value": 5,
+  "fixed_n": 1,
+  "total_timesteps": 2000000,
+  "seed": 1,
+  "runtime_seconds": 2796.994517916988,
+  "timesteps_per_second": 715.053242753391,
+  "train_episodes_completed": 42169,
+  "train_mean_return": 33.25072920866039,
+  "train_mean_length": 47.423699874315254,
+  "evaluation_count": 100,
+  "best_evaluation": {
+    "training_steps": 1940000,
+    "eval_mean_return": 46.5,
+    "eval_std_return": 24.95495942693556,
+    "eval_mean_episode_length": 47.75,
+    "eval_success_rate": 0.5,
+    "eval_mean_terminal_base_reward": 15.0,
+    "eval_mean_terminal_task_progress": 0.5,
+    "eval_task_failure_rate": 0.3
+  },
+  "final_evaluation": {
+    "training_steps": 2000000,
+    "eval_mean_return": 45.0,
+    "eval_std_return": 24.186773244895647,
+    "eval_mean_episode_length": 57.25,
+    "eval_success_rate": 0.45,
+    "eval_mean_terminal_base_reward": 13.5,
+    "eval_mean_terminal_task_progress": 0.45,
+    "eval_task_failure_rate": 0.3
+  },
+  "artifacts": {
+    "config": "envs/randomized_letter_env/results_and_evaluation/ddqn/semantic_progress_terminal_30_expfra02_seed1/config.json",
+    "summary": "envs/randomized_letter_env/results_and_evaluation/ddqn/semantic_progress_terminal_30_expfra02_seed1/summary.json",
+    "final_model": "envs/randomized_letter_env/results_and_evaluation/ddqn/semantic_progress_terminal_30_expfra02_seed1/model_final.zip",
+    "best_model": "envs/randomized_letter_env/results_and_evaluation/ddqn/semantic_progress_terminal_30_expfra02_seed1/best_model.zip",
+    "train_monitor": "envs/randomized_letter_env/results_and_evaluation/ddqn/semantic_progress_terminal_30_expfra02_seed1/train_monitor.csv",
+    "eval_monitor": "envs/randomized_letter_env/results_and_evaluation/ddqn/semantic_progress_terminal_30_expfra02_seed1/eval_monitor.csv",
+    "eval_metrics": "envs/randomized_letter_env/results_and_evaluation/ddqn/semantic_progress_terminal_30_expfra02_seed1/eval_metrics.csv"
+  }
+}

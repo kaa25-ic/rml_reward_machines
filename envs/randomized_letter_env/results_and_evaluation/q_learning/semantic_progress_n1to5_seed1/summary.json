@@ -1,0 +1,59 @@
+{
+  "completed_at_utc": "2026-07-12T18:02:52.871161+00:00",
+  "algorithm": "q_learning",
+  "encoding": "semantic_progress",
+  "n_value": 5,
+  "fixed_n": null,
+  "placement_mode": "regional",
+  "episodes": 50000,
+  "seed": 1,
+  "runtime_seconds": 749.4762162090046,
+  "agent": {
+    "state_count": 77079,
+    "epsilon": 0.05,
+    "actions": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "config": {
+      "alpha": 0.5,
+      "gamma": 0.9,
+      "epsilon": 0.4,
+      "epsilon_decay": 0.99995,
+      "min_epsilon": 0.05
+    }
+  },
+  "training_record_count": 50,
+  "evaluation_count": 50,
+  "best_evaluation": {
+    "training_episodes": 50000,
+    "training_steps": 1266532,
+    "eval_mean_return": 34.4,
+    "eval_std_return": 16.75231327309754,
+    "eval_mean_episode_length": 126.24,
+    "eval_success_rate": 0.16,
+    "eval_mean_terminal_base_reward": 4.8,
+    "eval_mean_terminal_task_progress": 0.16,
+    "eval_task_failure_rate": 0.24
+  },
+  "final_evaluation": {
+    "training_episodes": 50000,
+    "training_steps": 1266532,
+    "eval_mean_return": 34.4,
+    "eval_std_return": 16.75231327309754,
+    "eval_mean_episode_length": 126.24,
+    "eval_success_rate": 0.16,
+    "eval_mean_terminal_base_reward": 4.8,
+    "eval_mean_terminal_task_progress": 0.16,
+    "eval_task_failure_rate": 0.24
+  },
+  "artifacts": {
+    "config": "envs/randomized_letter_env/results_and_evaluation/q_learning/semantic_progress_terminal_30_regional_n1to5_seed1/config.json",
+    "summary": "envs/randomized_letter_env/results_and_evaluation/q_learning/semantic_progress_terminal_30_regional_n1to5_seed1/summary.json",
+    "train_metrics": "envs/randomized_letter_env/results_and_evaluation/q_learning/semantic_progress_terminal_30_regional_n1to5_seed1/train_metrics.csv",
+    "eval_metrics": "envs/randomized_letter_env/results_and_evaluation/q_learning/semantic_progress_terminal_30_regional_n1to5_seed1/eval_metrics.csv",
+    "q_table": "envs/randomized_letter_env/results_and_evaluation/q_learning/semantic_progress_terminal_30_regional_n1to5_seed1/q_table.pkl"
+  }
+}

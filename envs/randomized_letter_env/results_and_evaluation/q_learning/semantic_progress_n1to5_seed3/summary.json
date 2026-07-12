@@ -1,0 +1,59 @@
+{
+  "completed_at_utc": "2026-07-12T18:19:59.279577+00:00",
+  "algorithm": "q_learning",
+  "encoding": "semantic_progress",
+  "n_value": 5,
+  "fixed_n": null,
+  "placement_mode": "regional",
+  "episodes": 50000,
+  "seed": 3,
+  "runtime_seconds": 879.4733765420387,
+  "agent": {
+    "state_count": 77970,
+    "epsilon": 0.05,
+    "actions": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "config": {
+      "alpha": 0.5,
+      "gamma": 0.9,
+      "epsilon": 0.4,
+      "epsilon_decay": 0.99995,
+      "min_epsilon": 0.05
+    }
+  },
+  "training_record_count": 50,
+  "evaluation_count": 50,
+  "best_evaluation": {
+    "training_episodes": 48000,
+    "training_steps": 1219335,
+    "eval_mean_return": 33.2,
+    "eval_std_return": 14.891608375189028,
+    "eval_mean_episode_length": 133.52,
+    "eval_success_rate": 0.12,
+    "eval_mean_terminal_base_reward": 3.6,
+    "eval_mean_terminal_task_progress": 0.12,
+    "eval_task_failure_rate": 0.24
+  },
+  "final_evaluation": {
+    "training_episodes": 50000,
+    "training_steps": 1264821,
+    "eval_mean_return": 33.2,
+    "eval_std_return": 14.891608375189028,
+    "eval_mean_episode_length": 133.52,
+    "eval_success_rate": 0.12,
+    "eval_mean_terminal_base_reward": 3.6,
+    "eval_mean_terminal_task_progress": 0.12,
+    "eval_task_failure_rate": 0.24
+  },
+  "artifacts": {
+    "config": "envs/randomized_letter_env/results_and_evaluation/q_learning/semantic_progress_n1to5_seed3/config.json",
+    "summary": "envs/randomized_letter_env/results_and_evaluation/q_learning/semantic_progress_n1to5_seed3/summary.json",
+    "train_metrics": "envs/randomized_letter_env/results_and_evaluation/q_learning/semantic_progress_n1to5_seed3/train_metrics.csv",
+    "eval_metrics": "envs/randomized_letter_env/results_and_evaluation/q_learning/semantic_progress_n1to5_seed3/eval_metrics.csv",
+    "q_table": "envs/randomized_letter_env/results_and_evaluation/q_learning/semantic_progress_n1to5_seed3/q_table.pkl"
+  }
+}

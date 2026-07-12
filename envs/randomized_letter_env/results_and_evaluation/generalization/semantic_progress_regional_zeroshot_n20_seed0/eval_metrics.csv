@@ -1,0 +1,2 @@
+algorithm,encoding,train_seed,eval_n,n_eval_episodes,eval_mean_return,eval_std_return,eval_mean_episode_length,eval_success_rate,eval_mean_terminal_base_reward,eval_mean_terminal_task_progress,eval_task_failure_rate,eval_timeout_rate
+ddqn,semantic_progress,0,20,100,70.0,0.0,43.61,1.0,30.0,1.0,0.0,0.0

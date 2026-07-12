@@ -1,0 +1,36 @@
+{
+  "experiment": "randomized_letter_env_q_learning",
+  "started_at_utc": "2026-07-12T18:05:08.888485+00:00",
+  "training_config": {
+    "encoding": "semantic_progress",
+    "n_value": 5,
+    "fixed_n": null,
+    "placement_mode": "regional",
+    "episodes": 50000,
+    "seed": 2,
+    "alpha": 0.5,
+    "gamma": 0.9,
+    "epsilon": 0.4,
+    "epsilon_decay": 0.99995,
+    "min_epsilon": 0.05,
+    "eval_freq_episodes": 1000,
+    "train_log_freq_episodes": 1000,
+    "n_eval_episodes": 25,
+    "eval_seed_base": 0,
+    "max_episode_steps": 200,
+    "monitor_progress_bonus": 10.0,
+    "monitor_regression_penalty": 0.0,
+    "neutralize_legacy_transition_bonus": true,
+    "legacy_transition_bonus": 10.0,
+    "step_penalty": 0.0,
+    "no_op_penalty": 0.0,
+    "state_discovery_bonus": 0.0,
+    "output_dir": "envs/randomized_letter_env/results_and_evaluation/q_learning/semantic_progress_n1to5_seed2"
+  },
+  "state_key": "(position_observation_tuple, monitor_encoding_tuple)",
+  "monitor": {
+    "train_config_path": "envs/randomized_letter_env/results_and_evaluation/q_learning/semantic_progress_n1to5_seed2/monitor_train_config.yaml",
+    "eval_config_path": "envs/randomized_letter_env/results_and_evaluation/q_learning/semantic_progress_n1to5_seed2/monitor_eval_config.yaml",
+    "spec_path": "/Users/khalid/Desktop/rml_reward_machines/envs/randomized_letter_env/specs/letter_env_monitor.pl"
+  }
+}
