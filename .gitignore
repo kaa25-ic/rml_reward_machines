@@ -35,6 +35,8 @@ results_and_evaluation/**
 !**/results_and_evaluation/**/eval_metrics.csv
 !results_and_evaluation/**/train_metrics.csv
 !**/results_and_evaluation/**/train_metrics.csv
+!results_and_evaluation/**/combined_eval_metrics.csv
+!**/results_and_evaluation/**/combined_eval_metrics.csv
 !results_and_evaluation/**/summary.json
 !**/results_and_evaluation/**/summary.json
 !results_and_evaluation/**/config.json
@@ -59,10 +61,16 @@ checkpoints/
 !envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_basic_seed0/best_dynamics_encoder.pt
 !envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0/best_student.pt
 !envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/best_dynamics_encoder.pt
+!envs/lunar_lander/results_and_evaluation/ppo/semantic_progress_success_aligned_seed0/best_model.zip
 !**/results_and_evaluation/figures/
 !**/results_and_evaluation/figures/*.csv
 !**/results_and_evaluation/figures/*.pdf
 !**/results_and_evaluation/figures/*.png
+!**/results_and_evaluation/**/rendering/
+!**/results_and_evaluation/**/rendering/**/*.csv
+!**/results_and_evaluation/**/rendering/**/*.json
+!**/results_and_evaluation/**/rendering/**/*.yaml
+!**/results_and_evaluation/**/rendering/**/*.gif
 envs/multitask_letter_env/results_and_evaluation/ddqn/learned_gru_n_1to5_seed5_diagnostic/**
 *.onnx
 *.qlf

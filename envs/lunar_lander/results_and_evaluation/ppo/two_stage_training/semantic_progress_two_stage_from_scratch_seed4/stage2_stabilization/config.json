@@ -1,0 +1,56 @@
+{
+  "experiment": "lunar_lander_protocol_ppo",
+  "started_at_utc": "2026-07-14T11:55:05.307280+00:00",
+  "training_config": {
+    "encoding": "semantic_progress",
+    "total_timesteps": 300000,
+    "seed": 4,
+    "learning_rate": 0.0001,
+    "linear_learning_rate_decay": false,
+    "n_steps": 2048,
+    "batch_size": 64,
+    "n_epochs": 10,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "clip_range": 0.2,
+    "ent_coef": 0.0,
+    "vf_coef": 0.5,
+    "max_grad_norm": 0.5,
+    "target_kl": null,
+    "eval_freq": 50000,
+    "n_eval_episodes": 50,
+    "eval_seed_base": 10000,
+    "max_episode_steps": 1000,
+    "monitor_progress_bonus": 20.0,
+    "hover_step_bonus": 2.0,
+    "hover_complete_bonus": 30.0,
+    "controlled_descent_bonus": 20.0,
+    "success_bonus": 200.0,
+    "failure_penalty": -100.0,
+    "landing_target_bonus": 0.0,
+    "landing_angle_bonus": 0.0,
+    "post_descent_landing_bonus": 0.0,
+    "post_descent_protocol_miss_penalty": 0.0,
+    "initial_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/best_model.zip",
+    "early_stop_protocol_rate": null,
+    "early_stop_landing_rate": null,
+    "early_stop_patience": 1,
+    "output_dir": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization"
+  },
+  "policy_config": {
+    "features_dim": 128,
+    "position_hidden_dim": 64,
+    "monitor_hidden_dim": 64,
+    "monitor_embedding_dim": 16,
+    "max_monitor_states": 256,
+    "network_architecture": [
+      128,
+      128
+    ]
+  },
+  "monitor": {
+    "train_config_path": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/monitor_train_config.yaml",
+    "eval_config_path": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/monitor_eval_config.yaml",
+    "spec_path": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/specs/lunar_lander_protocol.pl"
+  }
+}

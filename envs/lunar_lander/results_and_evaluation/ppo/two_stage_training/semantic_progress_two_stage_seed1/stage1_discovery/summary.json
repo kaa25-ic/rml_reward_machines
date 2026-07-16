@@ -1,0 +1,48 @@
+{
+  "completed_at_utc": "2026-07-13T18:17:54.584260+00:00",
+  "algorithm": "ppo",
+  "encoding": "semantic_progress",
+  "total_timesteps": 1000000,
+  "seed": 1,
+  "runtime_seconds": 1656.1661319160012,
+  "timesteps_per_second": 603.8041599384178,
+  "train_episodes_completed": 2482,
+  "train_mean_return": 414.2997329343272,
+  "train_mean_length": 403.4464141821112,
+  "evaluation_count": 20,
+  "best_evaluation": {
+    "training_steps": 700000,
+    "eval_mean_return": 691.3426087319962,
+    "eval_std_return": 88.54403732412317,
+    "eval_mean_episode_length": 263.88,
+    "eval_successful_landing_rate": 1.0,
+    "eval_successful_protocol_rate": 0.96,
+    "eval_hover_complete_rate": 1.0,
+    "eval_controlled_descent_rate": 1.0,
+    "eval_mean_terminal_lunar_base_reward": 100.0,
+    "eval_mean_terminal_monitor_reward": 95.0,
+    "eval_task_failure_rate": 0.04
+  },
+  "final_evaluation": {
+    "training_steps": 1000000,
+    "eval_mean_return": -43.388249417127454,
+    "eval_std_return": 354.99943658678677,
+    "eval_mean_episode_length": 839.26,
+    "eval_successful_landing_rate": 0.18,
+    "eval_successful_protocol_rate": 0.18,
+    "eval_hover_complete_rate": 0.22,
+    "eval_controlled_descent_rate": 0.22,
+    "eval_mean_terminal_lunar_base_reward": 14.031577262887218,
+    "eval_mean_terminal_monitor_reward": -2.5,
+    "eval_task_failure_rate": 0.82
+  },
+  "artifacts": {
+    "config": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed1/stage1_discovery/config.json",
+    "summary": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed1/stage1_discovery/summary.json",
+    "final_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed1/stage1_discovery/model_final.zip",
+    "best_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed1/stage1_discovery/best_model.zip",
+    "train_monitor": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed1/stage1_discovery/train_monitor.csv",
+    "eval_monitor": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed1/stage1_discovery/eval_monitor.csv",
+    "eval_metrics": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed1/stage1_discovery/eval_metrics.csv"
+  }
+}

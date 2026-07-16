@@ -1,0 +1,20 @@
+{
+  "run_name": "semantic_progress_two_stage_seed2_stage2_stabilization",
+  "run_dir": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed2/stage2_stabilization",
+  "model_path": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed2/stage2_stabilization/model_final.zip",
+  "episode_index": 0,
+  "seed": 10000,
+  "episode_return": 710.1990422448253,
+  "episode_length": 208,
+  "successful_landing": true,
+  "successful_protocol": true,
+  "task_failed": false,
+  "max_monitor_progress": 5.0,
+  "final_lunar_base_reward": 100.0,
+  "final_monitor_reward": 100.0,
+  "terminated": true,
+  "truncated": false,
+  "video_dir": null,
+  "gif_path": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed2_stage2_stabilization/episode_000.gif",
+  "trajectory_path": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed2_stage2_stabilization/episode_000_trajectory.csv"
+}

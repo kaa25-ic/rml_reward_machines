@@ -1,0 +1,47 @@
+env_name: lunar-lander-protocol
+host: 127.0.0.1
+port: 54763
+max_episode_steps: 1000
+variables:
+- name: corridor
+  type: float
+  location: info
+  identifier: corridor
+- name: hover
+  type: float
+  location: info
+  identifier: hover
+- name: controlled_descent
+  type: float
+  location: info
+  identifier: controlled_descent
+- name: target_zone
+  type: float
+  location: info
+  identifier: target_zone
+- name: safe_landing_angle
+  type: float
+  location: info
+  identifier: safe_landing_angle
+- name: both_contact
+  type: float
+  location: info
+  identifier: both_contact
+- name: env_terminated
+  type: float
+  location: info
+  identifier: env_terminated
+- name: env_successful_landing
+  type: float
+  location: info
+  identifier: env_successful_landing
+- name: env_truncated
+  type: float
+  location: info
+  identifier: env_truncated
+reward:
+  name: protocol
+  true: 100
+  currently_true: 0
+  currently_false: 0
+  false: -25
