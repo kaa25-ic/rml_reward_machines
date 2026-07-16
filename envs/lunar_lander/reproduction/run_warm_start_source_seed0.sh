@@ -8,12 +8,12 @@ set -euo pipefail
 # The newer shaping fields are explicitly set to zero so the command remains
 # stable even if LunarLander training defaults change again.
 
-PYTHON_BIN="${PYTHON_BIN:-./.venv/bin/python3}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/common.sh"
+
 OUTPUT_DIR="${OUTPUT_DIR:-/private/tmp/rml_lunar_reproduction/semantic_progress_success_aligned_seed0}"
 
-MPLCONFIGDIR="${MPLCONFIGDIR:-/private/tmp/mplconfig}" \
-PYTHONPYCACHEPREFIX="${PYTHONPYCACHEPREFIX:-/private/tmp/rml_pycache}" \
-"${PYTHON_BIN}" envs/lunar_lander/experiments/train_ppo.py \
+run_cmd "${PYTHON_BIN}" envs/lunar_lander/experiments/train_ppo.py \
   --encoding semantic_progress \
   --seed 0 \
   --total-timesteps 500000 \
