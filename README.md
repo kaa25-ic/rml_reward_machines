@@ -91,8 +91,8 @@ After installing the environment, basic checks can be run with:
 
 ```bash
 python -m pip check
-python -m pytest
+./.venv/bin/python3 -m pytest tests
 ```
 
-Additional environment-specific smoke tests will be documented as the
-environment packages are added.
+Each environment README also lists a narrower command for running the shared
+core tests together with that environment's tests.

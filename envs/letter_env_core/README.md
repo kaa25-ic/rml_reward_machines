@@ -14,3 +14,12 @@ Current users of this package:
 - `envs.letter_env`
 - `envs.multitask_letter_env`
 - `envs.randomized_letter_env`
+
+## Testing
+
+From the repository root, run the shared test helpers and LetterEnv core tests
+with:
+
+```bash
+./.venv/bin/python3 -m pytest tests/core tests/letter_env_core
+```

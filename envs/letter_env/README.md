@@ -70,6 +70,15 @@ The neural experiments use six monitor-state encodings:
 The tabular reproduction also includes `simple`, which is used for comparison
 with the baseline tabular state abstraction for this environment.
 
+## Testing
+
+From the repository root, run the shared core tests, shared grid tests, and
+single-task LetterEnv tests with:
+
+```bash
+./.venv/bin/python3 -m pytest tests/core tests/letter_env_core tests/letter_env
+```
+
 Learned encoder checkpoints are stored under
 `results_and_evaluation/encoder_pretraining/`. The experiments use
 `gru_dim16_seed0/best_student.pt` for GRU encodings and

@@ -29,12 +29,12 @@ class LunarLanderProtocolConfig:
     hover_step_bonus: float = 2.0
     hover_complete_bonus: float = 30.0
     controlled_descent_bonus: float = 20.0
-    success_bonus: float = 100.0
-    failure_penalty: float = -25.0
-    landing_target_bonus: float = 10.0
-    landing_angle_bonus: float = 10.0
-    post_descent_landing_bonus: float = 40.0
-    post_descent_protocol_miss_penalty: float = -60.0
+    success_bonus: float = 200.0
+    failure_penalty: float = -100.0
+    landing_target_bonus: float = 0.0
+    landing_angle_bonus: float = 0.0
+    post_descent_landing_bonus: float = 0.0
+    post_descent_protocol_miss_penalty: float = 0.0
     render_mode: str | None = None
     thresholds: LunarProtocolThresholds | None = None
 
@@ -266,8 +266,8 @@ def _lunar_hover_count(raw_monitor_state: Any) -> int:
         or state.startswith("star(waiting_for_landing")
     ):
         return 3
-    if "(1+1)" in state:
+    if "(1+1)" in state or "[1+1]" in state:
         return 2
-    if "(0+1)" in state:
+    if "(0+1)" in state or "[0+1]" in state:
         return 1
     return 0

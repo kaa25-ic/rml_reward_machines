@@ -75,6 +75,15 @@ Implemented monitor encodings:
 - `learned_graph`: a multitask-trained 32-dimensional graph monitor-state
   encoder.
 
+## Testing
+
+From the repository root, run the shared core tests, shared grid tests, and
+multi-task LetterEnv tests with:
+
+```bash
+./.venv/bin/python3 -m pytest tests/core tests/letter_env_core tests/multitask_letter_env
+```
+
 The GRU and graph encoders should be trained inside this package before running
 their DDQN experiments. Both learned encoders are trained from RML-monitor
 corpora generated for `small_v1` with `n=1..5`. GRU pretraining uses labelled

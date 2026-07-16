@@ -24,6 +24,15 @@ propositions such as corridor, hover, controlled descent, target zone, contact,
 and successful simulator landing. The RML monitor determines protocol progress,
 success, and failure.
 
+## Testing
+
+From the repository root, run the shared core tests and LunarLander protocol
+tests with:
+
+```bash
+./.venv/bin/python3 -m pytest tests/core tests/lunar_lander
+```
+
 ## Two-Stage PPO
 
 `experiments/train_ppo_two_stage.py` is a separate orchestration script for the
@@ -63,6 +72,24 @@ MPLCONFIGDIR=/private/tmp/mplconfig PYTHONPYCACHEPREFIX=/private/tmp/rml_pycache
 Repeat with seeds `0` through `4`, changing only `--seed` and `--run-name`.
 The warm-start two-stage runs are retained as an ablation; their stage 1 starts
 from `results_and_evaluation/ppo/semantic_progress_success_aligned_seed0/best_model.zip`.
+That retained warm-start source was trained with the earlier terminal reward
+values recorded in its saved `config.json` (`success_bonus=100`,
+`failure_penalty=-25`). To reproduce it safely after the defaults refactor, use
+the explicit command file:
+
+```bash
+bash envs/lunar_lander/reproduction/run_warm_start_source_seed0.sh
+```
+
+By default, the script writes to:
+
+```text
+/private/tmp/rml_lunar_reproduction/semantic_progress_success_aligned_seed0
+```
+
+Set `OUTPUT_DIR=...` if you want a different destination. The script does not
+overwrite the retained committed run unless you deliberately point `OUTPUT_DIR`
+at that result folder.
 
 The cleaned PPO results folder intentionally keeps only:
 

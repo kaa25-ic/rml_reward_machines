@@ -71,6 +71,15 @@ computed from the RML monitor-state string, not from a Python task tracker.
 The neural experiments use Double DQN. The tabular baseline uses dictionary-
 backed Q-learning with the same semantic-progress monitor information.
 
+## Testing
+
+From the repository root, run the shared core tests, shared grid tests, and
+randomized LetterEnv tests with:
+
+```bash
+./.venv/bin/python3 -m pytest tests/core tests/letter_env_core tests/randomized_letter_env
+```
+
 ## Reproducing Runs
 
 Reproduction scripts are provided in `reproduction/`. They write outputs to the

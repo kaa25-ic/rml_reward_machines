@@ -66,12 +66,12 @@ class LunarLanderPPOTrainingConfig:
     hover_step_bonus: float = 2.0
     hover_complete_bonus: float = 30.0
     controlled_descent_bonus: float = 20.0
-    success_bonus: float = 100.0
-    failure_penalty: float = -25.0
-    landing_target_bonus: float = 10.0
-    landing_angle_bonus: float = 10.0
-    post_descent_landing_bonus: float = 40.0
-    post_descent_protocol_miss_penalty: float = -60.0
+    success_bonus: float = 200.0
+    failure_penalty: float = -100.0
+    landing_target_bonus: float = 0.0
+    landing_angle_bonus: float = 0.0
+    post_descent_landing_bonus: float = 0.0
+    post_descent_protocol_miss_penalty: float = 0.0
     initial_model: Path | None = None
     early_stop_protocol_rate: float | None = None
     early_stop_landing_rate: float | None = None
@@ -502,12 +502,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--hover-step-bonus", type=float, default=2.0)
     parser.add_argument("--hover-complete-bonus", type=float, default=30.0)
     parser.add_argument("--controlled-descent-bonus", type=float, default=20.0)
-    parser.add_argument("--success-bonus", type=float, default=100.0)
-    parser.add_argument("--failure-penalty", type=float, default=-25.0)
-    parser.add_argument("--landing-target-bonus", type=float, default=10.0)
-    parser.add_argument("--landing-angle-bonus", type=float, default=10.0)
-    parser.add_argument("--post-descent-landing-bonus", type=float, default=40.0)
-    parser.add_argument("--post-descent-protocol-miss-penalty", type=float, default=-60.0)
+    parser.add_argument("--success-bonus", type=float, default=200.0)
+    parser.add_argument("--failure-penalty", type=float, default=-100.0)
+    parser.add_argument("--landing-target-bonus", type=float, default=0.0)
+    parser.add_argument("--landing-angle-bonus", type=float, default=0.0)
+    parser.add_argument("--post-descent-landing-bonus", type=float, default=0.0)
+    parser.add_argument("--post-descent-protocol-miss-penalty", type=float, default=0.0)
     parser.add_argument(
         "--initial-model",
         type=Path,

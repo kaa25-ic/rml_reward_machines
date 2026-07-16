@@ -1,0 +1,130 @@
+[
+  {
+    "label": "hover_waiting_initial",
+    "state": "@(app(_5348,[0]),[_5348=gen([h],guarded(var(h)<2,star(waiting_for_hover:eps)*((hover_match:eps)*app(_5348,[var(h)+1])),app(gen([],star(waiting_for_hover:eps)*(hover_match:eps)*app(gen([],star(waiting_for_descent:eps)*(controlled_descent_match:eps)*star(waiting_for_landing:eps)*(safe_landing_match:eps)*1),[])),[])))])",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed0_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 1,
+    "progress": 1.0,
+    "hover_count": 0
+  },
+  {
+    "label": "hover_count_1_seed0_step2",
+    "state": "@(star(waiting_for_hover:eps)*((hover_match:eps)*app(gen([h],_14764),[0+1])),[_14764=guarded(var(h)<2,star(waiting_for_hover:eps)*((hover_match:eps)*app(gen([h],_14764),[var(h)+1])),app(gen([],star(waiting_for_hover:eps)*(hover_match:eps)*app(gen([],star(waiting_for_descent:eps)*(controlled_descent_match:eps)*star(waiting_for_landing:eps)*(safe_landing_match:eps)*1),[])),[]))])",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed0_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 2,
+    "progress": 2.0,
+    "hover_count": 1
+  },
+  {
+    "label": "hover_count_1_seed0_step3",
+    "state": "@(star(waiting_for_hover:eps)*((hover_match:eps)*app(gen([h],_8458),[0+1])),[_8458=guarded(var(h)<2,star(waiting_for_hover:eps)*((hover_match:eps)*app(gen([h],_8458),[var(h)+1])),app(gen([],star(waiting_for_hover:eps)*(hover_match:eps)*app(gen([],star(waiting_for_descent:eps)*(controlled_descent_match:eps)*star(waiting_for_landing:eps)*(safe_landing_match:eps)*1),[])),[]))])",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed0_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 3,
+    "progress": 2.0,
+    "hover_count": 1
+  },
+  {
+    "label": "hover_count_1_seed0_step4",
+    "state": "@(star(waiting_for_hover:eps)*((hover_match:eps)*app(gen([h],_4148),[0+1])),[_4148=guarded(var(h)<2,star(waiting_for_hover:eps)*((hover_match:eps)*app(gen([h],_4148),[var(h)+1])),app(gen([],star(waiting_for_hover:eps)*(hover_match:eps)*app(gen([],star(waiting_for_descent:eps)*(controlled_descent_match:eps)*star(waiting_for_landing:eps)*(safe_landing_match:eps)*1),[])),[]))])",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed0_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 4,
+    "progress": 2.0,
+    "hover_count": 1
+  },
+  {
+    "label": "hover_count_1_seed0_step5",
+    "state": "@(star(waiting_for_hover:eps)*((hover_match:eps)*app(gen([h],_13076),[0+1])),[_13076=guarded(var(h)<2,star(waiting_for_hover:eps)*((hover_match:eps)*app(gen([h],_13076),[var(h)+1])),app(gen([],star(waiting_for_hover:eps)*(hover_match:eps)*app(gen([],star(waiting_for_descent:eps)*(controlled_descent_match:eps)*star(waiting_for_landing:eps)*(safe_landing_match:eps)*1),[])),[]))])",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed0_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 5,
+    "progress": 2.0,
+    "hover_count": 1
+  },
+  {
+    "label": "hover_count_1_seed0_step45",
+    "state": "@(app(gen([h],_8570),[0+1]),[_8570=guarded(var(h)<2,star(waiting_for_hover:eps)*((hover_match:eps)*app(gen([h],_8570),[var(h)+1])),app(gen([],star(waiting_for_hover:eps)*(hover_match:eps)*app(gen([],star(waiting_for_descent:eps)*(controlled_descent_match:eps)*star(waiting_for_landing:eps)*(safe_landing_match:eps)*1),[])),[]))])",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed0_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 45,
+    "progress": 2.0,
+    "hover_count": 1
+  },
+  {
+    "label": "hover_count_2_seed0_step46",
+    "state": "@(app(gen([h],_4834),[1+1]),[_4834=guarded(var(h)<2,star(waiting_for_hover:eps)*((hover_match:eps)*app(gen([h],_4834),[var(h)+1])),app(gen([],star(waiting_for_hover:eps)*(hover_match:eps)*app(gen([],star(waiting_for_descent:eps)*(controlled_descent_match:eps)*star(waiting_for_landing:eps)*(safe_landing_match:eps)*1),[])),[]))])",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed0_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 46,
+    "progress": 2.0,
+    "hover_count": 2
+  },
+  {
+    "label": "descent_ready_app",
+    "state": "app(gen([],star(waiting_for_descent:eps)*(controlled_descent_match:eps)*star(waiting_for_landing:eps)*(safe_landing_match:eps)*1),[])",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed0_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 47,
+    "progress": 3.0,
+    "hover_count": 3
+  },
+  {
+    "label": "descent_ready_star",
+    "state": "star(waiting_for_descent:eps)*((controlled_descent_match:eps)*star(waiting_for_landing:eps)*(safe_landing_match:eps)*1)",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed0_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 48,
+    "progress": 3.0,
+    "hover_count": 3
+  },
+  {
+    "label": "landing_phase",
+    "state": "star(waiting_for_landing:eps)*((safe_landing_match:eps)*1)",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed0_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 79,
+    "progress": 4.0,
+    "hover_count": 3
+  },
+  {
+    "label": "true_verdict",
+    "state": "1",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed0_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 190,
+    "progress": 5.0,
+    "hover_count": 0
+  },
+  {
+    "label": "hover_count_1_seed2",
+    "state": "@(app(gen([h],_4260),[0+1]),[_4260=guarded(var(h)<2,star(waiting_for_hover:eps)*((hover_match:eps)*app(gen([h],_4260),[var(h)+1])),app(gen([],star(waiting_for_hover:eps)*(hover_match:eps)*app(gen([],star(waiting_for_descent:eps)*(controlled_descent_match:eps)*star(waiting_for_landing:eps)*(safe_landing_match:eps)*1),[])),[]))])",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed2_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 43,
+    "progress": 2.0,
+    "hover_count": 1
+  },
+  {
+    "label": "hover_count_2_seed2",
+    "state": "@(app(gen([h],_13850),[1+1]),[_13850=guarded(var(h)<2,star(waiting_for_hover:eps)*((hover_match:eps)*app(gen([h],_13850),[var(h)+1])),app(gen([],star(waiting_for_hover:eps)*(hover_match:eps)*app(gen([],star(waiting_for_descent:eps)*(controlled_descent_match:eps)*star(waiting_for_landing:eps)*(safe_landing_match:eps)*1),[])),[]))])",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed2_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 44,
+    "progress": 2.0,
+    "hover_count": 2
+  },
+  {
+    "label": "hover_count_1_seed4",
+    "state": "@(app(gen([h],_13188),[0+1]),[_13188=guarded(var(h)<2,star(waiting_for_hover:eps)*((hover_match:eps)*app(gen([h],_13188),[var(h)+1])),app(gen([],star(waiting_for_hover:eps)*(hover_match:eps)*app(gen([],star(waiting_for_descent:eps)*(controlled_descent_match:eps)*star(waiting_for_landing:eps)*(safe_landing_match:eps)*1),[])),[]))])",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed4_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 101,
+    "progress": 2.0,
+    "hover_count": 1
+  },
+  {
+    "label": "hover_count_2_seed4",
+    "state": "@(app(gen([h],_9144),[1+1]),[_9144=guarded(var(h)<2,star(waiting_for_hover:eps)*((hover_match:eps)*app(gen([h],_9144),[var(h)+1])),app(gen([],star(waiting_for_hover:eps)*(hover_match:eps)*app(gen([],star(waiting_for_descent:eps)*(controlled_descent_match:eps)*star(waiting_for_landing:eps)*(safe_landing_match:eps)*1),[])),[]))])",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed4_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 102,
+    "progress": 2.0,
+    "hover_count": 2
+  },
+  {
+    "label": "false_verdict",
+    "state": "false_verdict",
+    "source_trajectory": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/semantic_progress_two_stage_seed4_stage2_stabilization/episode_000_trajectory.csv",
+    "step": 1000,
+    "progress": -1000.0,
+    "hover_count": 0
+  }
+]

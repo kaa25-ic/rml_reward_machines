@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import re
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
@@ -12,6 +11,8 @@ from typing import Any, Protocol
 import numpy as np
 import websocket
 import yaml
+
+from rml_rm.encodings.monitor_state import normalize_monitor_state
 
 
 class MonitorClient(Protocol):
@@ -62,11 +63,6 @@ def load_monitor_config(config_path: str | Path) -> dict[str, Any]:
         if key not in config:
             raise ValueError(f"RML config {path} is missing {key!r}.")
     return config
-
-
-def normalize_monitor_state(monitor_state: str) -> str:
-    """Normalize monitor states by removing generated variable suffixes."""
-    return re.sub(r"_[0-9]+", "", monitor_state)
 
 
 def normalize_verdict(verdict: str) -> str:

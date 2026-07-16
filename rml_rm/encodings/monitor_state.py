@@ -15,8 +15,9 @@ ADDITIONAL_NUMERIC_VALUE_SUFFIX = "::ADDITIONAL::"
 
 
 def normalize_monitor_state(state: str) -> str:
-    """Remove runtime-generated variable suffixes from a monitor-state string."""
-    return re.sub(r"_[0-9]+", "", str(state))
+    """Normalize monitor-state strings emitted by the RML runtime."""
+    normalized = re.sub(r"_[0-9]+", "", str(state))
+    return normalized.replace("\\*", "*")
 
 
 def split_top_level_factors(state: str) -> list[str]:

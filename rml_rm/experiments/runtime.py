@@ -148,6 +148,7 @@ def managed_monitor_pair(
     output_dir: Path,
     monitor_config_template: Path,
     monitor_spec_path: Path,
+    max_episode_steps: int | None = None,
 ) -> Iterator[MonitorPairRuntime]:
     """Start paired train/eval RML monitors and stop them on exit."""
     train_port, eval_port = allocate_monitor_ports()
@@ -158,11 +159,13 @@ def managed_monitor_pair(
             output_dir / "monitor_train_config.yaml",
             template_path=monitor_config_template,
             port=train_port,
+            max_episode_steps=max_episode_steps,
         ),
         eval_config_path=write_runtime_monitor_config(
             output_dir / "monitor_eval_config.yaml",
             template_path=monitor_config_template,
             port=eval_port,
+            max_episode_steps=max_episode_steps,
         ),
     )
     train_monitor = RMLMonitorProcess(

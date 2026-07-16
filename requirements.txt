@@ -1,4 +1,4 @@
-gymnasium==0.28.1
+gymnasium[box2d]==0.28.1
 numpy==1.26.4
 PyYAML==6.0.3
 websocket_client==1.7.0
@@ -12,3 +12,6 @@ tqdm==4.67.0
 # Plotting/reporting dependencies used by experiment analysis scripts.
 matplotlib==3.8.2
 seaborn==0.13.2
+
+# Test dependencies.
+pytest==8.3.4

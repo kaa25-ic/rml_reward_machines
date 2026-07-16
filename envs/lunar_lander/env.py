@@ -32,6 +32,9 @@ EVENT_NAMES = (
 )
 
 
+THRESHOLD_TOLERANCE = 1e-6
+
+
 @dataclass(frozen=True)
 class LunarProtocolThresholds:
     """Thresholds used to derive monitor propositions from LunarLander states."""
@@ -145,21 +148,25 @@ def lunar_protocol_events(
     right = right_contact > thresholds.contact_threshold
 
     corridor = (
-        abs(x) <= thresholds.x_corridor
-        and thresholds.y_corridor_low <= y <= thresholds.y_corridor_high
+        abs(x) <= thresholds.x_corridor + THRESHOLD_TOLERANCE
+        and thresholds.y_corridor_low - THRESHOLD_TOLERANCE
+        <= y
+        <= thresholds.y_corridor_high + THRESHOLD_TOLERANCE
     )
     hover = (
-        thresholds.y_hover_low <= y <= thresholds.y_hover_high
-        and abs(vy) <= thresholds.vy_hover_max
-        and abs(angle) <= thresholds.angle_hover_max
+        thresholds.y_hover_low - THRESHOLD_TOLERANCE
+        <= y
+        <= thresholds.y_hover_high + THRESHOLD_TOLERANCE
+        and abs(vy) <= thresholds.vy_hover_max + THRESHOLD_TOLERANCE
+        and abs(angle) <= thresholds.angle_hover_max + THRESHOLD_TOLERANCE
     )
     controlled_descent = (
         y < thresholds.y_hover_low
-        and abs(vy) <= thresholds.vy_descent_max
-        and abs(angle) <= thresholds.angle_descent_max
+        and abs(vy) <= thresholds.vy_descent_max + THRESHOLD_TOLERANCE
+        and abs(angle) <= thresholds.angle_descent_max + THRESHOLD_TOLERANCE
     )
-    target_zone = abs(x) <= thresholds.x_target
-    safe_landing_angle = abs(angle) <= thresholds.angle_landing_max
+    target_zone = abs(x) <= thresholds.x_target + THRESHOLD_TOLERANCE
+    safe_landing_angle = abs(angle) <= thresholds.angle_landing_max + THRESHOLD_TOLERANCE
     env_successful_landing = terminated and reward > 0.0
 
     return np.asarray(

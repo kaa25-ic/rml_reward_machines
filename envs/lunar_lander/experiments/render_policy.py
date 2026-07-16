@@ -433,8 +433,8 @@ def env_config_from_training_config(
         hover_step_bonus=float(training_config.get("hover_step_bonus", 2.0)),
         hover_complete_bonus=float(training_config.get("hover_complete_bonus", 30.0)),
         controlled_descent_bonus=float(training_config.get("controlled_descent_bonus", 20.0)),
-        success_bonus=float(training_config.get("success_bonus", 100.0)),
-        failure_penalty=float(training_config.get("failure_penalty", -25.0)),
+        success_bonus=float(training_config.get("success_bonus", 200.0)),
+        failure_penalty=float(training_config.get("failure_penalty", -100.0)),
         landing_target_bonus=float(training_config.get("landing_target_bonus", 0.0)),
         landing_angle_bonus=float(training_config.get("landing_angle_bonus", 0.0)),
         post_descent_landing_bonus=float(
