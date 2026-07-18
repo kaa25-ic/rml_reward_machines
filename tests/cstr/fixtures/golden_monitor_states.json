@@ -1,0 +1,53 @@
+{
+  "alpha_equivalent_states": [
+    "@(app(_11762,[]),[=(_11762,gen([],(in_soak_band:eps)*app(_22333,[]))),=(_22333,gen([],(stable:eps)*app(_22333,[])))])",
+    "@(app(_98231,[]),[=(_98231,gen([],(in_soak_band:eps)*app(_88110,[]))),=(_88110,gen([],(stable:eps)*app(_88110,[])))])"
+  ],
+  "classifier_states": [
+    {
+      "monitor_state": "@(app(_11762,[]),[=(_11762,gen([],(safe:eps)*app(_11762,[]))+(in_soak_band:eps)*app(_22333,[]))),=(_22333,gen([],(in_soak_band:eps)*app(_22333,[])))])",
+      "verdict": "currently_false",
+      "payload": {
+        "stable": 0.0,
+        "in_soak_band": 1.0,
+        "temp_safe": 1.0,
+        "critical": 0.0,
+        "overshoot": 0.0
+      },
+      "previous_phase": "preheat",
+      "previous_soak_steps": 0,
+      "soak_steps": 3,
+      "expected_phase": "soak"
+    },
+    {
+      "monitor_state": "@(app(_81152,[]),[=(_81152,gen([],(stable:eps)*app(_49021,[])+(safe:eps)*app(_81152,[]))),=(_49021,gen([],(done_regulated:1)+(safe:eps)*app(_49021,[])))])",
+      "verdict": "currently_false",
+      "payload": {
+        "stable": 1.0,
+        "in_soak_band": 0.0,
+        "temp_safe": 1.0,
+        "critical": 0.0,
+        "overshoot": 0.0
+      },
+      "previous_phase": "approach",
+      "previous_soak_steps": 0,
+      "soak_steps": 3,
+      "expected_phase": "regulate"
+    },
+    {
+      "monitor_state": "1",
+      "verdict": "currently_true",
+      "payload": {
+        "stable": 1.0,
+        "in_soak_band": 0.0,
+        "temp_safe": 1.0,
+        "critical": 0.0,
+        "overshoot": 0.0
+      },
+      "previous_phase": "regulate",
+      "previous_soak_steps": 0,
+      "soak_steps": 3,
+      "expected_phase": "success"
+    }
+  ]
+}

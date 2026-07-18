@@ -48,11 +48,19 @@ does not terminate the physical episode by default; evaluation remains strict.
 
 The CSTR test suite covers monitor phase decoding, soak counting, semantic
 progress encodings, generated RML specs, native threshold predicates,
-deterministic resets, and the pure-Python reference automaton/manual-RM
-contracts.
+deterministic resets, graph-monitor normalization regressions, frozen graph
+encoder adapter behavior, reward-shaping transitions, and the pure-Python
+reference automaton/manual-RM contracts.
 
 ```bash
 python3 -m pytest tests/cstr
+```
+
+Run the shared core contracts together with the CSTR tests before changing
+monitor wrappers, monitor-state normalization, or graph encoders:
+
+```bash
+./.venv/bin/python3 -m pytest tests/core tests/cstr
 ```
 
 These tests are intentionally fast and do not require SWI-Prolog or PPO
