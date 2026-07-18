@@ -10,25 +10,54 @@ The Python environment only derives low-level propositions from the simulator
 state. Protocol progress, success, and failure are handled by the RML monitor in
 `specs/lunar_lander_protocol.pl`.
 
-## Current Setup
+## Landing Protocol
 
-- Algorithm: PPO
-- Encoding: `semantic_progress`
-- Main reward setting: `+200` on strict RML success, `-100` on strict RML failure
-- Additional shaping: semantic monitor-progress, hover completion, controlled descent,
-  success, and failure terms
-- Base simulator: Gymnasium LunarLander
+The protocol is a temporal specification over propositions extracted from the
+Gymnasium LunarLander state. The required order is:
 
-The Python side does not implement a protocol tracker. It only derives simulator
-propositions such as corridor, hover, controlled descent, target zone, contact,
-and successful simulator landing. The RML monitor determines protocol progress,
-success, and failure.
+1. Enter the descent corridor.
+2. Hold a controlled hover for the required count.
+3. Confirm hover completion.
+4. Enter controlled descent.
+5. Land safely in the target zone.
 
-The selected experiment uses a two-stage PPO procedure. Stage 1 is a discovery
-stage initialized from the retained single-stage seed-0 policy. Stage 2
-stabilizes the best stage-1 checkpoint with a lower learning rate. This keeps
-the final policy stable while preserving the strictly RML-based protocol
-monitoring.
+The monitor starts in a waiting-for-corridor phase. A corridor match occurs when
+the lander is horizontally close to the pad and within the configured vertical
+corridor. After this match, the monitor enters the hover phase and counts hover
+events. A hover event requires the lander to remain inside the hover height
+band, keep vertical speed below the hover threshold, and keep the body angle
+within the hover-angle threshold.
+
+After three counted hover events, the monitor switches to controlled descent. Controlled descent requires the lander
+to be below the hover band while keeping descent speed and angle within their
+configured limits.
+
+The protocol succeeds only when the simulator terminates with a successful
+landing while all landing predicates are true: both legs are in contact, the
+lander is inside the horizontal target zone, the landing angle is safe, and the
+base LunarLander environment reports a successful landing. If the episode ends
+before the required protocol sequence is complete, the RML monitor rejects the
+trace.
+
+The default proposition thresholds are defined by
+`LunarProtocolThresholds` in `env.py`. They use the standard LunarLander state
+components `x`, `y`, vertical velocity `vy`, body `angle`, and the two leg
+contact indicators:
+
+| Predicate | Default condition |
+| --- | --- |
+| `corridor` | horizontal corridor `abs(x) <= 0.7` and vertical corridor `0.7 <= y <= 1.4` |
+| `hover` | hover band `0.6 <= y <= 1.0`, vertical-speed limit `abs(vy) <= 0.25`, angle limit `abs(angle) <= 0.35` |
+| `controlled_descent` | below hover band `y < 0.6`, descent-speed limit `abs(vy) <= 0.6`, descent-angle limit `abs(angle) <= 0.45` |
+| `target_zone` | landing-zone limit `abs(x) <= 0.25` |
+| `safe_landing_angle` | terminal landing-angle limit `abs(angle) <= 0.30` |
+| `both_contact` | left and right leg-contact indicators are both greater than `0.5` |
+| `env_successful_landing` | the simulator terminates and the base LunarLander reward is positive |
+
+The RML monitor therefore distinguishes an ordinary successful simulator
+landing from a protocol-compliant landing: the final step must satisfy the
+terminal simulator success condition and the protocol-specific target-zone,
+angle, and contact predicates.
 
 ## Testing
 
@@ -40,6 +69,12 @@ tests with:
 ```
 
 ## Two-Stage PPO
+
+The selected experiment uses a two-stage PPO procedure. Stage 1 is a discovery
+stage with a higher learning reate. Stage 2
+stabilizes the best stage-1 checkpoint with a lower learning rate. This keeps
+the final policy stable while preserving the strictly RML-based protocol
+monitoring.
 
 `experiments/train_ppo_two_stage.py` is a separate orchestration script for the
 discovery-then-stabilization PPO experiment. Stage 1 trains with the discovery
@@ -53,77 +88,14 @@ By default, all two-stage runs are saved under:
 envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/
 ```
 
-The single-stage `train_ppo.py` path is unchanged.
-
-The selected two-stage experiment uses the retained seed-0 single-stage policy
-as the stage-1 warm start, then trains one two-stage run per seed. Example
-seed-0 command:
-
-```bash
-MPLCONFIGDIR=/private/tmp/mplconfig PYTHONPYCACHEPREFIX=/private/tmp/rml_pycache ./.venv/bin/python3 envs/lunar_lander/experiments/train_ppo_two_stage.py \
-  --seed 0 \
-  --run-name semantic_progress_two_stage_seed0 \
-  --stage1-initial-model envs/lunar_lander/results_and_evaluation/ppo/semantic_progress_success_aligned_seed0/best_model.zip \
-  --stage1-timesteps 1000000 \
-  --stage1-learning-rate 0.0003 \
-  --stage2-timesteps 300000 \
-  --stage2-learning-rate 0.0001 \
-  --n-eval-episodes 50 \
-  --eval-freq 50000 \
-  --success-bonus 200 \
-  --failure-penalty -100 \
-  --landing-target-bonus 0 \
-  --landing-angle-bonus 0 \
-  --post-descent-landing-bonus 0 \
-  --post-descent-protocol-miss-penalty 0
-```
-
-Repeat with seeds `0` through `4`, changing only `--seed` and `--run-name`.
-
-Each two-stage run writes:
-
-- `stage1_discovery/`: stage-1 model checkpoints, monitor configs, logs,
-  evaluation CSV, and summary JSON;
-- `stage2_stabilization/`: stage-2 model checkpoints, monitor configs, logs,
-  evaluation CSV, and summary JSON;
-- `combined_eval_metrics.csv`: a stage-labelled evaluation curve with global
-  training steps;
-- `summary.json`: the combined two-stage configuration and artifact index.
-
-The retained warm-start source was trained with the earlier terminal reward
-values recorded in its saved `config.json` (`success_bonus=100`,
-`failure_penalty=-25`). To reproduce that source run safely after the defaults
-refactor, use the explicit command file:
-
-```bash
-bash envs/lunar_lander/reproduction/run_warm_start_source_seed0.sh
-```
-
-By default, the script writes to:
-
-```text
-/private/tmp/rml_lunar_reproduction/semantic_progress_success_aligned_seed0
-```
-
-Set `OUTPUT_DIR=...` if you want a different destination. The script does not
-overwrite the retained committed run unless you deliberately point `OUTPUT_DIR`
-at that result folder.
-
-The retained PPO artifacts used by the selected experiment are:
-
-```text
-envs/lunar_lander/results_and_evaluation/ppo/semantic_progress_success_aligned_seed0/
-envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/
-```
-
 ## Rendering Policies
 
 `experiments/render_policy.py` renders trained PPO checkpoints through the same
 RML monitor stack used during training. It can render one run directory or batch
 render all runs under a two-stage result root. Each render writes an episode
 summary, a step-by-step trajectory CSV, and a root-level render index. Use
-`--record-gif` for dependency-light visual artifacts in the current project
-environment; `--record-video` is also supported when MP4 video dependencies are
+`--record-gif` for visual artifacts in the current project
+environment, and `--record-video` is also supported when MP4 video dependencies are
 installed.
 
 Render the final stage-2 policy for all two-stage seeds:
@@ -137,18 +109,9 @@ MPLCONFIGDIR=/private/tmp/mplconfig PYTHONPYCACHEPREFIX=/private/tmp/rml_pycache
   --seed 10000
 ```
 
-The default output location for that command is:
-
-```text
-envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/rendering/stage2_stabilization_model_final/
-```
-
-The trajectory CSVs are used by the qualitative phase-colored trajectory figure
-and by the golden monitor-state tests under `tests/lunar_lander/`.
-
 ## Figures
 
-Report figures are generated from the saved two-stage evaluation CSVs and the
+Figures are generated from the saved two-stage evaluation CSVs and the
 rendered stage-2 trajectories:
 
 - landing vs RML protocol learning curves over successful seeds;
@@ -162,27 +125,9 @@ Generate figures with:
 ./.venv/bin/python3 -m envs.lunar_lander.analysis.generate_figures --formats pdf png
 ```
 
-The default output location is:
-
-```text
-envs/lunar_lander/results_and_evaluation/figures/
-```
-
 ## Reproducing Results
 
-Reproduction scripts are provided in `reproduction/`. They use the same output
-layout as the tracked experiment artifacts:
-
-```text
-results_and_evaluation/
-  ppo/
-    semantic_progress_success_aligned_seed0/
-    two_stage_training/
-      semantic_progress_two_stage_seed0/
-      ...
-      rendering/
-  figures/
-```
+Reproduction scripts are provided in `reproduction/`. 
 
 Run the selected two-stage PPO experiments for seeds `0..4`:
 
@@ -213,5 +158,3 @@ stage-2 final policies, and regenerates the figure artifacts. It does not delete
 existing result folders before running. Use `SEEDS="0 1"` with
 `run_two_stage_ppo.sh` for a smaller partial rerun.
 
-All reproduction scripts accept `PYTHON_BIN=...` if a different Python
-interpreter should be used.

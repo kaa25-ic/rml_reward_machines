@@ -34,14 +34,6 @@ rendering, and raw observation construction. This keeps the completed
 single-task environment stable while allowing multitask and randomized
 LetterEnv variants to reuse the same grid implementation.
 
-The repository also reserves separate packages for the related variants:
-
-- `envs.multitask_letter_env`
-- `envs.randomized_letter_env`
-
-Those packages keep their task definitions, encodings, monitor specifications,
-experiments, results, and analysis separate from this single-task environment.
-
 RML monitoring requires SWI-Prolog. Install the project and verify SWI-Prolog
 from the repository root:
 
@@ -70,6 +62,11 @@ The neural experiments use six monitor-state encodings:
 The tabular reproduction also includes `simple`, which is used for comparison
 with the baseline tabular state abstraction for this environment.
 
+Learned encoder checkpoints are stored under
+`results_and_evaluation/encoder_pretraining/`. The experiments use
+`gru_dim16_seed0/best_student.pt` for GRU encodings and
+`gnn_basic_seed0/best_dynamics_encoder.pt` for graph encodings.
+
 ## Testing
 
 From the repository root, run the shared core tests, shared grid tests, and
@@ -78,11 +75,6 @@ single-task LetterEnv tests with:
 ```bash
 ./.venv/bin/python3 -m pytest tests/core tests/letter_env_core tests/letter_env
 ```
-
-Learned encoder checkpoints are stored under
-`results_and_evaluation/encoder_pretraining/`. The experiments use
-`gru_dim16_seed0/best_student.pt` for GRU encodings and
-`gnn_basic_seed0/best_dynamics_encoder.pt` for graph encodings.
 
 ## Experiment Groups
 
@@ -120,7 +112,8 @@ JSON. Tabular reproduction runs write episode-level metrics and a summary JSON.
 ## Learned Encoder Pretraining
 
 The learned GRU encoder is trained in two stages: first collect a teacher
-dataset, then distill a frozen monitor encoder from that dataset.
+dataset, then distill a frozen monitor encoder from that dataset. Below are
+example commands to run the two stages:
 
 ```bash
 python -m envs.letter_env.experiments.collect_gru_teacher_dataset \
@@ -133,9 +126,9 @@ python -m envs.letter_env.experiments.train_gru_encoder \
   --seed 0
 ```
 
-The learned graph encoder is also trained in two stages: first generate a
+The learned GNN graph encoder is also trained in two stages: first generate a
 parameterized monitor-transition corpus, then train the basic graph dynamics
-encoder.
+encoder. Below are example commands to run the two stages:
 
 ```bash
 python -m envs.letter_env.experiments.generate_gnn_monitor_corpus \
@@ -151,116 +144,40 @@ python -m envs.letter_env.experiments.train_gnn_encoder \
 ```
 
 The generated datasets and training logs document encoder pretraining. The GRU
-and graph checkpoints listed above are sufficient to rerun the learned-encoding
+and GNN checkpoints listed above are provided and sufficient to rerun the learned-encoding
 RL experiments without repeating pretraining.
 
-## Training
+## Figures
 
-DQN and Double DQN share the same entry point. Use `--algorithm dqn` for DQN
-and `--algorithm ddqn` for Double DQN.
+Figures are generated from the saved learning and zero-shot CSV summaries:
 
-Example Double DQN run with numerical encoding and variable `n` from 1 to 5:
+- learning curves comparing DQN, Double DQN, and PPO with the numerical
+  monitor encoding.
+- learning curves comparing monitor-state encodings.
+- sample-efficiency bars using first success at `SR >= 0.9`.
+- zero-shot success rate at held-out sequence lengths.
+- zero-shot episode length at held-out sequence lengths.
 
-```bash
-python -m envs.letter_env.experiments.train_dqn \
-  --algorithm ddqn \
-  --encoding numerical \
-  --n-value 5 \
-  --seed 0 \
-  --output-dir envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/numerical_n_1to5_seed0 \
-  --total-timesteps 500000 \
-  --learning-rate 0.001 \
-  --buffer-size 100000 \
-  --learning-starts 5000 \
-  --batch-size 64 \
-  --gamma 0.9 \
-  --exploration-fraction 0.4 \
-  --eval-freq 20000 \
-  --n-eval-episodes 20 \
-  --monitor-progress-bonus 10 \
-  --monitor-regression-penalty 0
-```
-
-Example Double DQN run with a learned GRU monitor encoder:
+Generate figures with:
 
 ```bash
-python -m envs.letter_env.experiments.train_dqn \
-  --algorithm ddqn \
-  --encoding learned_gru \
-  --learned-gru-checkpoint envs/letter_env/results_and_evaluation/encoder_pretraining/gru_dim16_seed0/best_student.pt \
-  --n-value 5 \
-  --seed 0 \
-  --output-dir envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/learned_gru_n_1to5_seed0 \
-  --total-timesteps 500000
+python -m envs.letter_env.analysis.generate_figures \
+  --formats pdf png \
+  --success-threshold 0.9 \
+  --max-learning-steps 250000
 ```
 
-Example Double DQN run with a learned graph monitor encoder:
+The reproduction wrapper runs the same command:
 
 ```bash
-python -m envs.letter_env.experiments.train_dqn \
-  --algorithm ddqn \
-  --encoding learned_graph \
-  --learned-graph-checkpoint envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_basic_seed0/best_dynamics_encoder.pt \
-  --n-value 5 \
-  --seed 0 \
-  --output-dir envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/learned_graph_n_1to5_seed0 \
-  --total-timesteps 500000
+bash envs/letter_env/reproduction/run_figures.sh
 ```
 
-Example Double DQN run with the hidden monitor-state ablation:
+Figures and source CSV summaries are written to:
 
-```bash
-python -m envs.letter_env.experiments.train_dqn \
-  --algorithm ddqn \
-  --encoding hidden_monitor_state \
-  --n-value 5 \
-  --seed 0 \
-  --output-dir envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/hidden_monitor_state_n_1to5_seed0 \
-  --total-timesteps 500000 \
-  --learning-rate 0.001 \
-  --buffer-size 100000 \
-  --learning-starts 5000 \
-  --batch-size 64 \
-  --gamma 0.9 \
-  --exploration-fraction 0.4 \
-  --eval-freq 20000 \
-  --n-eval-episodes 20 \
-  --monitor-progress-bonus 10 \
-  --monitor-regression-penalty 0
+```text
+envs/letter_env/results_and_evaluation/figures/
 ```
-
-Example PPO run:
-
-```bash
-python -m envs.letter_env.experiments.train_ppo \
-  --encoding numerical \
-  --n-value 5 \
-  --seed 0 \
-  --output-dir envs/letter_env/results_and_evaluation/experiments_with_variable_n/ppo/numerical_n_1to5_seed0 \
-  --total-timesteps 500000 \
-  --n-steps 16384 \
-  --batch-size 64 \
-  --ent-coef 0.05 \
-  --step-penalty 0.05 \
-  --eval-freq 20000 \
-  --n-eval-episodes 20 \
-  --monitor-progress-bonus 10 \
-  --monitor-regression-penalty 0
-```
-
-Example tabular reproduction run:
-
-```bash
-python -m envs.letter_env.experiments.train_tabular \
-  --encoding all \
-  --max-n 10 \
-  --n-values 1 2 3 4 5 6 7 8 9 10 \
-  --iterations 1 \
-  --output-dir envs/letter_env/results_and_evaluation/experiments_with_variable_n/original_tabular_reproduction/tabular_reproduction_from_previous_thesis
-```
-
-For multi-seed experiments, use one output folder per seed, for example
-`one_hot_n_1to5_seed0`, `one_hot_n_1to5_seed1`, and so on.
 
 ## Reproduction Scripts
 
@@ -284,51 +201,3 @@ bash envs/letter_env/reproduction/run_all_selected.sh
 The scripts write outputs to `results_and_evaluation/` using the folder layout
 documented above. They do not delete existing results before running. Learned
 encoding runs use the GRU and GNN checkpoints under `encoder_pretraining/`.
-
-## Zero-Shot Evaluation
-
-Saved neural policies can be evaluated on fixed larger values of `n` using:
-
-```bash
-python -m envs.letter_env.experiments.evaluate_zero_shot \
-  --algorithm ddqn \
-  --encoding numerical \
-  --train-seed 0 \
-  --eval-n 10 \
-  --model-path envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/numerical_n_1to5_seed0/model_final.zip \
-  --output-dir envs/letter_env/results_and_evaluation/generalization_experiments_with_zero_shot_on_larger_n/ddqn/numerical_zeroshot_n10_seed0 \
-  --n-eval-episodes 20
-```
-
-For learned encodings, pass the same encoder checkpoint used during training:
-
-```bash
-python -m envs.letter_env.experiments.evaluate_zero_shot \
-  --algorithm ddqn \
-  --encoding learned_graph \
-  --train-seed 0 \
-  --eval-n 20 \
-  --model-path envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/learned_graph_n_1to5_seed0/best_model.zip \
-  --learned-graph-checkpoint envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_basic_seed0/best_dynamics_encoder.pt \
-  --output-dir envs/letter_env/results_and_evaluation/generalization_experiments_with_zero_shot_on_larger_n/ddqn/learned_graph_zeroshot_n20_seed0 \
-  --n-eval-episodes 20
-```
-
-The zero-shot output folder contains an evaluation CSV, monitor logs, copied
-runtime monitor configuration, and summary JSON.
-
-## Tests And Smoke Checks
-
-Smoke checks can write to `/private/tmp` or another temporary location so that
-`results_and_evaluation/` remains reserved for full experiment outputs.
-
-Basic command checks:
-
-```bash
-python -m envs.letter_env.experiments.train_dqn --help
-python -m envs.letter_env.experiments.train_ppo --help
-python -m envs.letter_env.experiments.train_tabular --help
-python -m envs.letter_env.experiments.train_gru_encoder --help
-python -m envs.letter_env.experiments.train_gnn_encoder --help
-python -m envs.letter_env.experiments.evaluate_zero_shot --help
-```
