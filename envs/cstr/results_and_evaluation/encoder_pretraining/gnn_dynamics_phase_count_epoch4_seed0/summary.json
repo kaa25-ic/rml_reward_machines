@@ -1,0 +1,115 @@
+{
+  "config": {
+    "dataset_path": "envs/cstr/results_and_evaluation/encoder_pretraining/gnn_corpus_seed0/monitor_states.jsonl",
+    "output_dir": "envs/cstr/results_and_evaluation/encoder_pretraining/gnn_dynamics_phase_count_epoch4_seed0",
+    "experiment_name": "cstr_gnn_dynamics_values_phase_count",
+    "seed": 0,
+    "epochs": 4,
+    "batch_size": 8,
+    "learning_rate": 0.001,
+    "weight_decay": 1e-05,
+    "validation_fraction": 0.2,
+    "max_grad_norm": 5.0,
+    "node_embedding_dim": 32,
+    "node_value_embedding_dim": 16,
+    "node_value_dropout": 0.1,
+    "hidden_dim": 64,
+    "output_dim": 32,
+    "num_layers": 2,
+    "dropout": 0.1,
+    "output_layer_norm": true,
+    "output_l2_normalize": false,
+    "event_embedding_dim": 16,
+    "phase_loss_weight": 2.0,
+    "phase_class_weighting": true,
+    "balanced_phase_sampling": true,
+    "use_graph_structural_features": true,
+    "prefer_normalized_monitor_state": false,
+    "device": "cpu"
+  },
+  "dataset": {
+    "path": "envs/cstr/results_and_evaluation/encoder_pretraining/gnn_corpus_seed0/monitor_states.jsonl",
+    "examples": 18253,
+    "train_examples": 14603,
+    "validation_examples": 3650
+  },
+  "graph": {
+    "node_value_embedding_dim": 16,
+    "structural_feature_dim": 15,
+    "num_node_kinds": 9,
+    "num_node_values": 27,
+    "num_edge_types": 5,
+    "event_vocab": {
+      "<UNK>": 0,
+      "SAFE": 1,
+      "IN_SOAK": 2,
+      "STABLE": 3,
+      "DONE_REGULATED": 4,
+      "CRITICAL": 5,
+      "UNSAFE": 6
+    },
+    "phase_vocab": {
+      "<UNK>": 0,
+      "<initial>": 1,
+      "preheat": 2,
+      "soak_1": 3,
+      "soak_2": 4,
+      "soak_3": 5,
+      "soak_4": 6,
+      "soak_5": 7,
+      "soak_6": 8,
+      "soak_7": 9,
+      "soak_8": 10,
+      "soak_9": 11,
+      "soak_10": 12,
+      "approach": 13,
+      "regulate": 14
+    },
+    "transition_label_counts": {
+      "neutral": 16685,
+      "progress": 1318,
+      "failure": 200,
+      "success": 50
+    },
+    "phase_label_counts": {
+      "<UNK>": 0,
+      "<initial>": 250,
+      "preheat": 3810,
+      "soak_1": 225,
+      "soak_2": 110,
+      "soak_3": 103,
+      "soak_4": 52,
+      "soak_5": 52,
+      "soak_6": 51,
+      "soak_7": 50,
+      "soak_8": 50,
+      "soak_9": 50,
+      "soak_10": 50,
+      "approach": 200,
+      "regulate": 13200
+    }
+  },
+  "best": {
+    "epoch": 4,
+    "val_loss": 0.15233367227400615,
+    "encoder_path": "envs/cstr/results_and_evaluation/encoder_pretraining/gnn_dynamics_phase_count_epoch4_seed0/best_dynamics_encoder.pt"
+  },
+  "final_metrics": {
+    "epoch": 4,
+    "train_loss": 0.8122788310634643,
+    "train_transition_accuracy": 0.9991097719646648,
+    "train_phase_accuracy": 0.9899335752927481,
+    "train_phase_macro_accuracy": 0.9900153279304504,
+    "val_loss": 0.15233367227400615,
+    "val_transition_accuracy": 1.0,
+    "val_phase_accuracy": 1.0,
+    "val_phase_macro_accuracy": 1.0
+  },
+  "artifacts": {
+    "config": "envs/cstr/results_and_evaluation/encoder_pretraining/gnn_dynamics_phase_count_epoch4_seed0/config.json",
+    "best_encoder": "envs/cstr/results_and_evaluation/encoder_pretraining/gnn_dynamics_phase_count_epoch4_seed0/best_dynamics_encoder.pt",
+    "final_encoder": "envs/cstr/results_and_evaluation/encoder_pretraining/gnn_dynamics_phase_count_epoch4_seed0/dynamics_encoder_final.pt",
+    "metrics": "envs/cstr/results_and_evaluation/encoder_pretraining/gnn_dynamics_phase_count_epoch4_seed0/metrics.jsonl",
+    "summary": "envs/cstr/results_and_evaluation/encoder_pretraining/gnn_dynamics_phase_count_epoch4_seed0/summary.json"
+  }
+}

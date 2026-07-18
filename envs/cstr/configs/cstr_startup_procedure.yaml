@@ -1,0 +1,39 @@
+env_name: cstr-rml-cstr_startup_procedure
+host: 127.0.0.1
+port: 18401
+max_episode_steps : 300
+variables:
+    - name: critical
+      type: float
+      location: info
+      identifier: event_temp_critical
+    - name: stable
+      type: float
+      location: info
+      identifier: event_stable_step
+    - name: temp_safe
+      type: float
+      location: info
+      identifier: event_temp_safe
+    - name: in_soak_band
+      type: float
+      location: info
+      identifier: event_in_soak_band
+    - name: overshoot
+      type: float
+      location: info
+      identifier: event_overshoot
+    - name: past_deadline
+      type: float
+      location: info
+      identifier: event_past_deadline
+    - name: heating_rate_exceeded
+      type: float
+      location: info
+      identifier: event_heating_rate_exceeded
+reward:
+      name: task
+      true: 0
+      currently_true: 0
+      currently_false: 0
+      false: 0

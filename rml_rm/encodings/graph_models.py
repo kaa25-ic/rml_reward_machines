@@ -170,8 +170,10 @@ class RMLGraphDynamicsPredictor(nn.Module):
         graph_config: GraphEncoderConfig,
         event_embedding_dim: int,
         num_phase_labels: int,
+        structural_feature_dim: int = 0,
     ) -> None:
         super().__init__()
+        self.structural_feature_dim = int(structural_feature_dim)
         self.encoder = RMLGraphNeuralEncoder(
             num_node_kinds=num_node_kinds,
             num_node_values=num_node_values,
@@ -179,19 +181,33 @@ class RMLGraphDynamicsPredictor(nn.Module):
             config=graph_config,
         )
         self.event_embedding = nn.Embedding(num_events, event_embedding_dim)
+        graph_embedding_dim = graph_config.output_dim + self.structural_feature_dim
         self.transition_head = nn.Sequential(
-            nn.Linear(graph_config.output_dim + event_embedding_dim, graph_config.hidden_dim),
+            nn.Linear(graph_embedding_dim + event_embedding_dim, graph_config.hidden_dim),
             nn.ReLU(),
             nn.Linear(graph_config.hidden_dim, len(TRANSITION_LABELS)),
         )
         self.phase_head = nn.Sequential(
-            nn.Linear(graph_config.output_dim, graph_config.hidden_dim),
+            nn.Linear(graph_embedding_dim, graph_config.hidden_dim),
             nn.ReLU(),
             nn.Linear(graph_config.hidden_dim, num_phase_labels),
         )
 
-    def forward(self, graph_batch: RMLGraphBatch, event_ids: torch.LongTensor) -> dict[str, torch.Tensor]:
+    def forward(
+        self,
+        graph_batch: RMLGraphBatch,
+        event_ids: torch.LongTensor,
+        structural_features: torch.Tensor | None = None,
+    ) -> dict[str, torch.Tensor]:
         graph_embedding = self.encoder(graph_batch)
+        if self.structural_feature_dim > 0:
+            if structural_features is None:
+                structural_features = torch.zeros(
+                    (graph_embedding.shape[0], self.structural_feature_dim),
+                    dtype=graph_embedding.dtype,
+                    device=graph_embedding.device,
+                )
+            graph_embedding = torch.cat([graph_embedding, structural_features.to(graph_embedding.device)], dim=1)
         event_embedding = self.event_embedding(event_ids)
         return {
             "embedding": graph_embedding,

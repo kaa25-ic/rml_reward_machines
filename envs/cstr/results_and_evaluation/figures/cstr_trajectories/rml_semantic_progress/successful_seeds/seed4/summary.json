@@ -1,0 +1,35 @@
+{
+  "experiment": "cstr_rml_policy_visualization",
+  "completed_at_utc": "2026-07-18T17:47:21.612948+00:00",
+  "runtime_seconds": 0.4796850840066327,
+  "model_path": "/Users/khalid/Desktop/rml_reward_machines/envs/cstr/results_and_evaluation/ppo/rml_semantic_progress_seed4/best_model.zip",
+  "env_variant": "semantic_progress",
+  "reward_mode": "env_rml",
+  "seed": 10000,
+  "regulation_violation_steps": 10,
+  "soak_steps": 10,
+  "summary": {
+    "steps": 300,
+    "episode_return": 963.0074964034304,
+    "physical_success": true,
+    "full_episode_safe": true,
+    "terminal_stable": true,
+    "rml_success": true,
+    "monitor_failed": false,
+    "monitor_soak_steps": 0,
+    "monitor_violation_steps": 0,
+    "critical_failure": false,
+    "warning_events": 0,
+    "max_stable_steps": 274,
+    "first_stable_step": 27,
+    "final_tracking_error": 0.03292537144992813,
+    "final_temperature_violation": 0.0,
+    "terminated": true,
+    "truncated": true
+  },
+  "paths": {
+    "trajectory_csv": "/Users/khalid/Desktop/rml_reward_machines/envs/cstr/results_and_evaluation/figures/cstr_trajectories/rml_semantic_progress/successful_seeds/seed4/trajectory.csv",
+    "trajectory_png": "/Users/khalid/Desktop/rml_reward_machines/envs/cstr/results_and_evaluation/figures/cstr_trajectories/rml_semantic_progress/successful_seeds/seed4/trajectory.png",
+    "summary": "/Users/khalid/Desktop/rml_reward_machines/envs/cstr/results_and_evaluation/figures/cstr_trajectories/rml_semantic_progress/successful_seeds/seed4/summary.json"
+  }
+}

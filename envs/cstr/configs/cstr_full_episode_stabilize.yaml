@@ -1,0 +1,23 @@
+env_name: cstr-rml-cstr_full_episode_stabilize
+host: 127.0.0.1
+port: 18401
+max_episode_steps : 300
+variables:
+    - name: critical
+      type: float
+      location: info
+      identifier: event_temp_critical
+    - name: stable
+      type: float
+      location: info
+      identifier: event_stable_step
+    - name: temp_safe
+      type: float
+      location: info
+      identifier: event_temp_safe
+reward:
+      name: task
+      true: 0
+      currently_true: 0
+      currently_false: 0
+      false: 0

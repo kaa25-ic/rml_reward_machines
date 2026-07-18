@@ -58,6 +58,7 @@ class RMLMonitorWrapper(gym.Wrapper):
         client: MonitorClient | None = None,
         transition_bonus: float = 10.0,
         include_transition_bonus: bool = True,
+        terminal_monitor_states: set[str] | None = None,
     ) -> None:
         super().__init__(env)
         self.config_path = Path(config_path)
@@ -76,6 +77,11 @@ class RMLMonitorWrapper(gym.Wrapper):
         self.monitor_state_unencoded = ""
         self.transition_bonus = float(transition_bonus)
         self.include_transition_bonus = bool(include_transition_bonus)
+        self.active_terminal_monitor_states = (
+            set(self.terminal_monitor_states)
+            if terminal_monitor_states is None
+            else {normalize_monitor_state(str(state)) for state in terminal_monitor_states}
+        )
         self.step_num = 0
         self.total_timesteps = 0
         self.data = self._empty_data()
@@ -104,7 +110,7 @@ class RMLMonitorWrapper(gym.Wrapper):
         self.data["terminate"] = bool(truncated)
         monitor_reward, monitor_info = self.monitor_reward()
 
-        if normalize_monitor_state(self.monitor_state_unencoded) in self.terminal_monitor_states:
+        if normalize_monitor_state(self.monitor_state_unencoded) in self.active_terminal_monitor_states:
             terminated = True
 
         info = dict(info)

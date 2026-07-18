@@ -8,6 +8,7 @@ import numpy as np
 import torch
 
 from rml_rm.encodings.graph_models import GraphEncoderConfig, RMLGraphBatch, RMLGraphDynamicsPredictor
+from rml_rm.encodings.graph_pretraining import graph_structural_features
 from rml_rm.encodings.rml_sequence import load_gru_checkpoint
 from rml_rm.encodings.rml_graph import normalize_generated_variables, rml_to_graph
 
@@ -59,8 +60,8 @@ class FrozenGraphMonitorStateEncoder:
         self.device = torch.device("cpu")
         checkpoint = torch.load(self.checkpoint_path, map_location=self.device)
         graph_config = GraphEncoderConfig(**checkpoint["graph_config"])
-        if int(graph_config.node_value_embedding_dim) != 0:
-            raise ValueError("Only the basic graph encoder without node-value embeddings is supported.")
+        self.structural_feature_dim = int(checkpoint.get("structural_feature_dim", 0))
+        self.embedding_dim = int(graph_config.output_dim) + self.structural_feature_dim
 
         self.node_kind_vocab = {str(key): int(value) for key, value in checkpoint["node_kind_vocab"].items()}
         self.node_value_vocab = {str(key): int(value) for key, value in checkpoint["node_value_vocab"].items()}
@@ -75,6 +76,7 @@ class FrozenGraphMonitorStateEncoder:
             graph_config=graph_config,
             event_embedding_dim=int(checkpoint["config"].get("event_embedding_dim", 16)),
             num_phase_labels=len(self.phase_vocab),
+            structural_feature_dim=self.structural_feature_dim,
         ).to(self.device)
         self.model.load_state_dict(checkpoint["model_state_dict"])
         self.model.eval()
@@ -87,6 +89,13 @@ class FrozenGraphMonitorStateEncoder:
             return cached.copy()
 
         graph = rml_to_graph(monitor_state)
+        structural_features = None
+        if self.structural_feature_dim > 0:
+            structural_features = torch.tensor(
+                [graph_structural_features(graph)],
+                dtype=torch.float32,
+                device=self.device,
+            )
         batch = RMLGraphBatch.from_graphs(
             [graph],
             node_kind_vocab=self.node_kind_vocab,
@@ -96,14 +105,31 @@ class FrozenGraphMonitorStateEncoder:
         )
         with torch.no_grad():
             encoded = (
-                self.model(batch, torch.zeros(1, dtype=torch.long, device=self.device))["embedding"]
+                self.model(
+                    batch,
+                    torch.zeros(1, dtype=torch.long, device=self.device),
+                    structural_features,
+                )["embedding"]
                 .squeeze(0)
                 .cpu()
                 .numpy()
                 .astype(np.float32)
             )
-        norm = float(np.linalg.norm(encoded))
-        if norm > 1e-8:
-            encoded = encoded / norm
+        encoded = _scale_graph_embedding(encoded, structural_feature_dim=self.structural_feature_dim)
         self._cache[monitor_state] = encoded.copy()
         return encoded
+
+
+def _scale_graph_embedding(encoded: np.ndarray, *, structural_feature_dim: int) -> np.ndarray:
+    vector = np.asarray(encoded, dtype=np.float32).reshape(-1)
+    structural_dim = max(0, min(int(structural_feature_dim), int(vector.shape[0])))
+    if structural_dim == 0:
+        norm = float(np.linalg.norm(vector))
+        return vector / norm if norm > 1e-8 else vector
+    learned_dim = int(vector.shape[0]) - structural_dim
+    learned = vector[:learned_dim]
+    structural = vector[learned_dim:]
+    norm = float(np.linalg.norm(learned))
+    if norm > 1e-8:
+        learned = learned / norm
+    return np.concatenate([learned, 0.5 * structural], dtype=np.float32)

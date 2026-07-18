@@ -33,6 +33,7 @@ exclude = ["legacy*", "results*", "tests*"]
 "envs.letter_env" = ["configs/*.json", "configs/*.yaml", "specs/*.pl"]
 "envs.randomized_letter_env" = ["configs/*.yaml", "specs/*.pl"]
 "envs.lunar_lander" = ["configs/*.yaml", "specs/*.pl"]
+"envs.cstr" = ["configs/*.yaml", "specs/*.pl"]
 "rml_rm.monitors" = ["rml/*.pl", "rml/*.sh"]
 
 [tool.pytest.ini_options]

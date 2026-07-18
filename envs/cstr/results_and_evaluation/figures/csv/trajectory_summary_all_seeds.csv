@@ -1,0 +1,26 @@
+variant,label,train_seed,success_group,steps,episode_return,physical_success,full_episode_safe,terminal_stable,rml_success,monitor_failed,monitor_soak_steps,monitor_violation_steps,critical_failure,warning_events,max_stable_steps,first_stable_step,final_tracking_error,final_temperature_violation,terminated,truncated
+baseline,Baseline,0,successful_seeds,300,37.53002326885285,True,True,True,False,False,0,0,False,0,286,15,0.0009186508235327073,0.0,False,True
+baseline,Baseline,1,successful_seeds,300,33.45114627301835,True,True,True,False,False,0,0,False,0,270,31,7.634996672917227e-05,0.0,False,True
+baseline,Baseline,2,successful_seeds,300,-41.08328936444045,False,True,False,False,False,0,0,False,0,0,-1,0.0874625000897119,0.0,False,True
+baseline,Baseline,3,successful_seeds,300,30.228597254695206,True,True,True,False,False,0,0,False,0,271,30,0.011194602768396456,0.0,False,True
+baseline,Baseline,4,successful_seeds,300,-39.04217118426948,False,True,False,False,False,0,0,False,0,0,-1,0.0864349635473799,0.0,False,True
+rml_hidden,RML hidden,0,failed_seeds,300,943.1042904201468,True,True,True,True,False,0,0,False,0,271,30,0.055560760085844985,0.0,True,True
+rml_hidden,RML hidden,1,failed_seeds,300,949.0609329567079,True,True,True,True,False,0,0,False,0,270,31,0.024245696323908994,0.0,True,True
+rml_hidden,RML hidden,2,successful_seeds,300,952.1446028704229,True,True,True,True,False,0,0,False,0,270,31,0.00923633635210741,0.0,True,True
+rml_hidden,RML hidden,3,successful_seeds,300,955.8906462510923,True,True,True,True,False,0,0,False,0,270,31,7.669481904754027e-05,0.0,True,True
+rml_hidden,RML hidden,4,failed_seeds,300,948.8393504358941,True,True,True,True,False,0,0,False,0,270,31,0.019455630242580235,0.0,True,True
+rml_semantic_progress,RML semantic progress,0,successful_seeds,300,974.198292541014,True,True,True,True,False,0,0,False,0,275,26,0.012265277734273883,0.0,True,True
+rml_semantic_progress,RML semantic progress,1,successful_seeds,300,967.649144464402,True,True,True,True,False,0,0,False,0,273,28,0.0015882869255687826,0.0,True,True
+rml_semantic_progress,RML semantic progress,2,successful_seeds,300,975.2607367699474,True,True,True,True,False,0,0,False,0,275,26,0.008534850355005341,0.0,True,True
+rml_semantic_progress,RML semantic progress,3,successful_seeds,300,966.2750545929729,True,True,True,True,False,0,0,False,0,276,25,0.04358393065592481,0.0,True,True
+rml_semantic_progress,RML semantic progress,4,successful_seeds,300,963.0074964034304,True,True,True,True,False,0,0,False,0,274,27,0.03292537144992813,0.0,True,True
+manual_rm_semantic_progress,Manual RM semantic progress,0,failed_seeds,6,-62.214641017919874,False,False,False,False,True,0,0,False,0,0,-1,0.320505947747469,0.24358197022240802,True,False
+manual_rm_semantic_progress,Manual RM semantic progress,1,successful_seeds,300,947.8672857348574,True,True,True,True,False,0,0,False,0,269,32,0.019247083757307992,0.0,True,True
+manual_rm_semantic_progress,Manual RM semantic progress,2,successful_seeds,300,972.4611456296057,True,True,True,True,False,0,0,False,0,274,27,0.006499449419155867,0.0,True,True
+manual_rm_semantic_progress,Manual RM semantic progress,3,successful_seeds,300,967.0149675375894,True,True,True,True,False,0,0,False,0,273,28,0.004584615624721011,0.0,True,True
+manual_rm_semantic_progress,Manual RM semantic progress,4,successful_seeds,300,974.6992716889288,True,True,True,True,False,0,0,False,0,275,26,0.010923854096481445,0.0,True,True
+rml_graph_encoder,RML graph encoder,0,successful_seeds,300,984.4838972312587,True,True,True,True,False,0,0,False,0,277,24,0.0006416501576814171,0.0,True,True
+rml_graph_encoder,RML graph encoder,1,successful_seeds,300,974.4147864704195,True,True,True,True,False,0,0,False,0,275,26,0.00917793789956578,0.0,True,True
+rml_graph_encoder,RML graph encoder,2,successful_seeds,300,972.1453262467743,True,True,True,True,False,0,0,False,0,274,27,0.003960033208425362,0.0,True,True
+rml_graph_encoder,RML graph encoder,3,successful_seeds,300,974.5054848493583,True,True,True,True,False,0,0,False,0,274,27,6.752469654636162e-05,0.0,True,True
+rml_graph_encoder,RML graph encoder,4,successful_seeds,300,966.5245415197853,True,True,True,True,False,0,0,False,0,274,27,0.015583322449482018,0.0,True,True
