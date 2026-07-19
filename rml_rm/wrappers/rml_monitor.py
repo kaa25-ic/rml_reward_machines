@@ -1,5 +1,9 @@
 """Gym wrapper for RML monitor integration."""
 
+# The RML-monitor gym integration here is derived from RMLGym
+# (https://github.com/hishamunniyankal/rml-gym); see the repository README,
+# "License & Attribution".
+
 import copy
 from collections.abc import Callable, Mapping
 from pathlib import Path

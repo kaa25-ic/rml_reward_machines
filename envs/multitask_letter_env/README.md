@@ -18,22 +18,16 @@ The `small_v1` task suite is:
 | 3 | `A B D C D^n` |
 | 4 | `A B C D C D^n` |
 
-The grid mechanics are shared with `envs.letter_env_core`: the agent starts at
-`(4, 4)`, `A` is at `(1, 1)`, `C` is at `(1, 4)`, `D` is at `(4, 1)`, and the
-first visit to `A` reveals `B` at the same location.
-
 ## RML Setup
 
-The environment is purely RML-based. Rewards, verdicts, terminal success, and
-monitor states come from task-specific RML monitors. The Python environment
-does not maintain a separate progress tracker.
+The environment is RML-based. Rewards, verdicts, terminal success, and
+monitor states come from task-specific RML monitors. 
 
 Static monitor files are stored in:
 
 - `specs/`: Prolog RML specifications, one per task.
 - `configs/`: YAML monitor configuration templates, one per task.
-- `configs/monitor_state_catalogue.json`: reachable RML monitor states for
-  `small_v1` and `n=1..5`.
+- `configs/monitor_state_catalogue.json`: reachable RML monitor states.
 - `configs/monitor_progress_catalogue.json`: RML-state progress values used for
   reward shaping.
 
@@ -60,9 +54,9 @@ python -m envs.multitask_letter_env.experiments.build_monitor_progress_catalogue
 
 The observation contains:
 
-- grid position and proposition features;
-- normalized count `n`;
-- one-hot task identity;
+- grid position and proposition features.
+- normalized count `n`.
+- one-hot task identity.
 - encoded RML monitor state.
 
 Implemented monitor encodings:
@@ -85,8 +79,8 @@ multi-task LetterEnv tests with:
 ```
 
 The GRU and graph encoders should be trained inside this package before running
-their DDQN experiments. Both learned encoders are trained from RML-monitor
-corpora generated for `small_v1` with `n=1..5`. GRU pretraining uses labelled
+their DDQN experiments (trained models are included). Both learned encoders are trained from RML-monitor
+corpora. GRU pretraining uses labelled
 monitor-state traces. The labels supervise progress index, next expected event,
 terminal type, and task identity.
 
@@ -208,11 +202,11 @@ python -m envs.multitask_letter_env.experiments.evaluate_zero_shot \
 
 ## Figures
 
-Report figures are generated from the saved CSV summaries:
+Figures are generated from the saved CSV summaries:
 
-- learning curves by DDQN encoding;
-- zero-shot success with the tabular contrast;
-- sample-efficiency bars using first success at `SR >= 0.9`;
+- learning curves by DDQN encoding.
+- zero-shot success with the tabular contrast.
+- sample-efficiency bars using first success at `SR >= 0.9`.
 - a tabular/neural summary table.
 
 Generate figures with:
@@ -226,17 +220,7 @@ python -m envs.multitask_letter_env.analysis.generate_figures \
 
 ## Reproducing Results
 
-Reproduction scripts are provided in `reproduction/`. They use the same output
-layout as the tracked experiment artifacts:
-
-```text
-results_and_evaluation/
-  encoder_pretraining/
-  ddqn/
-  tabular/
-  generalization/
-  figures/
-```
+Reproduction scripts are provided in `reproduction/`. 
 
 Run encoder pretraining:
 

@@ -1,3 +1,8 @@
+% MIT License
+% Copyright (c) 2019-2022 Davide Ancona, Luca Franceschini, Angelo Ferrando, Viviana Mascardi
+% Vendored from the RML project (RML@DIBRIS, University of Genoa).
+% See the repository README, "License & Attribution".
+
 :- module(trace_expressions,[next/3, may_halt/1, is1/1]).
 
 :- use_module(library(coinduction)).

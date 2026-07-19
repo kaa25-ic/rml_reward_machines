@@ -2,7 +2,7 @@
 
 Randomized LetterEnv evaluates the RML task `A, B, C, D^n` when the letter
 locations vary across episodes. The Python environment controls grid movement
-and letter placement; task progress, success, and failure are defined by the
+and letter placement. Task progress, success, and failure are defined by the
 RML monitor.
 
 The agent starts from a fixed location. `A`, `C`, and `D` are placed at reset,
@@ -19,7 +19,7 @@ Two randomized variants are supported.
 In the fully randomized variant, `A`, `C`, and `D` are sampled from the full
 grid, excluding the agent start location. This is the harder setting because
 incorrect letters can appear near the start or along short paths to the current
-target.
+target. It can also make the episode unsolvable if one letter cannot be reached in the correct order.
 
 Use:
 
@@ -62,14 +62,10 @@ results_and_evaluation/q_learning/
 
 ## Encoding
 
-The current experiments use `semantic_progress`, a compact monitor-state
+The experiments use `semantic_progress`, a compact monitor-state
 encoding for the phases of the shared `A, B, C, D^n` task. The encoding is
-computed from the RML monitor-state string, not from a Python task tracker.
+computed from the RML monitor-state string. 
 
-## Algorithms
-
-The neural experiments use Double DQN. The tabular baseline uses dictionary-
-backed Q-learning with the same semantic-progress monitor information.
 
 ## Testing
 
@@ -82,18 +78,7 @@ randomized LetterEnv tests with:
 
 ## Reproducing Runs
 
-Reproduction scripts are provided in `reproduction/`. They write outputs to the
-same layout used by the tracked experiment artifacts:
-
-```text
-results_and_evaluation/
-  ddqn/
-    full_random_n1/
-    regional_randomness_n1to5/
-  q_learning/
-  generalization/
-  figures/
-```
+Reproduction scripts are provided in `reproduction/`. 
 
 The main training scripts run the selected experiments for seeds `0..4`.
 
@@ -138,14 +123,4 @@ The full selected pipeline reruns the five-seed DDQN experiments, the five-seed
 Q-learning baseline, seed-0 zero-shot evaluations, and figure generation. It
 does not delete existing result folders before running.
 
-The monitor reward configuration defaults to:
 
-```text
-configs/random_letter_en.yaml
-```
-
-The figure script can also be called directly:
-
-```bash
-python -m envs.randomized_letter_env.analysis.generate_figures --formats pdf png
-```

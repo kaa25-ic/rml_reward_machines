@@ -1,3 +1,8 @@
+% MIT License
+% Copyright (c) 2019-2022 Davide Ancona, Luca Franceschini, Angelo Ferrando, Viviana Mascardi
+% Vendored from the RML project (RML@DIBRIS, University of Genoa).
+% See the repository README, "License & Attribution".
+
 :- module('deep_subdict', [deep_subdict/2]).
 
 % three cases: dictionaries, lists and others

@@ -1,3 +1,8 @@
+% MIT License
+% Copyright (c) 2019-2022 Davide Ancona, Luca Franceschini, Angelo Ferrando, Viviana Mascardi
+% Vendored from the RML project (RML@DIBRIS, University of Genoa).
+% See the repository README, "License & Attribution".
+
 :- use_module(library(http/websocket)).
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
