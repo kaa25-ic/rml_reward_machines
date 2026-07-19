@@ -140,12 +140,17 @@ def main() -> None:
         show_std=True,
     )
 
-    generalization_rows = load_generalization_metrics(args.generalization_root, final_rows, args.seed0)
+    generalization_rows = load_generalization_metrics(args.generalization_root, args.ppo_root, final_rows, args.seed0)
     if not generalization_rows.empty:
-        write_table(csv_dir / "generalization_success_by_soak_steps.csv", generalization_rows)
-        plot_generalization_success(
+        write_table(csv_dir / "zero_shot_soak_generalization.csv", generalization_rows)
+        plot_zero_shot_soak_generalization(
             generalization_rows,
-            args.output_dir / "generalization_success_by_soak_steps_seed0",
+            args.output_dir / "zero_shot_soak_generalization",
+        )
+        plot_zero_shot_soak_generalization(
+            generalization_rows,
+            args.output_dir / "zero_shot_soak_generalization_side_by_side",
+            layout="horizontal",
         )
 
     trajectory_rows = []
@@ -178,7 +183,8 @@ def main() -> None:
 
     figure_names = [
         "all_variants_best_metrics_multiseed.png",
-        "generalization_success_by_soak_steps_seed0.png",
+        "zero_shot_soak_generalization.png",
+        "zero_shot_soak_generalization_side_by_side.png",
     ]
     if not args.skip_trajectories:
         figure_names.extend(
@@ -284,7 +290,16 @@ def plot_best_metrics(rows: pd.DataFrame, output_prefix: Path, *, title: str, sh
     save_figure(fig, output_prefix)
 
 
-def load_generalization_metrics(generalization_root: Path, final_rows: pd.DataFrame, seed: int) -> pd.DataFrame:
+def load_generalization_metrics(
+    generalization_root: Path,
+    ppo_root: Path,
+    final_rows: pd.DataFrame,
+    seed: int,
+) -> pd.DataFrame:
+    variable_rows = load_variable_k_generalization_metrics(generalization_root, ppo_root)
+    if not variable_rows.empty:
+        return variable_rows
+
     records = []
     for variant in VARIANTS:
         if variant["key"] == "baseline":
@@ -326,46 +341,226 @@ def load_generalization_metrics(generalization_root: Path, final_rows: pd.DataFr
                         "split": "heldout",
                         "status": str(result.get("status", "")),
                         "rml_success_rate": float(result_summary.get("rml_success_rate", np.nan)),
+                        "soak_exact_compliance_rate": float(
+                            result_summary.get("soak_exact_compliance_rate", np.nan)
+                        ),
                     }
                 )
     return pd.DataFrame(records)
 
 
-def plot_generalization_success(rows: pd.DataFrame, output_prefix: Path) -> None:
-    fig, axis = plt.subplots(figsize=(8, 4.8), constrained_layout=True)
-    axis.axvspan(9.5, 10.5, color="#111827", alpha=0.08, label="Trained k")
-    for variant in VARIANTS:
-        subset = rows.loc[rows["variant"] == variant["key"]].sort_values("soak_steps")
+def load_variable_k_generalization_metrics(generalization_root: Path, ppo_root: Path) -> pd.DataFrame:
+    records = []
+    for summary_path in sorted(ppo_root.glob("rml_graph_variable_k_seed*/summary.json")):
+        seed = int(summary_path.parent.name.rsplit("seed", maxsplit=1)[1])
+        with summary_path.open("r", encoding="utf-8") as handle:
+            summary = json.load(handle)
+        for row in summary.get("best_eval", []):
+            records.append(
+                {
+                    "variant": "rml_graph_variable_k",
+                    "label": "RML graph variable-k",
+                    "train_seed": seed,
+                    "soak_steps": int(row["soak_steps"]),
+                    "split": "train",
+                    "status": "evaluated",
+                    "rml_success_rate": float(row.get("rml_success_rate", np.nan)),
+                    "soak_exact_compliance_rate": float(row.get("soak_exact_compliance_rate", np.nan)),
+                }
+            )
+
+    for summary_path in sorted(generalization_root.glob("rml_graph_variable_k_seed*/k*/summary.json")):
+        seed = int(summary_path.parents[1].name.rsplit("seed", maxsplit=1)[1])
+        soak_steps = int(summary_path.parent.name.removeprefix("k"))
+        with summary_path.open("r", encoding="utf-8") as handle:
+            summary = json.load(handle)
+        result_summary = summary.get("summary") or {}
+        records.append(
+            {
+                "variant": "rml_graph_variable_k",
+                "label": "RML graph variable-k",
+                "train_seed": seed,
+                "soak_steps": soak_steps,
+                "split": "heldout",
+                "status": "evaluated",
+                "rml_success_rate": float(result_summary.get("rml_success_rate", np.nan)),
+                "soak_exact_compliance_rate": float(
+                    result_summary.get("soak_exact_compliance_rate", np.nan)
+                ),
+            }
+        )
+    return pd.DataFrame(records)
+
+
+def plot_zero_shot_soak_generalization(
+    rows: pd.DataFrame,
+    output_prefix: Path,
+    *,
+    layout: str = "vertical",
+) -> None:
+    metrics = [
+        ("rml_success_rate", "RML success rate"),
+        ("soak_exact_compliance_rate", "Exact soak compliance"),
+    ]
+    available_metrics = [metric for metric in metrics if metric[0] in rows.columns]
+    horizontal = layout == "horizontal"
+    nrows, ncols = (1, len(available_metrics)) if horizontal else (len(available_metrics), 1)
+    fig, axes = plt.subplots(
+        nrows,
+        ncols,
+        figsize=(12.6, 4.8) if horizontal else (8.6, 3.8 * len(available_metrics)),
+        constrained_layout=not horizontal,
+        sharex=not horizontal,
+    )
+    if len(available_metrics) == 1:
+        axes = [axes]
+    axes = np.ravel(axes)
+
+    for axis, (metric, ylabel) in zip(axes, available_metrics):
+        plot_generalization_metric_panel(
+            axis,
+            rows,
+            metric,
+            ylabel,
+            show_legend=not horizontal,
+        )
+
+    if horizontal:
+        fig.subplots_adjust(left=0.07, right=0.98, bottom=0.26, top=0.88, wspace=0.24)
+        for axis in axes:
+            axis.set_xlabel("Required soak duration k")
+        handles, labels = axes[0].get_legend_handles_labels()
+        deduped = dict(zip(labels, handles))
+        fig.legend(
+            deduped.values(),
+            deduped.keys(),
+            loc="lower center",
+            bbox_to_anchor=(0.5, 0.04),
+            ncol=min(3, len(deduped)),
+            frameon=False,
+        )
+        fig.suptitle("CSTR zero-shot soak generalization", y=0.97)
+    else:
+        axes[0].set_title("CSTR zero-shot soak generalization")
+        axes[-1].set_xlabel("Required soak duration k")
+    save_figure(fig, output_prefix)
+
+
+def plot_generalization_metric_panel(
+    axis: plt.Axes,
+    rows: pd.DataFrame,
+    metric: str,
+    ylabel: str,
+    *,
+    show_legend: bool = True,
+) -> None:
+    train_steps = sorted(rows.loc[rows["split"] == "train", "soak_steps"].dropna().unique())
+    heldout_steps = sorted(rows.loc[rows["split"] == "heldout", "soak_steps"].dropna().unique())
+    region_label_y = 0.2
+    if train_steps:
+        train_start = min(train_steps) - 0.5
+        train_end = max(train_steps) + 0.5
+        axis.axvspan(train_start, train_end, color="#111827", alpha=0.08, label="trained k")
+        axis.text(
+            (train_start + train_end) / 2,
+            region_label_y,
+            "trained",
+            ha="center",
+            va="center",
+            fontsize=9,
+            color="#374151",
+        )
+    if train_steps and heldout_steps:
+        boundary = (max(train_steps) + min(heldout_steps)) / 2
+        axis.axvline(boundary, color="#374151", linestyle="--", linewidth=1.2, alpha=0.8)
+        axis.text(
+            (min(heldout_steps) + max(heldout_steps)) / 2,
+            region_label_y,
+            "zero-shot",
+            ha="center",
+            va="center",
+            fontsize=9,
+            color="#374151",
+        )
+
+    for variant_key, subset in rows.groupby("variant"):
+        subset = subset.loc[subset["status"] == "evaluated"].sort_values(["soak_steps", "train_seed"])
         if subset.empty:
             continue
-        evaluated = subset.loc[subset["status"] == "evaluated"]
-        if not evaluated.empty:
-            axis.plot(
-                evaluated["soak_steps"].to_numpy(dtype=float),
-                evaluated["rml_success_rate"].to_numpy(dtype=float),
-                marker="o",
-                linewidth=2.0,
-                color=COLORS[variant["key"]],
-                label=variant["label"],
-            )
-        failed = subset.loc[subset["status"] != "evaluated"]
-        if not failed.empty:
+        label = str(subset["label"].iloc[0])
+        color = COLORS.get(variant_key, COLORS["rml_graph_encoder"])
+
+        grouped = (
+            subset.groupby("soak_steps")[metric]
+            .agg(["mean", "std"])
+            .reset_index()
+            .sort_values("soak_steps")
+        )
+        grouped["std"] = grouped["std"].fillna(0.0)
+        x_values = grouped["soak_steps"].to_numpy(dtype=float)
+        means = grouped["mean"].to_numpy(dtype=float)
+        stds = grouped["std"].to_numpy(dtype=float)
+        axis.plot(x_values, means, color=color, linewidth=2.4, marker="o", label=f"{label} mean")
+        axis.fill_between(
+            x_values,
+            np.clip(means - stds, 0.0, 1.0),
+            np.clip(means + stds, 0.0, 1.0),
+            color=color,
+            alpha=0.16,
+            linewidth=0,
+            label="+/- 1 std",
+        )
+
+        seeds = sorted(int(seed) for seed in subset["train_seed"].dropna().unique())
+        offsets = {
+            seed: offset
+            for seed, offset in zip(seeds, np.linspace(-0.14, 0.14, len(seeds)) if seeds else [])
+        }
+        for seed in seeds:
+            seed_rows = subset.loc[subset["train_seed"] == seed]
             axis.scatter(
-                failed["soak_steps"].to_numpy(dtype=float),
-                np.zeros(len(failed)),
-                marker="x",
-                s=70,
-                color=COLORS[variant["key"]],
+                seed_rows["soak_steps"].to_numpy(dtype=float) + offsets[seed],
+                seed_rows[metric].to_numpy(dtype=float),
+                s=32,
+                color=color,
+                edgecolor="white",
+                linewidth=0.6,
+                alpha=0.78,
+                zorder=3,
             )
-    axis.set_xlabel("Required soak duration k")
-    axis.set_ylabel("RML success rate")
+
+        failures = subset.loc[
+            (subset["split"] == "heldout")
+            & (subset["train_seed"] == 3)
+            & (subset[metric] <= 0.0)
+        ].sort_values("soak_steps")
+        if not failures.empty:
+            for _, row in failures.iterrows():
+                axis.annotate(
+                    "seed 3",
+                    xy=(float(row["soak_steps"]) + offsets.get(3, 0.0), float(row[metric])),
+                    xytext=(0, 14),
+                    textcoords="offset points",
+                    ha="center",
+                    fontsize=8,
+                    color="#4c1d95",
+                    arrowprops={"arrowstyle": "-", "color": "#4c1d95", "linewidth": 0.8},
+                )
+
+    axis.set_ylabel(ylabel)
     axis.set_ylim(-0.05, 1.05)
     axis.set_xticks(sorted(rows["soak_steps"].dropna().unique()))
     axis.grid(True, alpha=0.25)
-    handles, labels = axis.get_legend_handles_labels()
-    axis.legend(handles, labels, loc="center left", bbox_to_anchor=(1.02, 0.5), frameon=False)
-    axis.set_title("CSTR zero-shot counting generalization")
-    save_figure(fig, output_prefix)
+    if show_legend:
+        handles, labels = axis.get_legend_handles_labels()
+        deduped = dict(zip(labels, handles))
+        axis.legend(
+            deduped.values(),
+            deduped.keys(),
+            loc="center left",
+            bbox_to_anchor=(1.02, 0.5),
+            frameon=False,
+        )
 
 
 def generate_all_seed_trajectories(args: argparse.Namespace, final_rows: pd.DataFrame) -> list[dict[str, Any]]:

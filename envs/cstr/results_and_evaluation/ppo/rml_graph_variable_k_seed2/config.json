@@ -1,0 +1,33 @@
+{
+  "experiment": "cstr_graph_variable_k_ppo",
+  "args": {
+    "train_soak_steps": [
+      5,
+      8,
+      10,
+      12
+    ],
+    "eval_soak_steps": [
+      5,
+      8,
+      10,
+      12
+    ],
+    "graph_encoder_checkpoint": "/Users/khalid/Desktop/rml_reward_machines/envs/cstr/results_and_evaluation/encoder_pretraining/gnn_dynamics_phase_count_reference_seed0/best_dynamics_encoder.pt",
+    "total_timesteps": 500000,
+    "seed": 2,
+    "eval_freq": 20000,
+    "n_eval_episodes": 10,
+    "output_dir": "/Users/khalid/Desktop/rml_reward_machines/envs/cstr/results_and_evaluation/ppo/rml_graph_variable_k_seed2",
+    "max_episode_steps": 300,
+    "deadline_steps": 100,
+    "n_steps": 1024,
+    "batch_size": 64,
+    "n_epochs": 10,
+    "learning_rate": 0.0003,
+    "ent_coef": 0.001,
+    "log_std_init": -1.5,
+    "training_failure_penalty": -25.0,
+    "disable_regulate_recovery_during_training": false
+  }
+}

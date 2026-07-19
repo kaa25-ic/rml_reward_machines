@@ -29,4 +29,4 @@ run_cmd "${PYTHON_BIN}" -m envs.cstr.analysis.generate_figures \
   --rml-hidden-trajectory-seed "${RML_HIDDEN_TRAJECTORY_SEED}" \
   --manual-rm-trajectory-seed "${MANUAL_RM_TRAJECTORY_SEED}" \
   --trajectory-seed "${TRAJECTORY_SEED}" \
-  "${EXTRA_ARGS[@]}"
+  "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}"

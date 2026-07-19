@@ -30,7 +30,7 @@ from rml_rm.monitors import RMLMonitorProcess, find_free_port
 
 
 DEFAULT_TRAIN_KS = (5, 8, 10, 12)
-DEFAULT_EVAL_KS = (5, 8, 10, 12, 15)
+DEFAULT_EVAL_KS = DEFAULT_TRAIN_KS
 
 
 class VariableKEvalCallback(BaseCallback):
@@ -55,7 +55,7 @@ class VariableKEvalCallback(BaseCallback):
         self.eval_seed_base = int(eval_seed_base)
         self.records: list[dict[str, Any]] = []
         self.metrics_path = self.output_dir / "eval_metrics_by_k.csv"
-        self.best_score = (float("-inf"), float("-inf"), float("-inf"))
+        self.best_score = (float("-inf"), float("-inf"))
         self.best_model_path = self.output_dir / "best_model"
 
     def _on_training_start(self) -> None:
@@ -129,14 +129,12 @@ class VariableKEvalCallback(BaseCallback):
             "mean_hidden_soak_exit_error",
         ]
 
-    def _selection_score(self, records: list[dict[str, Any]]) -> tuple[float, float, float]:
+    def _selection_score(self, records: list[dict[str, Any]]) -> tuple[float, float]:
         if not records:
-            return (float("-inf"), float("-inf"), float("-inf"))
+            return (float("-inf"), float("-inf"))
         train_rows = [row for row in records if int(row["soak_steps"]) in self.train_soak_steps]
-        heldout = [row for row in records if int(row["soak_steps"]) == 15]
         return (
             _mean(train_rows, "startup_success_rate"),
-            _mean(heldout, "startup_success_rate"),
             _mean(train_rows, "mean_return"),
         )
 
@@ -385,7 +383,6 @@ def _best_records(records: list[dict[str, Any]], *, train_soak_steps: set[int]) 
         by_timestep.values(),
         key=lambda rows: (
             _mean([row for row in rows if int(row["soak_steps"]) in train_soak_steps], "startup_success_rate"),
-            _mean([row for row in rows if int(row["soak_steps"]) == 15], "startup_success_rate"),
             _mean([row for row in rows if int(row["soak_steps"]) in train_soak_steps], "mean_return"),
         ),
     )

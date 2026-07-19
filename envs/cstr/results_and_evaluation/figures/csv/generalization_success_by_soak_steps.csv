@@ -1,9 +1,0 @@
-variant,label,train_seed,soak_steps,split,status,rml_success_rate
-rml_hidden,RML hidden,0,10,train,evaluated,0.0
-rml_semantic_progress,RML semantic progress,0,10,train,evaluated,1.0
-manual_rm_semantic_progress,Manual RM semantic progress,0,10,train,evaluated,0.0
-rml_graph_encoder,RML graph encoder,0,10,train,evaluated,1.0
-rml_hidden,RML hidden,0,15,heldout,evaluated,0.0
-rml_semantic_progress,RML semantic progress,0,15,heldout,error,
-manual_rm_semantic_progress,Manual RM semantic progress,0,15,heldout,error,
-rml_graph_encoder,RML graph encoder,0,15,heldout,evaluated,1.0

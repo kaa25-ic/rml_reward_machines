@@ -1,7 +1,7 @@
 {
   "experiment": "cstr_rml_policy_visualization",
-  "completed_at_utc": "2026-07-18T17:47:17.674635+00:00",
-  "runtime_seconds": 0.490536917001009,
+  "completed_at_utc": "2026-07-19T12:52:04.143635+00:00",
+  "runtime_seconds": 0.4606967080035247,
   "model_path": "/Users/khalid/Desktop/rml_reward_machines/envs/cstr/results_and_evaluation/ppo/rml_hidden_seed1/best_model.zip",
   "env_variant": "rml_hidden",
   "reward_mode": "env_rml",

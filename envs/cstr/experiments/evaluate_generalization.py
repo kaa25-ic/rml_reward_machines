@@ -76,6 +76,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-episode-steps", type=int, default=300)
     parser.add_argument("--regulation-violation-steps", type=int, default=10)
     parser.add_argument("--deadline-steps", type=int, default=100)
+    parser.add_argument("--ca-initial", type=float, default=0.80)
+    parser.add_argument("--temp-initial", type=float, default=331.0)
+    parser.add_argument("--initial-coolant-temp", type=float, default=302.5)
     parser.add_argument("--model-root", type=Path, default=PPO_ROOT)
     parser.add_argument("--output-root", type=Path, default=None)
     parser.add_argument("--graph-encoder-checkpoint", type=Path, default=GRAPH_ENCODER_CHECKPOINT)
@@ -117,6 +120,9 @@ def main() -> None:
         "eval_seed": args.eval_seed,
         "train_soak_steps": args.train_soak_steps,
         "eval_soak_steps": args.eval_soak_steps,
+        "ca_initial": args.ca_initial,
+        "temp_initial": args.temp_initial,
+        "initial_coolant_temp": args.initial_coolant_temp,
         "episodes": args.episodes,
         "results": results,
         "paths": {
@@ -149,6 +155,9 @@ def _evaluate_variant(args: argparse.Namespace, output_root: Path, variant: str)
         "eval_seed": args.eval_seed,
         "soak_steps_train": args.train_soak_steps,
         "soak_steps_eval": args.eval_soak_steps,
+        "ca_initial": args.ca_initial,
+        "temp_initial": args.temp_initial,
+        "initial_coolant_temp": args.initial_coolant_temp,
         "monitor_state_limit": spec["monitor_state_limit"],
     }
     try:
@@ -196,6 +205,9 @@ def _evaluate_variant(args: argparse.Namespace, output_root: Path, variant: str)
                 soak_concentration_high=0.74,
                 fixed_initial_state=True,
                 randomize_initial_state=False,
+                ca_initial=args.ca_initial,
+                temp_initial=args.temp_initial,
+                initial_coolant_temp=args.initial_coolant_temp,
                 randomize_setpoint=False,
                 enable_disturbance=False,
                 temp_weight=0.015,

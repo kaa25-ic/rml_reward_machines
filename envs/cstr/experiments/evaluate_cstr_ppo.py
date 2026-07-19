@@ -70,6 +70,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--soak-concentration-high", type=float, default=0.74)
     parser.add_argument("--fixed-initial-state", action="store_true", default=True)
     parser.add_argument("--randomize-initial-state", action="store_true")
+    parser.add_argument("--ca-initial", type=float, default=0.80)
+    parser.add_argument("--temp-initial", type=float, default=331.0)
+    parser.add_argument("--initial-coolant-temp", type=float, default=302.5)
     parser.add_argument("--randomize-setpoint", action="store_true")
     parser.add_argument("--enable-disturbance", action="store_true")
     parser.add_argument("--temp-weight", type=float, default=0.015)
@@ -132,6 +135,9 @@ def evaluate_checkpoint(args: argparse.Namespace) -> dict[str, Any]:
         soak_concentration_low=args.soak_concentration_low,
         soak_concentration_high=args.soak_concentration_high,
         randomize_initial_state=bool(args.randomize_initial_state) or not args.fixed_initial_state,
+        ca_initial=args.ca_initial,
+        temp_initial=args.temp_initial,
+        initial_coolant_temp=args.initial_coolant_temp,
         randomize_setpoint=args.randomize_setpoint,
         enable_disturbance=args.enable_disturbance,
         temp_weight=args.temp_weight,
@@ -213,6 +219,11 @@ def evaluate_checkpoint(args: argparse.Namespace) -> dict[str, Any]:
             "require_soak_concentration_band": args.require_soak_concentration_band,
             "soak_concentration_low": args.soak_concentration_low,
             "soak_concentration_high": args.soak_concentration_high,
+            "fixed_initial_state": args.fixed_initial_state,
+            "randomize_initial_state": args.randomize_initial_state,
+            "ca_initial": args.ca_initial,
+            "temp_initial": args.temp_initial,
+            "initial_coolant_temp": args.initial_coolant_temp,
             "monitor_port": monitor_port,
             "temp_weight": args.temp_weight,
             "action_weight": args.action_weight,

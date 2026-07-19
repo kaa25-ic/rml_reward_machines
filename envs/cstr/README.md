@@ -164,11 +164,15 @@ TOTAL_TIMESTEPS=500000 SEED=1 bash envs/cstr/reproduction/run_cstr_ppo.sh
 Generalization soak-length evaluation:
 
 ```bash
-SEED=0 bash envs/cstr/reproduction/run_generalization.sh
+SEED=1 TOTAL_TIMESTEPS=500000 bash envs/cstr/reproduction/run_graph_variable_k.sh
+SEED=1 ZERO_SHOT_SOAK_STEPS="15 18 20" bash envs/cstr/reproduction/run_graph_variable_k_zero_shot.sh
 ```
 
-This loads the seed-0 PPO checkpoints trained with `soak_steps=10` and
-evaluates the RML variants with `soak_steps=15`.
+The variable-`k` graph policy is trained with `soak_steps` sampled across
+`5`, `8`, `10`, and `12`. It is then evaluated zero-shot on held-out longer
+startup procedures with `soak_steps` equal to `15`, `18`, and `20`. Across the
+completed seed-0 to seed-4 runs, `k=15` succeeds for all five seeds, while
+`k=18` and `k=20` succeed for four of five seeds.
 
 Figure generation:
 
@@ -183,7 +187,8 @@ runs:
 - `baseline_vs_rml_graph_trajectory_seed0`
 - `rml_graph_phase_trajectory_seed0`
 - `all_variants_trajectory_comparison_seed0_rml_hidden_seed2_manual_rm_seed1`
-- `generalization_success_by_soak_steps_seed0`
+- `zero_shot_soak_generalization`
+- `zero_shot_soak_generalization_side_by_side`
 
 ## Graph Encoder Pretraining
 
@@ -193,4 +198,3 @@ regenerated with:
 ```bash
 bash envs/cstr/reproduction/run_encoder_pretraining.sh
 ```
-

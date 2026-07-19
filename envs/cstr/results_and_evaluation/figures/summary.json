@@ -1,7 +1,8 @@
 {
   "figures": [
     "all_variants_best_metrics_multiseed.png",
-    "generalization_success_by_soak_steps_seed0.png",
+    "zero_shot_soak_generalization.png",
+    "zero_shot_soak_generalization_side_by_side.png",
     "all_variants_trajectory_comparison_seed0_rml_hidden_seed2_manual_rm_seed1.png",
     "baseline_vs_rml_graph_trajectory_seed0.png",
     "rml_graph_phase_trajectory_seed0.png"
