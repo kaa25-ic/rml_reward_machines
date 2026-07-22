@@ -45,20 +45,20 @@
         "eval_task_failure_rate": 0.96
       },
       "artifacts": {
-        "config": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/config.json",
-        "summary": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/summary.json",
-        "final_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/model_final.zip",
-        "best_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/best_model.zip",
-        "train_monitor": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/train_monitor.csv",
-        "eval_monitor": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/eval_monitor.csv",
-        "eval_metrics": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/eval_metrics.csv"
+        "config": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/config.json",
+        "summary": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/summary.json",
+        "final_model": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/model_final.zip",
+        "best_model": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/best_model.zip",
+        "train_monitor": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/train_monitor.csv",
+        "eval_monitor": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/eval_monitor.csv",
+        "eval_metrics": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/eval_metrics.csv"
       }
     },
-    "output_dir": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery"
+    "output_dir": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery"
   },
   "stage2": {
     "name": "stabilization",
-    "initial_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/best_model.zip",
+    "initial_model": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/best_model.zip",
     "summary": {
       "completed_at_utc": "2026-07-14T12:03:24.258472+00:00",
       "algorithm": "ppo",
@@ -98,24 +98,24 @@
         "eval_task_failure_rate": 0.98
       },
       "artifacts": {
-        "config": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/config.json",
-        "summary": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/summary.json",
-        "final_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/model_final.zip",
-        "best_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/best_model.zip",
-        "train_monitor": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/train_monitor.csv",
-        "eval_monitor": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/eval_monitor.csv",
-        "eval_metrics": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/eval_metrics.csv"
+        "config": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/config.json",
+        "summary": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/summary.json",
+        "final_model": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/model_final.zip",
+        "best_model": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/best_model.zip",
+        "train_monitor": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/train_monitor.csv",
+        "eval_monitor": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/eval_monitor.csv",
+        "eval_metrics": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/eval_metrics.csv"
       }
     },
-    "output_dir": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization"
+    "output_dir": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization"
   },
   "artifacts": {
-    "summary": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/summary.json",
-    "combined_eval_metrics": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/combined_eval_metrics.csv",
-    "stage1_best_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/best_model.zip",
-    "stage1_final_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/model_final.zip",
-    "stage2_best_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/best_model.zip",
-    "stage2_final_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/model_final.zip"
+    "summary": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/summary.json",
+    "combined_eval_metrics": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/combined_eval_metrics.csv",
+    "stage1_best_model": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/best_model.zip",
+    "stage1_final_model": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/model_final.zip",
+    "stage2_best_model": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/best_model.zip",
+    "stage2_final_model": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization/model_final.zip"
   },
   "config": {
     "stage1": {
@@ -152,7 +152,7 @@
       "early_stop_protocol_rate": null,
       "early_stop_landing_rate": null,
       "early_stop_patience": 1,
-      "output_dir": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery"
+      "output_dir": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery"
     },
     "stage2": {
       "encoding": "semantic_progress",
@@ -184,11 +184,11 @@
       "landing_angle_bonus": 0.0,
       "post_descent_landing_bonus": 0.0,
       "post_descent_protocol_miss_penalty": 0.0,
-      "initial_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/best_model.zip",
+      "initial_model": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage1_discovery/best_model.zip",
       "early_stop_protocol_rate": null,
       "early_stop_landing_rate": null,
       "early_stop_patience": 1,
-      "output_dir": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization"
+      "output_dir": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed4/stage2_stabilization"
     },
     "policy": {
       "features_dim": 128,
@@ -201,7 +201,7 @@
         128
       ]
     },
-    "monitor_config": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/configs/lunar_lander_protocol.yaml",
-    "monitor_spec": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/specs/lunar_lander_protocol.pl"
+    "monitor_config": "envs/lunar_lander/configs/lunar_lander_protocol.yaml",
+    "monitor_spec": "envs/lunar_lander/specs/lunar_lander_protocol.pl"
   }
 }

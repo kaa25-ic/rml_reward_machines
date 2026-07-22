@@ -56,11 +56,11 @@
       "a_b_d_n_c": "envs/multitask_letter_env/results_and_evaluation/ddqn/learned_gru_n_1to5_seed3/monitor_eval_configs/a_b_d_n_c.yaml"
     },
     "spec_paths": {
-      "a_b_c_d_n": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/specs/a_b_c_d_n.pl",
-      "a_b_d_n_c": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/specs/a_b_d_n_c.pl",
-      "a_b_c_d_n_c": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/specs/a_b_c_d_n_c.pl",
-      "a_b_d_c_d_n": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/specs/a_b_d_c_d_n.pl",
-      "a_b_c_d_c_d_n": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/specs/a_b_c_d_c_d_n.pl"
+      "a_b_c_d_n": "envs/multitask_letter_env/specs/a_b_c_d_n.pl",
+      "a_b_d_n_c": "envs/multitask_letter_env/specs/a_b_d_n_c.pl",
+      "a_b_c_d_n_c": "envs/multitask_letter_env/specs/a_b_c_d_n_c.pl",
+      "a_b_d_c_d_n": "envs/multitask_letter_env/specs/a_b_d_c_d_n.pl",
+      "a_b_c_d_c_d_n": "envs/multitask_letter_env/specs/a_b_c_d_c_d_n.pl"
     }
   }
 }

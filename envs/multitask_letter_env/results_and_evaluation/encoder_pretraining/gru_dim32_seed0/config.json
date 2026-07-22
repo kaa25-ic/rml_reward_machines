@@ -1,8 +1,8 @@
 {
   "experiment": "multitask_letter_env_gru_pretraining",
   "config": {
-    "dataset_path": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dataset_small_v1_seed0/dataset.jsonl",
-    "output_dir": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0",
+    "dataset_path": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dataset_small_v1_seed0/dataset.jsonl",
+    "output_dir": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0",
     "seed": 0,
     "max_len": 256,
     "token_dim": 32,

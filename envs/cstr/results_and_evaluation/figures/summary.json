@@ -584,6 +584,6 @@
       "truncated": true
     }
   ],
-  "csv_dir": "/Users/khalid/Desktop/rml_reward_machines/envs/cstr/results_and_evaluation/figures/csv",
-  "output_dir": "/Users/khalid/Desktop/rml_reward_machines/envs/cstr/results_and_evaluation/figures"
+  "csv_dir": "envs/cstr/results_and_evaluation/figures/csv",
+  "output_dir": "envs/cstr/results_and_evaluation/figures"
 }

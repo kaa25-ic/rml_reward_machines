@@ -23,7 +23,7 @@
         "approach_temp_progress_bonus": 4.0,
         "approach_warming_weight": 0.5,
         "assert_monitor_consistency": false,
-        "config_path": "/Users/khalid/Desktop/rml_reward_machines/envs/cstr/results_and_evaluation/encoder_pretraining/gnn_corpus_seed0/monitors/strict/configs/cstr_startup_procedure.yaml",
+        "config_path": "envs/cstr/results_and_evaluation/encoder_pretraining/gnn_corpus_seed0/monitors/strict/configs/cstr_startup_procedure.yaml",
         "cstr_env": {
           "action_high": 350.0,
           "action_low": 250.0,
@@ -151,7 +151,7 @@
         "approach_temp_progress_bonus": 4.0,
         "approach_warming_weight": 0.5,
         "assert_monitor_consistency": false,
-        "config_path": "/Users/khalid/Desktop/rml_reward_machines/envs/cstr/results_and_evaluation/encoder_pretraining/gnn_corpus_seed0/monitors/recover/configs/cstr_startup_procedure.yaml",
+        "config_path": "envs/cstr/results_and_evaluation/encoder_pretraining/gnn_corpus_seed0/monitors/recover/configs/cstr_startup_procedure.yaml",
         "cstr_env": {
           "action_high": 350.0,
           "action_low": 250.0,

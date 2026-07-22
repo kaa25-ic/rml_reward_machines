@@ -71,7 +71,7 @@ tests with:
 ## Two-Stage PPO
 
 The selected experiment uses a two-stage PPO procedure. Stage 1 is a discovery
-stage with a higher learning reate. Stage 2
+stage with a higher learning rate. Stage 2
 stabilizes the best stage-1 checkpoint with a lower learning rate. This keeps
 the final policy stable while preserving the strictly RML-based protocol
 monitoring.
@@ -157,4 +157,3 @@ The full pipeline reruns the five-seed two-stage PPO experiments, renders the
 stage-2 final policies, and regenerates the figure artifacts. It does not delete
 existing result folders before running. Use `SEEDS="0 1"` with
 `run_two_stage_ppo.sh` for a smaller partial rerun.
-

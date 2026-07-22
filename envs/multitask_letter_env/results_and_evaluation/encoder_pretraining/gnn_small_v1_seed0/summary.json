@@ -1,7 +1,7 @@
 {
   "config": {
-    "dataset_path": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_corpus_small_v1_seed0/monitor_states.jsonl",
-    "output_dir": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0",
+    "dataset_path": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_corpus_small_v1_seed0/monitor_states.jsonl",
+    "output_dir": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0",
     "experiment_name": "multitask_letter_env_gnn_dynamics",
     "seed": 0,
     "epochs": 80,
@@ -20,7 +20,7 @@
     "device": "auto"
   },
   "dataset": {
-    "path": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_corpus_small_v1_seed0/monitor_states.jsonl",
+    "path": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_corpus_small_v1_seed0/monitor_states.jsonl",
     "examples": 10636,
     "train_examples": 8509,
     "validation_examples": 2127
@@ -89,7 +89,7 @@
   "best": {
     "epoch": 65,
     "val_loss": 0.4013879695827545,
-    "encoder_path": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/best_dynamics_encoder.pt"
+    "encoder_path": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/best_dynamics_encoder.pt"
   },
   "final_metrics": {
     "epoch": 80,
@@ -101,10 +101,10 @@
     "val_phase_accuracy": 0.8575458392101551
   },
   "artifacts": {
-    "config": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/config.json",
-    "best_encoder": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/best_dynamics_encoder.pt",
-    "final_encoder": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/dynamics_encoder_final.pt",
-    "metrics": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/metrics.jsonl",
-    "summary": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/summary.json"
+    "config": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/config.json",
+    "best_encoder": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/best_dynamics_encoder.pt",
+    "final_encoder": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/dynamics_encoder_final.pt",
+    "metrics": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/metrics.jsonl",
+    "summary": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0/summary.json"
   }
 }

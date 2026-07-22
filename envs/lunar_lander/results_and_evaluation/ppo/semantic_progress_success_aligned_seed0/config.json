@@ -41,6 +41,6 @@
   "monitor": {
     "train_config_path": "envs/lunar_lander/results_and_evaluation/ppo/semantic_progress_success_aligned_seed0/monitor_train_config.yaml",
     "eval_config_path": "envs/lunar_lander/results_and_evaluation/ppo/semantic_progress_success_aligned_seed0/monitor_eval_config.yaml",
-    "spec_path": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/specs/lunar_lander_protocol.pl"
+    "spec_path": "envs/lunar_lander/specs/lunar_lander_protocol.pl"
   }
 }

@@ -37,12 +37,12 @@
     "eval_task_failure_rate": 0.02
   },
   "artifacts": {
-    "config": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed0/stage2_stabilization/config.json",
-    "summary": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed0/stage2_stabilization/summary.json",
-    "final_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed0/stage2_stabilization/model_final.zip",
-    "best_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed0/stage2_stabilization/best_model.zip",
-    "train_monitor": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed0/stage2_stabilization/train_monitor.csv",
-    "eval_monitor": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed0/stage2_stabilization/eval_monitor.csv",
-    "eval_metrics": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed0/stage2_stabilization/eval_metrics.csv"
+    "config": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed0/stage2_stabilization/config.json",
+    "summary": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed0/stage2_stabilization/summary.json",
+    "final_model": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed0/stage2_stabilization/model_final.zip",
+    "best_model": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed0/stage2_stabilization/best_model.zip",
+    "train_monitor": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed0/stage2_stabilization/train_monitor.csv",
+    "eval_monitor": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed0/stage2_stabilization/eval_monitor.csv",
+    "eval_metrics": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed0/stage2_stabilization/eval_metrics.csv"
   }
 }

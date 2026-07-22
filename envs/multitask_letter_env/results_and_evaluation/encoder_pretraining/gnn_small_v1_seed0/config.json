@@ -1,8 +1,8 @@
 {
   "experiment": "multitask_letter_env_gnn_dynamics",
   "config": {
-    "dataset_path": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_corpus_small_v1_seed0/monitor_states.jsonl",
-    "output_dir": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0",
+    "dataset_path": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_corpus_small_v1_seed0/monitor_states.jsonl",
+    "output_dir": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_small_v1_seed0",
     "experiment_name": "multitask_letter_env_gnn_dynamics",
     "seed": 0,
     "epochs": 80,

@@ -43,6 +43,6 @@
   "monitor": {
     "train_config_path": "envs/randomized_letter_env/results_and_evaluation/ddqn/regional_randomness_n1to5/semantic_progress_n1to5_seed2/monitor_train_config.yaml",
     "eval_config_path": "envs/randomized_letter_env/results_and_evaluation/ddqn/regional_randomness_n1to5/semantic_progress_n1to5_seed2/monitor_eval_config.yaml",
-    "spec_path": "/Users/khalid/Desktop/rml_reward_machines/envs/randomized_letter_env/specs/letter_env_monitor.pl"
+    "spec_path": "envs/randomized_letter_env/specs/letter_env_monitor.pl"
   }
 }

@@ -29,11 +29,11 @@
     "landing_angle_bonus": 0.0,
     "post_descent_landing_bonus": 0.0,
     "post_descent_protocol_miss_penalty": 0.0,
-    "initial_model": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed4/stage1_discovery/best_model.zip",
+    "initial_model": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed4/stage1_discovery/best_model.zip",
     "early_stop_protocol_rate": null,
     "early_stop_landing_rate": null,
     "early_stop_patience": 1,
-    "output_dir": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed4/stage2_stabilization"
+    "output_dir": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_seed4/stage2_stabilization"
   },
   "episodes": [
     {

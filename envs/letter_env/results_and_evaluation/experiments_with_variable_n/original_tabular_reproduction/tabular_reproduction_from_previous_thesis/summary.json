@@ -35,7 +35,7 @@
   },
   "monitor": {
     "config_path": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/original_tabular_reproduction/tabular_reproduction_from_previous_thesis/monitor_config.yaml",
-    "spec_path": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/specs/letter_env_spec_numerical_runtime_compatible.pl"
+    "spec_path": "envs/letter_env/specs/letter_env_spec_numerical_runtime_compatible.pl"
   },
   "episode_count": 4866,
   "condition_count": 30,

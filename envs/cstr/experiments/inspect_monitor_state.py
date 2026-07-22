@@ -14,8 +14,8 @@ its verdict, not by string matching:
     that the reference accept/reject decision matches the monitor verdict at every
     step, and that the deployed semantic progress decoder state matches the reference state.
 
-If agreement is ~100% on both variants, the Python encoding is provably equivalent
-to the RML specification the monitor enforces -- the claim the thesis needs.
+If agreement is ~100% on both variants, the Python encoding independently
+validates consistency with the RML specification across the tested traces.
 
 Run from the repository root:
 

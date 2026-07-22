@@ -49,6 +49,6 @@
   "monitor": {
     "train_config_path": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/learned_graph_n_1to5_seed4/monitor_train_config.yaml",
     "eval_config_path": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/learned_graph_n_1to5_seed4/monitor_eval_config.yaml",
-    "spec_path": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/specs/letter_env_spec_numerical_runtime_compatible.pl"
+    "spec_path": "envs/letter_env/specs/letter_env_spec_numerical_runtime_compatible.pl"
   }
 }

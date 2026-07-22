@@ -3,12 +3,12 @@
   "max_n": 5,
   "rows": 16366,
   "unique_normalized_monitor_states": 128,
-  "output_path": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_corpus_small_v1_seed0/monitor_states.jsonl",
+  "output_path": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_corpus_small_v1_seed0/monitor_states.jsonl",
   "random_traces_per_task_n": 200,
   "max_random_trace_length": 20,
   "seed": 0,
   "artifacts": {
-    "corpus": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_corpus_small_v1_seed0/monitor_states.jsonl",
-    "summary": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_corpus_small_v1_seed0/summary.json"
+    "corpus": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_corpus_small_v1_seed0/monitor_states.jsonl",
+    "summary": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gnn_corpus_small_v1_seed0/summary.json"
   }
 }

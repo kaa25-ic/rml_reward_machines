@@ -35,7 +35,7 @@
     "early_stop_protocol_rate": null,
     "early_stop_landing_rate": null,
     "early_stop_patience": 1,
-    "output_dir": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed2/stage1_discovery"
+    "output_dir": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed2/stage1_discovery"
   },
   "policy_config": {
     "features_dim": 128,
@@ -49,8 +49,8 @@
     ]
   },
   "monitor": {
-    "train_config_path": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed2/stage1_discovery/monitor_train_config.yaml",
-    "eval_config_path": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed2/stage1_discovery/monitor_eval_config.yaml",
-    "spec_path": "/Users/khalid/Desktop/rml_reward_machines/envs/lunar_lander/specs/lunar_lander_protocol.pl"
+    "train_config_path": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed2/stage1_discovery/monitor_train_config.yaml",
+    "eval_config_path": "envs/lunar_lander/results_and_evaluation/ppo/two_stage_training/semantic_progress_two_stage_from_scratch_seed2/stage1_discovery/monitor_eval_config.yaml",
+    "spec_path": "envs/lunar_lander/specs/lunar_lander_protocol.pl"
   }
 }

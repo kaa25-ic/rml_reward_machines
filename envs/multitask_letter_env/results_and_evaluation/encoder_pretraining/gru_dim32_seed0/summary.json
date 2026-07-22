@@ -1,7 +1,7 @@
 {
   "config": {
-    "dataset_path": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dataset_small_v1_seed0/dataset.jsonl",
-    "output_dir": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0",
+    "dataset_path": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dataset_small_v1_seed0/dataset.jsonl",
+    "output_dir": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0",
     "seed": 0,
     "max_len": 256,
     "token_dim": 32,
@@ -22,7 +22,7 @@
     "device": "auto"
   },
   "dataset": {
-    "path": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dataset_small_v1_seed0/dataset.jsonl",
+    "path": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dataset_small_v1_seed0/dataset.jsonl",
     "rows": 33364,
     "train_rows": 28360,
     "validation_rows": 5004,
@@ -37,12 +37,12 @@
   "best": {
     "epoch": 47,
     "val_loss": 0.9289959216479965,
-    "student_path": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0/best_student.pt"
+    "student_path": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0/best_student.pt"
   },
   "artifacts": {
-    "config": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0/config.json",
-    "best_student": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0/best_student.pt",
-    "final_student": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0/student_final.pt",
-    "metrics": "/Users/khalid/Desktop/rml_reward_machines/envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0/metrics.jsonl"
+    "config": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0/config.json",
+    "best_student": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0/best_student.pt",
+    "final_student": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0/student_final.pt",
+    "metrics": "envs/multitask_letter_env/results_and_evaluation/encoder_pretraining/gru_dim32_seed0/metrics.jsonl"
   }
 }

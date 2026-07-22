@@ -1,10 +1,10 @@
 {
   "artifacts": {
-    "config": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_parameterized_corpus_n1to5_seed0/config.json",
-    "corpus": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_parameterized_corpus_n1to5_seed0/monitor_states.jsonl",
-    "summary": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_parameterized_corpus_n1to5_seed0/summary.json"
+    "config": "envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_parameterized_corpus_n1to5_seed0/config.json",
+    "corpus": "envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_parameterized_corpus_n1to5_seed0/monitor_states.jsonl",
+    "summary": "envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_parameterized_corpus_n1to5_seed0/summary.json"
   },
-  "corpus_path": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_parameterized_corpus_n1to5_seed0/monitor_states.jsonl",
+  "corpus_path": "envs/letter_env/results_and_evaluation/encoder_pretraining/gnn_parameterized_corpus_n1to5_seed0/monitor_states.jsonl",
   "failed_traces": 20,
   "max_count": 5,
   "num_rows": 1435,
