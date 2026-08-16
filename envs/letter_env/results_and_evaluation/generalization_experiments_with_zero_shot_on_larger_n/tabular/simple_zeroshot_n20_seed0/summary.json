@@ -1,0 +1,37 @@
+{
+  "experiment": "letter_env_zero_shot",
+  "created_at_utc": "2026-08-06T18:38:43.619749+00:00",
+  "runtime_seconds": 0.21382341597927734,
+  "algorithm": "tabular",
+  "encoding": "simple",
+  "train_seed": 0,
+  "eval_n": 20,
+  "model_path": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/results_and_evaluation/experiments_with_variable_n/tabular_n_1_to_5/simple_seed0/q_tables/simple_iteration0_n5_seed0.pkl",
+  "learned_gru_checkpoint": null,
+  "learned_graph_checkpoint": null,
+  "n_eval_episodes": 20,
+  "eval_seed_base": 0,
+  "max_episode_steps": 200,
+  "monitor_progress_bonus": 10.0,
+  "monitor_regression_penalty": 0.0,
+  "step_penalty": 0.0,
+  "aggregate": {
+    "algorithm": "tabular",
+    "encoding": "simple",
+    "train_seed": 0,
+    "eval_n": 20,
+    "n_eval_episodes": 20,
+    "eval_mean_return": -30.0,
+    "eval_std_return": 0.0,
+    "eval_mean_episode_length": 9.0,
+    "eval_success_rate": 0.0,
+    "eval_mean_terminal_base_reward": 0.0,
+    "eval_mean_terminal_task_progress": 1.0,
+    "eval_task_failure_rate": 1.0
+  },
+  "artifacts": {
+    "summary": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/results_and_evaluation/generalization_experiments_with_zero_shot_on_larger_n/tabular/simple_zeroshot_n20_seed0/summary.json",
+    "eval_metrics": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/results_and_evaluation/generalization_experiments_with_zero_shot_on_larger_n/tabular/simple_zeroshot_n20_seed0/eval_metrics.csv",
+    "episode_metrics": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/results_and_evaluation/generalization_experiments_with_zero_shot_on_larger_n/tabular/simple_zeroshot_n20_seed0/episode_metrics.csv"
+  }
+}

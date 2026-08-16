@@ -1,0 +1,2 @@
+algorithm,encoding,train_seed,eval_n,n_eval_episodes,eval_mean_return,eval_std_return,eval_mean_episode_length,eval_success_rate,eval_task_failure_rate,eval_timeout_rate
+ddqn,learned_gru,3,20,25,-11.2,17.95995545651492,288.84,0.0,0.28,0.72

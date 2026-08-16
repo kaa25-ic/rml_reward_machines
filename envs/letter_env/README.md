@@ -67,6 +67,45 @@ Learned encoder checkpoints are stored under
 `gru_dim16_seed0/best_student.pt` for GRU encodings and
 `gnn_basic_seed0/best_dynamics_encoder.pt` for graph encodings.
 
+## Encoding Sufficiency Audit
+
+The encodings above can be audited for *sufficiency* — whether they preserve the
+reward-machine structure that optimal policies depend on. Two conditions are
+checked over the reachable monitor states: reward sufficiency (states sharing an
+encoded value emit the same reward under every event) and transition closure
+(they reach states with the same encoded value under every event). An encoding
+that is injective on the reachable states satisfies both by construction.
+
+Two modes are available:
+
+- Collision-only (default): a fast injectivity check over the stored
+  monitor-state catalogue. Non-injective encodings are reported as inconclusive.
+- Monitor-backed (`--with-monitor`): drives the live RML monitor to enumerate the
+  reachable states, transitions, and rewards, and returns a full sufficiency
+  verdict with concrete witnesses. Requires SWI-Prolog.
+
+```bash
+# fast injectivity check (no monitor)
+python -m envs.letter_env.experiments.verify_encoding_sufficiency
+
+# full sufficiency verdict against the live monitor
+python -m envs.letter_env.experiments.verify_encoding_sufficiency --with-monitor --max-n 5
+```
+
+The report is written to
+`results_and_evaluation/verification/encoding_sufficiency.json`, stamped with the
+mode used. In monitor-backed mode at the training horizon (`n <= 5`, 21 reachable
+monitor states), `learned_gru` is injective and therefore sufficient, while
+`one_hot`, `numerical`, `semantic_progress`, and `learned_graph` are not
+sufficient — each collapses count-distinct monitor states.
+
+Run the audit engine and driver tests with:
+
+```bash
+./.venv/bin/python3 -m pytest tests/verification
+RUN_RML_INTEGRATION=1 ./.venv/bin/python3 -m pytest tests/integration/test_letter_env_encoding_sufficiency.py
+```
+
 ## Testing
 
 From the repository root, run the shared core tests, shared grid tests, and
@@ -97,17 +136,22 @@ results_and_evaluation/
     dqn/
     ddqn/
     ppo/
+    tabular_n_1_to_5/
     original_tabular_reproduction/
   generalization_experiments_with_zero_shot_on_larger_n/
     dqn/
     ddqn/
     ppo/
+    tabular/
   figures/
+  verification/
 ```
 
 Each neural run writes its own folder containing the run configuration, model
 checkpoint, monitor logs, training monitor CSVs, evaluation metrics, and summary
-JSON. Tabular reproduction runs write episode-level metrics and a summary JSON.
+JSON. The original tabular reproduction writes episode-level metrics and a
+summary JSON. The variable-`n` tabular runs additionally save reloadable
+Q-tables for zero-shot evaluation.
 
 ## Learned Encoder Pretraining
 
@@ -177,6 +221,35 @@ Figures and source CSV summaries are written to:
 
 ```text
 envs/letter_env/results_and_evaluation/figures/
+```
+
+## Tabular Variable-n Runs
+
+The historical tabular reproduction trains separate fixed-`n` conditions. For a
+single-policy generalization check, train tabular Q-learning with `n` sampled
+from `1..5` and save the learned Q-table:
+
+```bash
+bash envs/letter_env/reproduction/run_tabular_variable_n.sh
+```
+
+This writes one run per tabular encoding to:
+
+```text
+envs/letter_env/results_and_evaluation/experiments_with_variable_n/tabular_n_1_to_5/
+```
+
+After the Q-tables are available, run zero-shot evaluation on `n=10`, `n=15`,
+and `n=20` with:
+
+```bash
+bash envs/letter_env/reproduction/run_tabular_zero_shot.sh
+```
+
+The zero-shot CSVs are written under:
+
+```text
+envs/letter_env/results_and_evaluation/generalization_experiments_with_zero_shot_on_larger_n/tabular/
 ```
 
 ## Reproduction Scripts

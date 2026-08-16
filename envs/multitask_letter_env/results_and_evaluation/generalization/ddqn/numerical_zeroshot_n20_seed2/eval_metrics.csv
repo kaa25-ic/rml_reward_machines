@@ -1,0 +1,2 @@
+algorithm,encoding,train_seed,eval_n,n_eval_episodes,eval_mean_return,eval_std_return,eval_mean_episode_length,eval_success_rate,eval_task_failure_rate,eval_timeout_rate
+ddqn,numerical,2,20,25,114.8,103.58069318169288,90.72,0.68,0.2,0.12

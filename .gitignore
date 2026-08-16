@@ -21,6 +21,7 @@ dist/
 *.log
 *.tmp
 tmp/
+graph_example/
 
 # Experiment outputs and large artifacts
 results/

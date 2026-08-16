@@ -1,0 +1,35 @@
+{
+  "experiment": "randomized_letter_env_ddqn_zero_shot",
+  "created_at_utc": "2026-08-07T15:21:02.204392+00:00",
+  "runtime_seconds": 2.059307582967449,
+  "algorithm": "ddqn",
+  "encoding": "semantic_progress",
+  "train_seed": 4,
+  "eval_n": 10,
+  "model_path": "envs/randomized_letter_env/results_and_evaluation/ddqn/regional_randomness_n1to5/semantic_progress_n1to5_seed4/model_final.zip",
+  "n_eval_episodes": 100,
+  "eval_seed_base": 50000,
+  "max_episode_steps": 200,
+  "monitor_progress_bonus": 10.0,
+  "placement_mode": "regional",
+  "aggregate": {
+    "algorithm": "ddqn",
+    "encoding": "semantic_progress",
+    "train_seed": 4,
+    "eval_n": 10,
+    "n_eval_episodes": 100,
+    "eval_mean_return": 68.1,
+    "eval_std_return": 10.83466658462548,
+    "eval_mean_episode_length": 29.14,
+    "eval_success_rate": 0.97,
+    "eval_mean_terminal_base_reward": 29.1,
+    "eval_mean_terminal_task_progress": 0.97,
+    "eval_task_failure_rate": 0.03,
+    "eval_timeout_rate": 0.0
+  },
+  "artifacts": {
+    "summary": "envs/randomized_letter_env/results_and_evaluation/generalization/semantic_progress_regional_zeroshot_n10_seed4/summary.json",
+    "eval_metrics": "envs/randomized_letter_env/results_and_evaluation/generalization/semantic_progress_regional_zeroshot_n10_seed4/eval_metrics.csv",
+    "episode_metrics": "envs/randomized_letter_env/results_and_evaluation/generalization/semantic_progress_regional_zeroshot_n10_seed4/episode_metrics.csv"
+  }
+}

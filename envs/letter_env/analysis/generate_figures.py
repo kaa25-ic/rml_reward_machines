@@ -47,8 +47,10 @@ ALGORITHM_LABELS = {
     "dqn": "DQN",
     "ddqn": "Double DQN",
     "ppo": "PPO",
+    "tabular": "Tabular",
 }
 ENCODING_LABELS = {
+    "simple": "Simple",
     "numerical": "Numerical",
     "one_hot": "One-hot",
     "semantic_progress": "Semantic progress",
@@ -66,6 +68,14 @@ COLORS = {
     "learned_gru": "#B279A2",
     "learned_graph": "#E45756",
     "hidden_monitor_state": "#79706E",
+    "ddqn:learned_graph": "#E45756",
+    "ddqn:learned_gru": "#B279A2",
+    "ddqn:numerical": "#4C78A8",
+    "ddqn:one_hot": "#F58518",
+    "ddqn:semantic_progress": "#54A24B",
+    "tabular:numerical": "#1F77B4",
+    "tabular:one_hot": "#FF7F0E",
+    "tabular:simple": "#6B7280",
 }
 MARKERS = {
     "dqn": "o",
@@ -77,6 +87,14 @@ MARKERS = {
     "learned_gru": "D",
     "learned_graph": "P",
     "hidden_monitor_state": "X",
+    "ddqn:learned_graph": "P",
+    "ddqn:learned_gru": "D",
+    "ddqn:numerical": "o",
+    "ddqn:one_hot": "s",
+    "ddqn:semantic_progress": "^",
+    "tabular:numerical": "v",
+    "tabular:one_hot": "X",
+    "tabular:simple": "h",
 }
 
 
@@ -325,23 +343,31 @@ def plot_zero_shot_success(zero_shot: pd.DataFrame, config: FigureConfig) -> Non
 
 
 def plot_zero_shot_episode_length(zero_shot: pd.DataFrame, config: FigureConfig) -> None:
+    tabular_encodings = ["one_hot", "numerical"]
     subset = zero_shot[
-        (zero_shot["algorithm"] == "ddqn")
-        & (zero_shot["encoding"].isin(ENCODING_ORDER))
+        (
+            ((zero_shot["algorithm"] == "ddqn") & zero_shot["encoding"].isin(ENCODING_ORDER))
+            | ((zero_shot["algorithm"] == "tabular") & zero_shot["encoding"].isin(tabular_encodings))
+        )
         & (zero_shot["eval_n"].isin(ZERO_SHOT_N_VALUES))
     ]
     summary = summarize_zero_shot(subset, "eval_mean_episode_length")
     summary.to_csv(config.output_dir / "zero_shot_generalization_episode_length.csv", index=False)
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(7.4, 4.8))
     draw_train_range(ax)
-    for encoding in ENCODING_ORDER:
-        group = summary[summary["encoding"] == encoding]
-        if group.empty:
-            continue
-        draw_zero_shot_curve(ax, group, encoding=encoding, value_column="mean")
-    format_zero_shot_axis(ax, title="DDQN zero-shot trajectory length", ylabel="Mean episode length")
-    ax.legend(loc="upper left", frameon=True, facecolor="white", edgecolor="white", framealpha=0.92)
+    for curve in merged_zero_shot_curves(summary):
+        draw_labeled_zero_shot_curve(ax, curve, value_column="mean")
+    format_zero_shot_axis(ax, title="", ylabel="Mean episode length")
+    ax.legend(
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.11),
+        ncol=2,
+        frameon=True,
+        facecolor="white",
+        edgecolor="white",
+        framealpha=0.95,
+    )
     save_figure(fig, config, "zero_shot_generalization_episode_length")
 
 
@@ -362,6 +388,30 @@ def summarize_curve(frame: pd.DataFrame, group_columns: list[str], value_column:
 def summarize_zero_shot(frame: pd.DataFrame, value_column: str) -> pd.DataFrame:
     summary = summarize_curve(frame, ["algorithm", "encoding", "eval_n"], value_column)
     return summary.sort_values(["encoding", "eval_n"])
+
+
+def merged_zero_shot_curves(summary: pd.DataFrame) -> list[dict[str, object]]:
+    """Merge curves with identical x/y values so overlapping lines remain legible."""
+    curves: dict[tuple[tuple[int, ...], tuple[float, ...]], dict[str, object]] = {}
+    for (algorithm, encoding), group in summary.groupby(["algorithm", "encoding"], sort=False):
+        group = group.sort_values("eval_n")
+        key = (
+            tuple(int(value) for value in group["eval_n"].to_numpy()),
+            tuple(round(float(value), 8) for value in group["mean"].to_numpy()),
+        )
+        algorithm_label = "DDQN" if algorithm == "ddqn" else ALGORITHM_LABELS.get(algorithm, algorithm.upper())
+        encoding_label = ENCODING_LABELS.get(encoding, encoding)
+        curve = curves.setdefault(
+            key,
+            {
+                "group": group,
+                "algorithm": algorithm_label,
+                "encoding_labels": [],
+                "style_key": f"{algorithm}:{encoding}",
+            },
+        )
+        curve["encoding_labels"].append(encoding_label)
+    return list(curves.values())
 
 
 def compute_sample_efficiency(learning: pd.DataFrame, *, threshold: float) -> pd.DataFrame:
@@ -437,6 +487,21 @@ def draw_zero_shot_curve(ax: plt.Axes, group: pd.DataFrame, *, encoding: str, va
         ax.fill_between(group["eval_n"], y - std, y + std, color=COLORS[encoding], alpha=0.12, linewidth=0)
 
 
+def draw_labeled_zero_shot_curve(ax: plt.Axes, curve: dict[str, object], *, value_column: str) -> None:
+    group = curve["group"].sort_values("eval_n")
+    style_key = str(curve["style_key"])
+    label = f"{curve['algorithm']} {' / '.join(str(label) for label in curve['encoding_labels'])}"
+    ax.plot(
+        group["eval_n"],
+        group[value_column],
+        color=COLORS.get(style_key, "#555555"),
+        marker=MARKERS.get(style_key, "o"),
+        linewidth=2.0,
+        markersize=5.5,
+        label=label,
+    )
+
+
 def draw_train_range(ax: plt.Axes) -> None:
     ax.axvspan(1, 5, color="#D8D8D8", alpha=0.35, linewidth=0)
     ax.text(3.0, 0.03, "train n=1..5", transform=ax.get_xaxis_transform(), ha="center", va="bottom", fontsize=8, color="#555555")
@@ -456,7 +521,7 @@ def format_zero_shot_axis(ax: plt.Axes, *, title: str, ylabel: str) -> None:
     ax.set_xlabel("Evaluation sequence length n")
     ax.set_ylabel(ylabel)
     ax.set_xticks([1, 5, 10, 15, 20])
-    ax.set_xlim(1, 20)
+    ax.set_xlim(1, 20.6)
     if "success" in ylabel.lower():
         ax.set_ylim(-0.03, 1.03)
         ax.set_yticks(np.linspace(0.0, 1.0, 6))

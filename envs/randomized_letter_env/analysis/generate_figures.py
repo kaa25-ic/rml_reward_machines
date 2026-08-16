@@ -293,7 +293,6 @@ def plot_regional_learning_curves(
         ax.set_ylim(-0.03, 1.03)
         ax.set_yticks(np.linspace(0.0, 1.0, 6))
         ax.set_xlim(left=0)
-    fig.suptitle("Regional randomized LetterEnv learning curves", y=1.02)
     fig.tight_layout()
     save_figure(fig, config, "regional_learning_curves")
 

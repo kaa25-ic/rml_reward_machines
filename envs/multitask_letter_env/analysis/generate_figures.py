@@ -31,6 +31,7 @@ ZERO_SHOT_N_VALUES = [10, 15, 20]
 FIGURE_NAMES = (
     "learning_by_encoding",
     "zero_shot_success_with_tabular",
+    "zero_shot_episode_length_with_tabular",
     "sample_efficiency",
     "tabular_neural_summary",
 )
@@ -52,12 +53,24 @@ COLORS = {
     "learned_graph": "#E45756",
     "tabular_numerical": "#6B7280",
     "tabular_one_hot": "#9CA3AF",
+    "ddqn:learned_graph": "#E45756",
+    "ddqn:learned_gru": "#B279A2",
+    "ddqn:numerical": "#4C78A8",
+    "ddqn:one_hot": "#F58518",
+    "tabular:numerical": "#6B7280",
+    "tabular:one_hot": "#9CA3AF",
 }
 MARKERS = {
     "numerical": "o",
     "one_hot": "s",
     "learned_gru": "D",
     "learned_graph": "P",
+    "ddqn:learned_graph": "P",
+    "ddqn:learned_gru": "D",
+    "ddqn:numerical": "o",
+    "ddqn:one_hot": "s",
+    "tabular:numerical": "v",
+    "tabular:one_hot": "X",
 }
 ZERO_SHOT_X_OFFSETS = {
     "numerical": -0.27,
@@ -97,6 +110,8 @@ def main() -> None:
         plot_learning_by_encoding(ddqn_learning, config)
     if "zero_shot_success_with_tabular" in config.figures:
         plot_zero_shot_success_with_tabular(zero_shot, config)
+    if "zero_shot_episode_length_with_tabular" in config.figures:
+        plot_zero_shot_episode_length_with_tabular(zero_shot, config)
     if "sample_efficiency" in config.figures:
         plot_sample_efficiency(ddqn_learning, config)
     if "tabular_neural_summary" in config.figures:
@@ -265,6 +280,35 @@ def plot_zero_shot_success_with_tabular(zero_shot: pd.DataFrame, config: FigureC
     save_figure(fig, config, "zero_shot_success_with_tabular")
 
 
+def plot_zero_shot_episode_length_with_tabular(zero_shot: pd.DataFrame, config: FigureConfig) -> None:
+    subset = zero_shot[
+        (
+            ((zero_shot["algorithm"] == "ddqn") & zero_shot["encoding"].isin(ENCODING_ORDER))
+            | ((zero_shot["algorithm"] == "tabular") & zero_shot["encoding"].isin(TABULAR_ENCODINGS))
+        )
+        & zero_shot["eval_n"].isin(ZERO_SHOT_N_VALUES)
+    ]
+    summary = summarize_curve(subset, ["algorithm", "encoding", "eval_n"], "eval_mean_episode_length")
+    summary.to_csv(config.output_dir / "zero_shot_episode_length_with_tabular.csv", index=False)
+
+    fig, ax = plt.subplots(figsize=(7.4, 4.8))
+    draw_train_range(ax)
+    for curve in merged_zero_shot_curves(summary):
+        draw_labeled_zero_shot_curve(ax, curve, value_column="mean")
+    format_zero_shot_axis(ax, title="Zero-shot episode length with tabular contrast", ylabel="Mean episode length")
+    ax.set_ylim(0, 420)
+    ax.legend(
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.11),
+        ncol=2,
+        frameon=True,
+        facecolor="white",
+        edgecolor="white",
+        framealpha=0.95,
+    )
+    save_figure(fig, config, "zero_shot_episode_length_with_tabular")
+
+
 def plot_sample_efficiency(learning: pd.DataFrame, config: FigureConfig) -> None:
     efficiency = compute_sample_efficiency(learning, threshold=config.success_threshold)
     efficiency.to_csv(config.output_dir / "sample_efficiency_first_success.csv", index=False)
@@ -301,25 +345,48 @@ def plot_tabular_neural_summary(
     summary.to_csv(config.output_dir / "tabular_neural_summary.csv", index=False)
 
     display = summary.copy()
-    display["method"] = display["algorithm"].map(ALGORITHM_LABELS) + "\n" + display["encoding"].map(ENCODING_LABELS)
+    method_labels = {
+        ("ddqn", "numerical"): "DDQN\nNumerical",
+        ("ddqn", "one_hot"): "DDQN\nOne-hot",
+        ("ddqn", "learned_gru"): "DDQN\nLearned GRU",
+        ("ddqn", "learned_graph"): "DDQN\nLearned GNN",
+        ("tabular", "numerical"): "Tabular Q-learning\nNumerical",
+        ("tabular", "one_hot"): "Tabular Q-learning\nOne-hot",
+    }
+    display["method"] = [
+        method_labels.get((row.algorithm, row.encoding), f"{row.algorithm}\n{row.encoding}")
+        for row in display.itertuples()
+    ]
     values = display[["in_distribution_success_rate", "zero_shot_success_rate"]].to_numpy(dtype=float)
 
-    fig, ax = plt.subplots(figsize=(7.2, 4.3))
+    fig, ax = plt.subplots(figsize=(5.4, 3.8))
     x = np.arange(len(display))
     width = 0.36
     ax.bar(x - width / 2, values[:, 0], width, label="n=1..5 final eval", color="#4C78A8", alpha=0.9)
     ax.bar(x + width / 2, values[:, 1], width, label="n=10/15/20 zero-shot", color="#E45756", alpha=0.9)
-    ax.set_title("In-distribution success and zero-shot transfer")
+    ax.set_title("In-distribution vs zero-shot success", fontsize=11)
     ax.set_ylabel("Success rate")
     ax.set_ylim(-0.03, 1.08)
     ax.set_xticks(x)
-    ax.set_xticklabels(display["method"], rotation=25, ha="right")
-    ax.legend(loc="lower left")
+    ax.set_xticklabels(display["method"], rotation=25, ha="right", fontsize=7.2)
+    ax.legend(
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.36),
+        ncol=2,
+        frameon=True,
+        facecolor="white",
+        edgecolor="white",
+        framealpha=0.95,
+        columnspacing=1.4,
+        handlelength=1.8,
+        fontsize=8,
+    )
     ax.grid(axis="x", visible=False)
     for index, (in_dist, zero) in enumerate(values):
-        ax.text(index - width / 2, in_dist + 0.025, f"{in_dist:.2f}", ha="center", va="bottom", fontsize=8)
-        ax.text(index + width / 2, zero + 0.025, f"{zero:.2f}", ha="center", va="bottom", fontsize=8)
+        ax.text(index - width / 2, in_dist + 0.022, f"{in_dist:.2f}", ha="center", va="bottom", fontsize=7.2)
+        ax.text(index + width / 2, zero + 0.022, f"{zero:.2f}", ha="center", va="bottom", fontsize=7.2)
     fig.tight_layout()
+    fig.subplots_adjust(bottom=0.44)
     save_figure(fig, config, "tabular_neural_summary")
 
 
@@ -331,6 +398,29 @@ def summarize_curve(frame: pd.DataFrame, group_columns: list[str], value_column:
     )
     summary["std"] = summary["std"].fillna(0.0)
     return summary
+
+
+def merged_zero_shot_curves(summary: pd.DataFrame) -> list[dict[str, object]]:
+    curves: dict[tuple[tuple[int, ...], tuple[float, ...]], dict[str, object]] = {}
+    for (algorithm, encoding), group in summary.groupby(["algorithm", "encoding"], sort=False):
+        group = group.sort_values("eval_n")
+        key = (
+            tuple(int(value) for value in group["eval_n"].to_numpy()),
+            tuple(round(float(value), 8) for value in group["mean"].to_numpy()),
+        )
+        algorithm_label = ALGORITHM_LABELS.get(algorithm, algorithm.upper()).replace(" Q-learning", "")
+        encoding_label = ENCODING_LABELS.get(encoding, encoding)
+        curve = curves.setdefault(
+            key,
+            {
+                "group": group,
+                "algorithm": algorithm_label,
+                "encoding_labels": [],
+                "style_key": f"{algorithm}:{encoding}",
+            },
+        )
+        curve["encoding_labels"].append(encoding_label)
+    return list(curves.values())
 
 
 def compute_sample_efficiency(learning: pd.DataFrame, *, threshold: float) -> pd.DataFrame:
@@ -440,6 +530,27 @@ def draw_zero_shot_curve(
         ax.fill_between(x, np.clip(y - std, 0.0, 1.0), np.clip(y + std, 0.0, 1.0), color=color, alpha=0.10, linewidth=0)
 
 
+def draw_labeled_zero_shot_curve(ax: plt.Axes, curve: dict[str, object], *, value_column: str) -> None:
+    group = curve["group"].sort_values("eval_n")
+    style_key = str(curve["style_key"])
+    color = COLORS.get(style_key, "#555555")
+    label = f"{curve['algorithm']} {' / '.join(str(label) for label in curve['encoding_labels'])}"
+    ax.plot(
+        group["eval_n"],
+        group[value_column],
+        color=color,
+        marker=MARKERS.get(style_key, "o"),
+        linewidth=2.0,
+        markersize=5.5,
+        label=label,
+    )
+    if "std" in group.columns and group["std"].notna().any():
+        x = group["eval_n"].to_numpy(dtype=float)
+        y = group[value_column].to_numpy(dtype=float)
+        std = group["std"].fillna(0.0).to_numpy(dtype=float)
+        ax.fill_between(x, y - std, y + std, color=color, alpha=0.12, linewidth=0)
+
+
 def draw_train_range(ax: plt.Axes) -> None:
     ax.axvspan(1, 5, color="#D8D8D8", alpha=0.35, linewidth=0)
     ax.text(3.0, 0.03, "train n=1..5", transform=ax.get_xaxis_transform(), ha="center", va="bottom", fontsize=8, color="#555555")
@@ -459,9 +570,10 @@ def format_zero_shot_axis(ax: plt.Axes, *, title: str, ylabel: str) -> None:
     ax.set_xlabel("Evaluation count n")
     ax.set_ylabel(ylabel)
     ax.set_xticks([1, 5, 10, 15, 20])
-    ax.set_xlim(1, 20)
-    ax.set_ylim(-0.03, 1.03)
-    ax.set_yticks(np.linspace(0.0, 1.0, 6))
+    ax.set_xlim(1, 20.6)
+    if "success" in ylabel.lower():
+        ax.set_ylim(-0.03, 1.03)
+        ax.set_yticks(np.linspace(0.0, 1.0, 6))
 
 
 def save_figure(fig: plt.Figure, config: FigureConfig, name: str) -> None:

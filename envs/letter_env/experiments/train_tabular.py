@@ -51,6 +51,19 @@ class EpisodeRecord:
 
 
 @dataclass(frozen=True)
+class SavedPolicyRecord:
+    """Artifact metadata for one saved tabular policy."""
+
+    encoding: str
+    iteration: int
+    n_value: int
+    seed: int
+    path: str
+    q_state_count: int
+    epsilon: float
+
+
+@dataclass(frozen=True)
 class LetterEnvTabularTrainingConfig:
     """Configuration for the LetterEnv tabular reproduction."""
 
@@ -99,6 +112,7 @@ def train_letter_env_tabular(
 
     started = time.monotonic()
     all_records: list[EpisodeRecord] = []
+    saved_policies: list[SavedPolicyRecord] = []
     with managed_monitor(
         output_dir=output_dir,
         monitor_config_template=monitor_config_template,
@@ -108,27 +122,31 @@ def train_letter_env_tabular(
         for encoding_index, encoding in enumerate(encodings):
             for iteration in range(config.iterations):
                 for n_value in config.n_values:
-                    seed = _derive_seed(
-                        config.seed_base + encoding_index * 100_000,
-                        iteration,
-                        n_value,
+                    seed = (
+                        _derive_seed(
+                            config.seed_base + encoding_index * 100_000,
+                            iteration,
+                            n_value,
+                        )
+                        if config.fixed_n
+                        else int(config.seed_base + encoding_index * 100_000 + iteration * 1000)
                     )
                     print(
                         f"[{utc_now()}] starting encoding={encoding} "
                         f"iteration={iteration} n={n_value} seed={seed}",
                         flush=True,
                     )
-                    all_records.extend(
-                        _train_condition(
-                            iteration=iteration,
-                            encoding=encoding,
-                            n_value=n_value,
-                            config=config,
-                            seed=seed,
-                            runtime_config_path=monitor_runtime.config_path,
-                            agent_config=agent_config,
-                        )
+                    records, policy_record = _train_condition(
+                        iteration=iteration,
+                        encoding=encoding,
+                        n_value=n_value,
+                        config=config,
+                        seed=seed,
+                        runtime_config_path=monitor_runtime.config_path,
+                        agent_config=agent_config,
                     )
+                    all_records.extend(records)
+                    saved_policies.append(policy_record)
 
     if not all_records:
         raise RuntimeError("No training records were produced.")
@@ -140,6 +158,7 @@ def train_letter_env_tabular(
         runtime_seconds=time.monotonic() - started,
         runtime_config_path=monitor_runtime.config_path,
         monitor_spec_path=monitor_spec_path,
+        saved_policies=saved_policies,
     )
     write_json(output_dir / "summary.json", summary)
     return summary
@@ -154,7 +173,7 @@ def _train_condition(
     seed: int,
     runtime_config_path: Path,
     agent_config: QLearningConfig,
-) -> list[EpisodeRecord]:
+) -> tuple[list[EpisodeRecord], SavedPolicyRecord]:
     rng = random.Random(seed)
     np.random.seed(seed)
     env = build_letter_env(
@@ -245,7 +264,22 @@ def _train_condition(
     finally:
         env.close()
 
-    return records
+    q_table_path = (
+        config.output_dir
+        / "q_tables"
+        / f"{encoding}_iteration{iteration}_n{n_value}_seed{seed}.pkl"
+    )
+    agent.save_q_table(q_table_path)
+    policy_record = SavedPolicyRecord(
+        encoding=encoding,
+        iteration=iteration,
+        n_value=n_value,
+        seed=seed,
+        path=str(q_table_path),
+        q_state_count=len(agent.q_table),
+        epsilon=agent.epsilon,
+    )
+    return records, policy_record
 
 
 def _selected_encodings(encoding: str) -> tuple[str, ...]:
@@ -274,6 +308,7 @@ def _build_summary(
     runtime_seconds: float,
     runtime_config_path: Path,
     monitor_spec_path: Path,
+    saved_policies: list[SavedPolicyRecord],
 ) -> dict[str, Any]:
     final_records_by_condition: dict[tuple[str, int, int], EpisodeRecord] = {}
     for record in records:
@@ -296,9 +331,11 @@ def _build_summary(
         "final_by_condition": [
             asdict(record) for _condition, record in sorted(final_records_by_condition.items())
         ],
+        "saved_policies": [asdict(record) for record in saved_policies],
         "artifacts": {
             "train_metrics": str(config.output_dir / "train_metrics.csv"),
             "summary": str(config.output_dir / "summary.json"),
+            "q_tables": str(config.output_dir / "q_tables"),
         },
     }
 

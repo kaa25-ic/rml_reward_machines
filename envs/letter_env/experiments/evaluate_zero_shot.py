@@ -1,4 +1,4 @@
-"""Evaluate a saved neural LetterEnv policy on fixed zero-shot n values."""
+"""Evaluate a saved LetterEnv policy on fixed zero-shot n values."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import time
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Hashable
 
 import numpy as np
 import yaml
@@ -18,7 +18,9 @@ from stable_baselines3 import DQN, PPO
 
 from envs.letter_env import LetterEnvConfig, build_letter_env
 from rml_rm.agents.ddqn import DoubleDQN
+from rml_rm.agents.tabular import QLearningAgent
 from rml_rm.monitors import RMLMonitorProcess, find_free_port
+from rml_rm.wrappers import tabular_state_key
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -144,7 +146,7 @@ def evaluate_zero_shot(
     _write_records(output_dir / "episode_metrics.csv", records)
     _write_aggregate(output_dir / "eval_metrics.csv", aggregate)
     summary = {
-        "experiment": "letter_env_neural_zero_shot",
+        "experiment": "letter_env_zero_shot",
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "runtime_seconds": time.monotonic() - started,
         "algorithm": algorithm,
@@ -178,6 +180,8 @@ def _load_model(algorithm: str, model_path: Path):
         return DoubleDQN.load(str(model_path))
     if algorithm == "ppo":
         return PPO.load(str(model_path))
+    if algorithm == "tabular":
+        return QLearningAgent.load_q_table(model_path)
     raise ValueError(f"Unsupported algorithm: {algorithm}")
 
 
@@ -204,10 +208,12 @@ def _evaluate_policy(
         terminal_task_progress = 0.0
         task_failed = False
         success = False
+        state = tabular_state_key(observation)
 
         while not terminated and not truncated:
-            action, _ = model.predict(observation, deterministic=True)
-            observation, reward, terminated, truncated, info = env.step(_scalar_action(action))
+            action = _predict_action(model, algorithm, observation, state)
+            observation, reward, terminated, truncated, info = env.step(action)
+            state = tabular_state_key(observation)
             episode_return += float(reward)
             episode_length += 1
             terminal_base_reward = float(info.get("base_reward", reward))
@@ -232,6 +238,18 @@ def _evaluate_policy(
             )
         )
     return records
+
+
+def _predict_action(model, algorithm: str, observation: dict[str, np.ndarray], state: Hashable) -> int:
+    if algorithm == "tabular":
+        action_values = model.q_table.get(state)
+        if action_values is None:
+            return int(min(model.actions))
+        max_value = max(action_values.values())
+        best_actions = [action for action, value in action_values.items() if value == max_value]
+        return int(sorted(best_actions)[0])
+    action, _ = model.predict(observation, deterministic=True)
+    return _scalar_action(action)
 
 
 def _aggregate_records(
@@ -304,10 +322,11 @@ def _scalar_action(action) -> int:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--algorithm", choices=["dqn", "ddqn", "ppo"], required=True)
+    parser.add_argument("--algorithm", choices=["dqn", "ddqn", "ppo", "tabular"], required=True)
     parser.add_argument(
         "--encoding",
         choices=[
+            "simple",
             "one_hot",
             "numerical",
             "semantic_progress",

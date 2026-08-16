@@ -206,6 +206,7 @@ Figures are generated from the saved CSV summaries:
 
 - learning curves by DDQN encoding.
 - zero-shot success with the tabular contrast.
+- zero-shot episode length with the tabular contrast.
 - sample-efficiency bars using first success at `SR >= 0.9`.
 - a tabular/neural summary table.
 

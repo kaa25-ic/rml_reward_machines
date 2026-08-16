@@ -102,6 +102,7 @@ rml_reward_machines/
     encodings/       # vector, semantic, GRU, graph, and frozen monitor encoders
     experiments/     # shared runtime, seeding, monitor lifecycle, and JSON helpers
     monitors/        # WebSocket client, monitor process manager, vendored RML scripts
+    verification/    # encoding-sufficiency audit engine
     wrappers/        # Gymnasium wrappers for monitor observations and rewards
   envs/
     letter_env/              # single-task A B C D^n experiments
@@ -113,6 +114,7 @@ rml_reward_machines/
   tests/
     core/                    # shared monitor, wrapper, and normalization tests
     integration/             # tests that require the external monitor process
+    verification/            # encoding-sufficiency audit engine tests
     letter_env*/
     multitask_letter_env/
     randomized_letter_env/
@@ -183,6 +185,18 @@ Shared wrappers and runtime helpers manage payload construction, monitor-state
 normalization, local port allocation, monitor startup/shutdown, and train/eval
 monitor separation. Environment-specific code is responsible for domain
 propositions, task-specific shaping, and analysis metrics.
+
+## Encoding Sufficiency
+
+`rml_rm/verification/` provides a formal audit of monitor-state encodings. An
+encoding is *sufficient* when monitor states that share an encoded value also
+share the same reward and, under every monitor event, transition to states with
+the same encoded value; an encoding that is injective on the reachable states is
+sufficient by construction. The audit partitions the reachable monitor states by
+encoded value and reports any pair that violates either condition. Under the
+standard abstraction assumptions, a sufficient encoding preserves the
+monitor-dependent distinctions needed by an optimal policy. LetterEnv provides
+the reference driver and reachable-state oracle; see `envs/letter_env/README.md`.
 
 ## License & Attribution
 

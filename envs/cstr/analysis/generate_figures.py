@@ -152,6 +152,10 @@ def main() -> None:
             args.output_dir / "zero_shot_soak_generalization_side_by_side",
             layout="horizontal",
         )
+        plot_zero_shot_soak_generalization_success_rate(
+            generalization_rows,
+            args.output_dir / "zero_shot_soak_generalization_success_rate",
+        )
 
     trajectory_rows = []
     if not args.skip_trajectories:
@@ -185,6 +189,7 @@ def main() -> None:
         "all_variants_best_metrics_multiseed.png",
         "zero_shot_soak_generalization.png",
         "zero_shot_soak_generalization_side_by_side.png",
+        "zero_shot_soak_generalization_success_rate.png",
     ]
     if not args.skip_trajectories:
         figure_names.extend(
@@ -446,6 +451,30 @@ def plot_zero_shot_soak_generalization(
     save_figure(fig, output_prefix)
 
 
+def plot_zero_shot_soak_generalization_success_rate(rows: pd.DataFrame, output_prefix: Path) -> None:
+    fig, axis = plt.subplots(figsize=(8.6, 4.2))
+    fig.subplots_adjust(left=0.10, right=0.98, top=0.96, bottom=0.28)
+    plot_generalization_metric_panel(
+        axis,
+        rows,
+        "rml_success_rate",
+        "RML success rate",
+        show_legend=False,
+    )
+    axis.set_xlabel("Required soak duration k")
+    handles, labels = axis.get_legend_handles_labels()
+    deduped = dict(zip(labels, handles))
+    fig.legend(
+        deduped.values(),
+        deduped.keys(),
+        loc="lower center",
+        bbox_to_anchor=(0.5, 0.03),
+        ncol=min(3, len(deduped)),
+        frameon=False,
+    )
+    save_figure(fig, output_prefix)
+
+
 def plot_generalization_metric_panel(
     axis: plt.Axes,
     rows: pd.DataFrame,
@@ -460,7 +489,7 @@ def plot_generalization_metric_panel(
     if train_steps:
         train_start = min(train_steps) - 0.5
         train_end = max(train_steps) + 0.5
-        axis.axvspan(train_start, train_end, color="#111827", alpha=0.08, label="trained k")
+        axis.axvspan(train_start, train_end, color="#111827", alpha=0.08, label="PPO training range")
         axis.text(
             (train_start + train_end) / 2,
             region_label_y,
@@ -680,13 +709,13 @@ def plot_trajectory_comparison(
     *,
     title: str,
 ) -> None:
-    fig, axes = plt.subplots(2, 1, figsize=(13, 7), sharex=True, constrained_layout=True)
+    fig, axes = plt.subplots(2, 1, figsize=(13, 7.2), sharex=True)
+    fig.subplots_adjust(left=0.07, right=0.98, top=0.97, bottom=0.16, hspace=0.08)
     for variant in VARIANTS:
         train_seed = trajectory_train_seed(args, variant["key"])
-        path = trajectory_root / variant["key"] / "successful_seeds" / f"seed{train_seed}" / "trajectory.csv"
-        if not path.exists():
+        frame = load_trajectory_frame(trajectory_root, variant["key"], "successful_seeds", train_seed)
+        if frame is None:
             continue
-        frame = pd.read_csv(path)
         steps = frame["step"].to_numpy(dtype=float)
         axes[0].plot(
             steps,
@@ -703,17 +732,18 @@ def plot_trajectory_comparison(
             linewidth=2.0,
         )
     axes[0].axhline(0.5, color="#111827", linestyle="--", linewidth=1.0, alpha=0.7)
-    axes[0].fill_between([0, 300], [0.42, 0.42], [0.58, 0.58], color="#6b7280", alpha=0.10)
+    axes[0].axhspan(0.58, 0.74, color="#f59e0b", alpha=0.14, label="Warning region")
+    axes[0].axhspan(0.42, 0.58, color="#059669", alpha=0.08, label="Safe region")
     axes[0].set_ylabel("Concentration")
-    axes[1].axhspan(346.0, 354.0, color="#059669", alpha=0.10)
+    axes[1].axhspan(343.0, 347.0, color="#f59e0b", alpha=0.14)
+    axes[1].axhspan(346.0, 354.0, color="#059669", alpha=0.08)
     axes[1].axhline(350.0, color="#111827", linestyle="--", linewidth=1.0, alpha=0.7)
     axes[1].set_ylabel("Temperature")
     axes[1].set_xlabel("Step")
     for axis in axes:
         axis.grid(True, alpha=0.25)
     handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="center left", bbox_to_anchor=(1.01, 0.5), frameon=False)
-    fig.suptitle(title)
+    fig.legend(handles, labels, loc="lower center", bbox_to_anchor=(0.5, 0.01), ncol=4, frameon=False)
     save_figure(fig, output_prefix)
 
 
@@ -724,14 +754,13 @@ def plot_headline_trajectory(
     baseline_seed: int,
     rml_seed: int,
 ) -> None:
-    baseline_path = trajectory_root / "baseline" / "successful_seeds" / f"seed{baseline_seed}" / "trajectory.csv"
-    rml_path = trajectory_root / "rml_graph_encoder" / "successful_seeds" / f"seed{rml_seed}" / "trajectory.csv"
-    if not baseline_path.exists() or not rml_path.exists():
+    baseline = load_trajectory_frame(trajectory_root, "baseline", "successful_seeds", baseline_seed)
+    rml = load_trajectory_frame(trajectory_root, "rml_graph_encoder", "successful_seeds", rml_seed)
+    if baseline is None or rml is None:
         return
 
-    baseline = pd.read_csv(baseline_path)
-    rml = pd.read_csv(rml_path)
-    fig, axes = plt.subplots(2, 1, figsize=(11, 6.5), sharex=True, constrained_layout=True)
+    fig, axes = plt.subplots(2, 1, figsize=(11, 6.8), sharex=True)
+    fig.subplots_adjust(left=0.08, right=0.98, top=0.91, bottom=0.17, hspace=0.08)
     for frame, label, color in (
         (baseline, "Baseline", COLORS["baseline"]),
         (rml, "RML graph encoder", COLORS["rml_graph_encoder"]),
@@ -740,8 +769,8 @@ def plot_headline_trajectory(
         axes[0].plot(steps, frame["reactor_concentration"].to_numpy(dtype=float), color=color, label=label, linewidth=2.1)
         axes[1].plot(steps, frame["reactor_temperature"].to_numpy(dtype=float), color=color, label=label, linewidth=2.1)
 
-    axes[0].fill_between([0, 300], [0.58, 0.58], [0.74, 0.74], color="#f59e0b", alpha=0.14)
-    axes[0].fill_between([0, 300], [0.42, 0.42], [0.58, 0.58], color="#059669", alpha=0.08)
+    axes[0].axhspan(0.58, 0.74, color="#f59e0b", alpha=0.14, label="Warning region")
+    axes[0].axhspan(0.42, 0.58, color="#059669", alpha=0.08, label="Safe region")
     axes[0].axhline(0.5, color="#111827", linestyle="--", linewidth=1.0, alpha=0.65)
     axes[0].set_ylabel("Concentration")
     axes[1].axhspan(343.0, 347.0, color="#f59e0b", alpha=0.14)
@@ -749,20 +778,24 @@ def plot_headline_trajectory(
     axes[1].axhline(350.0, color="#111827", linestyle="--", linewidth=1.0, alpha=0.65)
     axes[1].set_ylabel("Temperature")
     axes[1].set_xlabel("Step")
-    annotate_phase_spans(axes[0], rml)
     for axis in axes:
         axis.grid(True, alpha=0.25)
     handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="center left", bbox_to_anchor=(1.01, 0.5), frameon=False)
-    fig.suptitle("CSTR procedure contrast: baseline vs RML")
+    fig.legend(
+        handles,
+        labels,
+        loc="lower center",
+        bbox_to_anchor=(0.5, 0.01),
+        ncol=4,
+        frameon=False,
+    )
     save_figure(fig, output_prefix)
 
 
 def plot_phase_trajectory(trajectory_root: Path, output_prefix: Path, *, seed: int) -> None:
-    path = trajectory_root / "rml_graph_encoder" / "successful_seeds" / f"seed{seed}" / "trajectory.csv"
-    if not path.exists():
+    frame = load_trajectory_frame(trajectory_root, "rml_graph_encoder", "successful_seeds", seed)
+    if frame is None:
         return
-    frame = pd.read_csv(path)
     fig, axes = plt.subplots(2, 1, figsize=(11, 6.5), sharex=True, constrained_layout=True)
     for axis, column, ylabel in (
         (axes[0], "reactor_concentration", "Concentration"),
@@ -781,6 +814,16 @@ def plot_phase_trajectory(trajectory_root: Path, output_prefix: Path, *, seed: i
     fig.legend(handles=phase_handles, loc="center left", bbox_to_anchor=(1.01, 0.5), frameon=False)
     fig.suptitle(f"CSTR RML graph trajectory by protocol phase, seed {seed}")
     save_figure(fig, output_prefix)
+
+
+def load_trajectory_frame(trajectory_root: Path, method: str, outcome_group: str, seed: int) -> pd.DataFrame | None:
+    path = trajectory_root / method / outcome_group / f"seed{seed}" / "trajectory.csv"
+    if path.exists():
+        return pd.read_csv(path)
+    relocated = trajectory_root.parent / "csv" / "cstr_trajectories" / f"{method}_{outcome_group}_seed{seed}_trajectory.csv"
+    if relocated.exists():
+        return pd.read_csv(relocated)
+    return None
 
 
 def plot_phase_segments(axis: plt.Axes, frame: pd.DataFrame, value_column: str) -> None:
