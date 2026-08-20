@@ -7,8 +7,10 @@ import csv
 import json
 import random
 import time
+from contextlib import nullcontext
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 
 import numpy as np
@@ -84,6 +86,7 @@ class LetterEnvTabularTrainingConfig:
     max_episode_steps: int = 200
     fixed_n: bool = True
     legacy_transition_bonus: float = 10.0
+    finite_state_rm_max_n: int | None = None
     output_dir: Path = field(default_factory=Path)
 
 
@@ -113,12 +116,17 @@ def train_letter_env_tabular(
     started = time.monotonic()
     all_records: list[EpisodeRecord] = []
     saved_policies: list[SavedPolicyRecord] = []
-    with managed_monitor(
-        output_dir=output_dir,
-        monitor_config_template=monitor_config_template,
-        monitor_spec_path=monitor_spec_path,
-        max_episode_steps=config.max_episode_steps,
-    ) as monitor_runtime:
+    monitor_context = (
+        nullcontext(SimpleNamespace(config_path=monitor_config_template))
+        if config.encoding == "finite_state_rm"
+        else managed_monitor(
+            output_dir=output_dir,
+            monitor_config_template=monitor_config_template,
+            monitor_spec_path=monitor_spec_path,
+            max_episode_steps=config.max_episode_steps,
+        )
+    )
+    with monitor_context as monitor_runtime:
         for encoding_index, encoding in enumerate(encodings):
             for iteration in range(config.iterations):
                 for n_value in config.n_values:
@@ -189,6 +197,7 @@ def _train_condition(
             step_penalty=0.0,
             no_op_penalty=0.0,
             state_discovery_bonus=0.0,
+            finite_state_rm_max_n=config.finite_state_rm_max_n,
         ),
         monitor_config_path=runtime_config_path,
     )
@@ -322,6 +331,7 @@ def _build_summary(
         "monitor": {
             "config_path": str(runtime_config_path),
             "spec_path": str(monitor_spec_path),
+            "uses_external_rml_monitor": config.encoding != "finite_state_rm",
         },
         "episode_count": len(records),
         "condition_count": len(final_records_by_condition),
@@ -342,7 +352,11 @@ def _build_summary(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--encoding", choices=["simple", "one_hot", "numerical", "all"], default="all")
+    parser.add_argument(
+        "--encoding",
+        choices=["simple", "one_hot", "numerical", "finite_state_rm", "all"],
+        default="all",
+    )
     parser.add_argument("--max-n", type=int, default=10)
     parser.add_argument("--n-values", type=int, nargs="+", default=None)
     parser.add_argument("--iterations", type=int, default=1)
@@ -359,6 +373,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-episode-steps", type=int, default=200)
     parser.add_argument("--sample-n", action="store_true")
     parser.add_argument("--legacy-transition-bonus", type=float, default=10.0)
+    parser.add_argument("--finite-state-rm-max-n", type=int, default=None)
     parser.add_argument(
         "--output-dir",
         type=Path,
@@ -388,6 +403,7 @@ def main() -> None:
         max_episode_steps=args.max_episode_steps,
         fixed_n=not args.sample_n,
         legacy_transition_bonus=args.legacy_transition_bonus,
+        finite_state_rm_max_n=args.finite_state_rm_max_n,
         output_dir=args.output_dir,
     )
     summary = train_letter_env_tabular(config)

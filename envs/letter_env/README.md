@@ -45,7 +45,8 @@ swipl --version
 
 ## Encodings
 
-The neural experiments use six monitor-state encodings:
+The neural experiments use six RML monitor-state encodings plus one non-RML
+finite-state reward-machine baseline:
 
 - `one_hot`: a one-hot vector derived directly from the RML monitor state.
 - `numerical`: a compact numerical representation derived from the RML monitor
@@ -58,6 +59,10 @@ The neural experiments use six monitor-state encodings:
   parameterized RML monitor-transition data.
 - `hidden_monitor_state`: a constant monitor-state vector. The RML monitor and
   its rewards remain active, but the policy does not observe monitor progress.
+- `finite_state_rm`: a hand-coded finite-state Reward Machine for the same
+  `A B C D^n` task. It does not start or query the RML monitor; it exposes a
+  one-hot automaton state and emits the same terminal reward scale as the RML
+  monitor.
 
 The tabular reproduction also includes `simple`, which is used for comparison
 with the baseline tabular state abstraction for this environment.

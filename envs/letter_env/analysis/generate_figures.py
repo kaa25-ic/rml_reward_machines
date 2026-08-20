@@ -15,6 +15,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 
+import matplotlib.lines as mlines
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -32,6 +33,7 @@ ENCODING_ORDER = [
     "semantic_progress",
     "learned_gru",
     "learned_graph",
+    "finite_state_rm",
     "hidden_monitor_state",
 ]
 FIGURE_NAMES = (
@@ -42,6 +44,7 @@ FIGURE_NAMES = (
     "zero_shot_episode_length",
 )
 ZERO_SHOT_N_VALUES = [10, 15, 20]
+ZERO_SHOT_EPISODE_LENGTH_SEED = 0
 
 ALGORITHM_LABELS = {
     "dqn": "DQN",
@@ -56,7 +59,12 @@ ENCODING_LABELS = {
     "semantic_progress": "Semantic progress",
     "learned_gru": "Learned GRU",
     "learned_graph": "Learned GNN",
+    "finite_state_rm": "Finite-state RM",
     "hidden_monitor_state": "Hidden monitor",
+}
+EPISODE_LENGTH_LABELS = {
+    "ddqn:finite_state_rm": "Double DQN: manual finite-state RM (fails)",
+    "tabular:simple": "Tabular: simple encoding (fails)",
 }
 COLORS = {
     "dqn": "#4C78A8",
@@ -67,12 +75,14 @@ COLORS = {
     "semantic_progress": "#54A24B",
     "learned_gru": "#B279A2",
     "learned_graph": "#E45756",
+    "finite_state_rm": "#111827",
     "hidden_monitor_state": "#79706E",
     "ddqn:learned_graph": "#E45756",
     "ddqn:learned_gru": "#B279A2",
     "ddqn:numerical": "#4C78A8",
     "ddqn:one_hot": "#F58518",
     "ddqn:semantic_progress": "#54A24B",
+    "ddqn:finite_state_rm": "#111827",
     "tabular:numerical": "#1F77B4",
     "tabular:one_hot": "#FF7F0E",
     "tabular:simple": "#6B7280",
@@ -86,12 +96,14 @@ MARKERS = {
     "semantic_progress": "^",
     "learned_gru": "D",
     "learned_graph": "P",
+    "finite_state_rm": "*",
     "hidden_monitor_state": "X",
     "ddqn:learned_graph": "P",
     "ddqn:learned_gru": "D",
     "ddqn:numerical": "o",
     "ddqn:one_hot": "s",
     "ddqn:semantic_progress": "^",
+    "ddqn:finite_state_rm": "*",
     "tabular:numerical": "v",
     "tabular:one_hot": "X",
     "tabular:simple": "h",
@@ -287,7 +299,7 @@ def plot_learning_by_encoding(learning: pd.DataFrame, config: FigureConfig) -> N
             color=COLORS[encoding],
             marker=MARKERS[encoding],
         )
-    format_learning_axis(ax, title="DDQN learning curves by encoding", ylabel="Evaluation success rate")
+    format_learning_axis(ax, title="Double DQN learning curves by encoding", ylabel="Evaluation success rate")
     ax.legend(loc="lower right", ncol=1)
     save_figure(fig, config, "learning_by_encoding_success_rate")
 
@@ -303,11 +315,15 @@ def plot_sample_efficiency(learning: pd.DataFrame, config: FigureConfig) -> None
     y = np.arange(len(efficiency))
     means = efficiency["mean_first_success_steps"].to_numpy(dtype=float) / 1000.0
     stds = efficiency["std_first_success_steps"].fillna(0.0).to_numpy(dtype=float) / 1000.0
+    display_means = np.where(
+        np.isfinite(means),
+        means,
+        float(config.max_learning_steps) / 1000.0,
+    )
     colors = [COLORS.get(row.encoding, "#555555") for row in efficiency.itertuples()]
 
     fig, ax = plt.subplots(figsize=(6.9, 5.2))
-    ax.barh(y, means, xerr=stds, color=colors, alpha=0.88, capsize=3, edgecolor="white", linewidth=0.7)
-    ax.set_title(f"Sample efficiency to success rate >= {config.success_threshold:.1f}")
+    ax.barh(y, display_means, xerr=stds, color=colors, alpha=0.88, capsize=3, edgecolor="white", linewidth=0.7)
     ax.set_xlabel("Training steps (thousands)")
     ax.set_yticks(y)
     ax.set_yticklabels(labels)
@@ -316,7 +332,14 @@ def plot_sample_efficiency(learning: pd.DataFrame, config: FigureConfig) -> None
     ax.grid(axis="y", visible=False)
     for index, row in enumerate(efficiency.itertuples()):
         if row.unsolved_seeds > 0:
-            ax.text(means[index] + stds[index] + 4, index, f"{row.unsolved_seeds} unsolved", ha="left", va="center", fontsize=8)
+            ax.text(
+                display_means[index] + stds[index] + 4,
+                index,
+                f"{row.unsolved_seeds} unsolved",
+                ha="left",
+                va="center",
+                fontsize=8,
+            )
     fig.tight_layout()
     save_figure(fig, config, "sample_efficiency_first_success")
 
@@ -337,19 +360,21 @@ def plot_zero_shot_success(zero_shot: pd.DataFrame, config: FigureConfig) -> Non
         if group.empty:
             continue
         draw_zero_shot_curve(ax, group, encoding=encoding, value_column="mean")
-    format_zero_shot_axis(ax, title="DDQN zero-shot generalization", ylabel="Evaluation success rate")
+    format_zero_shot_axis(ax, title="Double DQN zero-shot generalization", ylabel="Evaluation success rate")
     ax.legend(loc="lower right", frameon=True, facecolor="white", edgecolor="white", framealpha=0.92)
     save_figure(fig, config, "zero_shot_generalization_success_rate")
 
 
 def plot_zero_shot_episode_length(zero_shot: pd.DataFrame, config: FigureConfig) -> None:
     tabular_encodings = ["one_hot", "numerical"]
+    ddqn_encodings = [encoding for encoding in ENCODING_ORDER if encoding != "finite_state_rm"]
     subset = zero_shot[
         (
-            ((zero_shot["algorithm"] == "ddqn") & zero_shot["encoding"].isin(ENCODING_ORDER))
+            ((zero_shot["algorithm"] == "ddqn") & zero_shot["encoding"].isin(ddqn_encodings))
             | ((zero_shot["algorithm"] == "tabular") & zero_shot["encoding"].isin(tabular_encodings))
         )
         & (zero_shot["eval_n"].isin(ZERO_SHOT_N_VALUES))
+        & (zero_shot["train_seed"] == ZERO_SHOT_EPISODE_LENGTH_SEED)
     ]
     summary = summarize_zero_shot(subset, "eval_mean_episode_length")
     summary.to_csv(config.output_dir / "zero_shot_generalization_episode_length.csv", index=False)
@@ -358,6 +383,7 @@ def plot_zero_shot_episode_length(zero_shot: pd.DataFrame, config: FigureConfig)
     draw_train_range(ax)
     for curve in merged_zero_shot_curves(summary):
         draw_labeled_zero_shot_curve(ax, curve, value_column="mean")
+    add_failed_episode_length_legend_entries(ax)
     format_zero_shot_axis(ax, title="", ylabel="Mean episode length")
     ax.legend(
         loc="upper center",
@@ -369,6 +395,27 @@ def plot_zero_shot_episode_length(zero_shot: pd.DataFrame, config: FigureConfig)
         framealpha=0.95,
     )
     save_figure(fig, config, "zero_shot_generalization_episode_length")
+
+
+def add_failed_episode_length_legend_entries(ax: plt.Axes) -> None:
+    """Add legend-only markers for methods omitted because they fail."""
+
+    failed_entries = [
+        ("ddqn:finite_state_rm", EPISODE_LENGTH_LABELS["ddqn:finite_state_rm"]),
+        ("tabular:simple", EPISODE_LENGTH_LABELS["tabular:simple"]),
+    ]
+    for style_key, label in failed_entries:
+        ax.add_line(
+            mlines.Line2D(
+                [],
+                [],
+                color=COLORS.get(style_key, "#555555"),
+                marker=MARKERS.get(style_key, "o"),
+                linestyle="None",
+                markersize=6.0,
+                label=label,
+            )
+        )
 
 
 def summarize_curve(frame: pd.DataFrame, group_columns: list[str], value_column: str) -> pd.DataFrame:
@@ -399,19 +446,25 @@ def merged_zero_shot_curves(summary: pd.DataFrame) -> list[dict[str, object]]:
             tuple(int(value) for value in group["eval_n"].to_numpy()),
             tuple(round(float(value), 8) for value in group["mean"].to_numpy()),
         )
-        algorithm_label = "DDQN" if algorithm == "ddqn" else ALGORITHM_LABELS.get(algorithm, algorithm.upper())
+        algorithm_label = ALGORITHM_LABELS.get(algorithm, algorithm.upper())
         encoding_label = ENCODING_LABELS.get(encoding, encoding)
         curve = curves.setdefault(
             key,
             {
                 "group": group,
-                "algorithm": algorithm_label,
-                "encoding_labels": [],
+                "label_groups": {},
                 "style_key": f"{algorithm}:{encoding}",
             },
         )
-        curve["encoding_labels"].append(encoding_label)
+        curve["label_groups"].setdefault(algorithm_label, []).append(encoding_label)
     return list(curves.values())
+
+
+def format_episode_length_curve_label(label_groups: dict[str, list[str]]) -> str:
+    labels = []
+    for algorithm_label, encoding_labels in label_groups.items():
+        labels.append(f"{algorithm_label}: {' / '.join(encoding_labels)}")
+    return "; ".join(labels)
 
 
 def compute_sample_efficiency(learning: pd.DataFrame, *, threshold: float) -> pd.DataFrame:
@@ -424,6 +477,7 @@ def compute_sample_efficiency(learning: pd.DataFrame, *, threshold: float) -> pd
         ("ddqn", "semantic_progress"),
         ("ddqn", "learned_gru"),
         ("ddqn", "learned_graph"),
+        ("ddqn", "finite_state_rm"),
         ("ddqn", "hidden_monitor_state"),
         ("ppo", "numerical"),
         ("ppo", "one_hot"),
@@ -490,7 +544,7 @@ def draw_zero_shot_curve(ax: plt.Axes, group: pd.DataFrame, *, encoding: str, va
 def draw_labeled_zero_shot_curve(ax: plt.Axes, curve: dict[str, object], *, value_column: str) -> None:
     group = curve["group"].sort_values("eval_n")
     style_key = str(curve["style_key"])
-    label = f"{curve['algorithm']} {' / '.join(str(label) for label in curve['encoding_labels'])}"
+    label = format_episode_length_curve_label(curve["label_groups"])
     ax.plot(
         group["eval_n"],
         group[value_column],
@@ -508,7 +562,6 @@ def draw_train_range(ax: plt.Axes) -> None:
 
 
 def format_learning_axis(ax: plt.Axes, *, title: str, ylabel: str) -> None:
-    ax.set_title(title)
     ax.set_xlabel("Training steps (thousands)")
     ax.set_ylabel(ylabel)
     ax.set_ylim(-0.03, 1.03)
@@ -517,7 +570,6 @@ def format_learning_axis(ax: plt.Axes, *, title: str, ylabel: str) -> None:
 
 
 def format_zero_shot_axis(ax: plt.Axes, *, title: str, ylabel: str) -> None:
-    ax.set_title(title)
     ax.set_xlabel("Evaluation sequence length n")
     ax.set_ylabel(ylabel)
     ax.set_xticks([1, 5, 10, 15, 20])

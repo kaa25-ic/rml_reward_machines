@@ -1,0 +1,44 @@
+{
+  "completed_at_utc": "2026-08-20T10:47:35.501202+00:00",
+  "algorithm": "ddqn",
+  "encoding": "finite_state_rm",
+  "n_value": 5,
+  "fixed_n": null,
+  "total_timesteps": 500000,
+  "seed": 0,
+  "runtime_seconds": 209.85734145902097,
+  "timesteps_per_second": 2382.5709242468197,
+  "train_episodes_completed": 21423,
+  "train_mean_return": 104.36446809503805,
+  "train_mean_length": 23.33926154133408,
+  "evaluation_count": 25,
+  "best_evaluation": {
+    "training_steps": 120000,
+    "eval_mean_return": 168.0,
+    "eval_std_return": 12.083045973594572,
+    "eval_mean_episode_length": 22.6,
+    "eval_success_rate": 1.0,
+    "eval_mean_terminal_base_reward": 1.0,
+    "eval_mean_terminal_task_progress": 6.8,
+    "eval_task_failure_rate": 0.0
+  },
+  "final_evaluation": {
+    "training_steps": 500000,
+    "eval_mean_return": 168.0,
+    "eval_std_return": 12.083045973594572,
+    "eval_mean_episode_length": 22.6,
+    "eval_success_rate": 1.0,
+    "eval_mean_terminal_base_reward": 1.0,
+    "eval_mean_terminal_task_progress": 6.8,
+    "eval_task_failure_rate": 0.0
+  },
+  "artifacts": {
+    "config": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/finite_state_rm_n_1to5_seed0/config.json",
+    "summary": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/finite_state_rm_n_1to5_seed0/summary.json",
+    "final_model": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/finite_state_rm_n_1to5_seed0/model_final.zip",
+    "best_model": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/finite_state_rm_n_1to5_seed0/best_model.zip",
+    "train_monitor": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/finite_state_rm_n_1to5_seed0/train_monitor.csv",
+    "eval_monitor": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/finite_state_rm_n_1to5_seed0/eval_monitor.csv",
+    "eval_metrics": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/ddqn/finite_state_rm_n_1to5_seed0/eval_metrics.csv"
+  }
+}

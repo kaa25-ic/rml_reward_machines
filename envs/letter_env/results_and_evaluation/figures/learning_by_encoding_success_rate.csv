@@ -1,4 +1,16 @@
 encoding,training_steps,mean,std,count
+finite_state_rm,20000,0.0,0.0,5
+finite_state_rm,40000,0.06999999999999999,0.15652475842498528,5
+finite_state_rm,60000,0.6,0.4315669125408017,5
+finite_state_rm,80000,0.86,0.19170289512680816,5
+finite_state_rm,100000,0.93,0.1565247584249853,5
+finite_state_rm,120000,1.0,0.0,5
+finite_state_rm,140000,1.0,0.0,5
+finite_state_rm,160000,1.0,0.0,5
+finite_state_rm,180000,1.0,0.0,5
+finite_state_rm,200000,1.0,0.0,5
+finite_state_rm,220000,1.0,0.0,5
+finite_state_rm,240000,1.0,0.0,5
 hidden_monitor_state,20000,0.0,0.0,5
 hidden_monitor_state,40000,0.0,0.0,5
 hidden_monitor_state,60000,0.0,0.0,5

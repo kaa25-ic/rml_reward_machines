@@ -81,6 +81,7 @@ def evaluate_zero_shot(
     monitor_progress_bonus: float,
     monitor_regression_penalty: float,
     step_penalty: float,
+    finite_state_rm_max_n: int | None = None,
     monitor_config_template: Path = DEFAULT_MONITOR_CONFIG,
     monitor_spec_path: Path = DEFAULT_MONITOR_SPEC,
 ) -> dict[str, Any]:
@@ -88,22 +89,32 @@ def evaluate_zero_shot(
     output_dir.mkdir(parents=True, exist_ok=True)
     _configure_global_seed(train_seed)
 
-    port = find_free_port()
-    runtime_config_path = _write_runtime_monitor_config(
-        output_dir / "monitor_eval_config.yaml",
-        template_path=monitor_config_template,
-        port=port,
+    uses_external_rml_monitor = encoding != "finite_state_rm"
+    port = find_free_port() if uses_external_rml_monitor else None
+    runtime_config_path = (
+        _write_runtime_monitor_config(
+            output_dir / "monitor_eval_config.yaml",
+            template_path=monitor_config_template,
+            port=int(port),
+        )
+        if uses_external_rml_monitor
+        else monitor_config_template
     )
-    monitor = RMLMonitorProcess(
-        spec_path=monitor_spec_path,
-        port=port,
-        log_path=output_dir / "eval_rml_monitor.log",
+    monitor = (
+        RMLMonitorProcess(
+            spec_path=monitor_spec_path,
+            port=int(port),
+            log_path=output_dir / "eval_rml_monitor.log",
+        )
+        if uses_external_rml_monitor
+        else None
     )
     started = time.monotonic()
     env = None
 
     try:
-        monitor.start()
+        if monitor is not None:
+            monitor.start()
         env = build_letter_env(
             LetterEnvConfig(
                 encoding=encoding,
@@ -117,6 +128,7 @@ def evaluate_zero_shot(
                 neutralize_legacy_transition_bonus=True,
                 step_penalty=step_penalty,
                 state_discovery_bonus=0.0,
+                finite_state_rm_max_n=finite_state_rm_max_n,
             ),
             monitor_config_path=runtime_config_path,
         )
@@ -134,7 +146,8 @@ def evaluate_zero_shot(
     finally:
         if env is not None:
             env.close()
-        monitor.stop()
+        if monitor is not None:
+            monitor.stop()
 
     aggregate = _aggregate_records(
         algorithm=algorithm,
@@ -162,6 +175,8 @@ def evaluate_zero_shot(
         "monitor_progress_bonus": monitor_progress_bonus,
         "monitor_regression_penalty": monitor_regression_penalty,
         "step_penalty": step_penalty,
+        "finite_state_rm_max_n": finite_state_rm_max_n,
+        "uses_external_rml_monitor": uses_external_rml_monitor,
         "aggregate": asdict(aggregate),
         "artifacts": {
             "summary": str(output_dir / "summary.json"),
@@ -332,6 +347,7 @@ def parse_args() -> argparse.Namespace:
             "semantic_progress",
             "learned_gru",
             "learned_graph",
+            "finite_state_rm",
         ],
         required=True,
     )
@@ -347,6 +363,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--monitor-progress-bonus", type=float, default=10.0)
     parser.add_argument("--monitor-regression-penalty", type=float, default=0.0)
     parser.add_argument("--step-penalty", type=float, default=0.0)
+    parser.add_argument("--finite-state-rm-max-n", type=int, default=None)
     return parser.parse_args()
 
 
@@ -367,6 +384,7 @@ def main() -> None:
         monitor_progress_bonus=args.monitor_progress_bonus,
         monitor_regression_penalty=args.monitor_regression_penalty,
         step_penalty=args.step_penalty,
+        finite_state_rm_max_n=args.finite_state_rm_max_n,
     )
     print(json.dumps(summary, indent=2))
 

@@ -5,8 +5,10 @@ from __future__ import annotations
 import argparse
 import json
 import time
+from contextlib import nullcontext
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 
 from stable_baselines3 import DQN
@@ -71,6 +73,7 @@ class LetterEnvDQNTrainingConfig:
     step_penalty: float = 0.0
     no_op_penalty: float = 0.0
     state_discovery_bonus: float = 0.0
+    finite_state_rm_max_n: int | None = None
     output_dir: Path = field(default_factory=Path)
 
 
@@ -95,11 +98,21 @@ def train_letter_env_dqn(
     started = time.monotonic()
     train_env = None
     eval_env = None
-    with managed_monitor_pair(
-        output_dir=output_dir,
-        monitor_config_template=monitor_config_template,
-        monitor_spec_path=monitor_spec_path,
-    ) as monitor_runtime:
+    monitor_context = (
+        nullcontext(
+            SimpleNamespace(
+                train_config_path=monitor_config_template,
+                eval_config_path=monitor_config_template,
+            )
+        )
+        if config.encoding == "finite_state_rm"
+        else managed_monitor_pair(
+            output_dir=output_dir,
+            monitor_config_template=monitor_config_template,
+            monitor_spec_path=monitor_spec_path,
+        )
+    )
+    with monitor_context as monitor_runtime:
         try:
             train_env = Monitor(
                 build_letter_env(
@@ -234,6 +247,7 @@ def _env_config(config: LetterEnvDQNTrainingConfig, *, evaluation: bool) -> Lett
         step_penalty=config.step_penalty,
         no_op_penalty=config.no_op_penalty,
         state_discovery_bonus=0.0 if evaluation else config.state_discovery_bonus,
+        finite_state_rm_max_n=config.finite_state_rm_max_n,
     )
 
 
@@ -255,6 +269,7 @@ def _write_run_config(
             "train_config_path": str(train_config_path),
             "eval_config_path": str(eval_config_path),
             "spec_path": str(monitor_spec_path),
+            "uses_external_rml_monitor": config.encoding != "finite_state_rm",
         },
     }
     write_json(path, payload)
@@ -272,6 +287,7 @@ def parse_args() -> argparse.Namespace:
             "learned_gru",
             "learned_graph",
             "hidden_monitor_state",
+            "finite_state_rm",
             "simple",
         ],
         default="numerical",
@@ -306,6 +322,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--step-penalty", type=float, default=0.0)
     parser.add_argument("--no-op-penalty", type=float, default=0.0)
     parser.add_argument("--state-discovery-bonus", type=float, default=0.0)
+    parser.add_argument("--finite-state-rm-max-n", type=int, default=None)
     parser.add_argument("--features-dim", type=int, default=128)
     parser.add_argument("--position-hidden-dim", type=int, default=64)
     parser.add_argument("--monitor-hidden-dim", type=int, default=64)
@@ -347,6 +364,7 @@ def main() -> None:
         step_penalty=args.step_penalty,
         no_op_penalty=args.no_op_penalty,
         state_discovery_bonus=args.state_discovery_bonus,
+        finite_state_rm_max_n=args.finite_state_rm_max_n,
         output_dir=args.output_dir,
     )
     policy_config = MLPPolicyConfig(

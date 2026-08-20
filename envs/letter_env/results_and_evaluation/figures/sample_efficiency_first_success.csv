@@ -6,5 +6,7 @@ ddqn,one_hot,64000.0,16733.20053068151,5,0,5
 ddqn,semantic_progress,72000.0,10954.451150103323,5,0,5
 ddqn,learned_gru,80000.0,14142.13562373095,5,0,5
 ddqn,learned_graph,80000.0,0.0,5,0,5
+ddqn,finite_state_rm,84000.0,26076.809620810596,5,0,5
+ddqn,hidden_monitor_state,,0.0,0,5,5
 ppo,numerical,172000.0,38987.17737923586,5,0,5
 ppo,one_hot,152000.0,30331.5017762062,5,0,5
