@@ -759,8 +759,8 @@ def plot_headline_trajectory(
     if baseline is None or rml is None:
         return
 
-    fig, axes = plt.subplots(2, 1, figsize=(11, 6.8), sharex=True)
-    fig.subplots_adjust(left=0.08, right=0.98, top=0.91, bottom=0.17, hspace=0.08)
+    fig, axes = plt.subplots(2, 1, figsize=(11, 5.4), sharex=True)
+    fig.subplots_adjust(left=0.09, right=0.98, top=0.95, bottom=0.21, hspace=0.08)
     for frame, label, color in (
         (baseline, "Baseline", COLORS["baseline"]),
         (rml, "RML graph encoder", COLORS["rml_graph_encoder"]),
@@ -772,14 +772,15 @@ def plot_headline_trajectory(
     axes[0].axhspan(0.58, 0.74, color="#f59e0b", alpha=0.14, label="Warning region")
     axes[0].axhspan(0.42, 0.58, color="#059669", alpha=0.08, label="Safe region")
     axes[0].axhline(0.5, color="#111827", linestyle="--", linewidth=1.0, alpha=0.65)
-    axes[0].set_ylabel("Concentration")
+    axes[0].set_ylabel("Concentration", fontsize=13)
     axes[1].axhspan(343.0, 347.0, color="#f59e0b", alpha=0.14)
     axes[1].axhspan(346.0, 354.0, color="#059669", alpha=0.08)
     axes[1].axhline(350.0, color="#111827", linestyle="--", linewidth=1.0, alpha=0.65)
-    axes[1].set_ylabel("Temperature")
-    axes[1].set_xlabel("Step")
+    axes[1].set_ylabel("Temperature", fontsize=13)
+    axes[1].set_xlabel("Step", fontsize=13)
     for axis in axes:
         axis.grid(True, alpha=0.25)
+        axis.tick_params(axis="both", labelsize=11)
     handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(
         handles,
@@ -788,6 +789,7 @@ def plot_headline_trajectory(
         bbox_to_anchor=(0.5, 0.01),
         ncol=4,
         frameon=False,
+        fontsize=12,
     )
     save_figure(fig, output_prefix)
 

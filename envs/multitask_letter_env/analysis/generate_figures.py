@@ -16,6 +16,7 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 import numpy as np
 import pandas as pd
 
@@ -48,7 +49,7 @@ ALGORITHM_LABELS = {
 }
 COLORS = {
     "numerical": "#4C78A8",
-    "one_hot": "#F58518",
+    "one_hot": "#54A24B",
     "learned_gru": "#B279A2",
     "learned_graph": "#E45756",
     "tabular_numerical": "#6B7280",
@@ -56,7 +57,7 @@ COLORS = {
     "ddqn:learned_graph": "#E45756",
     "ddqn:learned_gru": "#B279A2",
     "ddqn:numerical": "#4C78A8",
-    "ddqn:one_hot": "#F58518",
+    "ddqn:one_hot": "#54A24B",
     "tabular:numerical": "#6B7280",
     "tabular:one_hot": "#9CA3AF",
 }
@@ -79,6 +80,18 @@ ZERO_SHOT_X_OFFSETS = {
     "learned_graph": 0.27,
     "tabular_numerical": -0.12,
     "tabular_one_hot": 0.12,
+}
+EPISODE_LENGTH_X_OFFSETS = {
+    "ddqn:numerical": -0.30,
+    "ddqn:one_hot": -0.10,
+    "ddqn:learned_graph": 0.10,
+    "ddqn:learned_gru": 0.30,
+}
+EPISODE_LENGTH_LINESTYLES = {
+    "ddqn:numerical": "-",
+    "ddqn:one_hot": "--",
+    "ddqn:learned_graph": "-.",
+    "ddqn:learned_gru": "-",
 }
 
 
@@ -239,7 +252,7 @@ def plot_learning_by_encoding(learning: pd.DataFrame, config: FigureConfig) -> N
         if group.empty:
             continue
         draw_curve(ax, group, encoding=encoding, label=ENCODING_LABELS[encoding])
-    format_learning_axis(ax, title="DDQN learning curves by encoding", ylabel="Evaluation success rate")
+    format_learning_axis(ax, title=None, ylabel="Evaluation success rate")
     ax.legend(loc="lower right")
     save_figure(fig, config, "learning_by_encoding_success_rate")
 
@@ -293,11 +306,37 @@ def plot_zero_shot_episode_length_with_tabular(zero_shot: pd.DataFrame, config: 
 
     fig, ax = plt.subplots(figsize=(7.4, 4.8))
     draw_train_range(ax)
-    for curve in merged_zero_shot_curves(summary):
-        draw_labeled_zero_shot_curve(ax, curve, value_column="mean")
-    format_zero_shot_axis(ax, title="Zero-shot episode length with tabular contrast", ylabel="Mean episode length")
-    ax.set_ylim(0, 420)
+    plotted_summary = summary[summary["algorithm"] == "ddqn"]
+    for curve in merged_zero_shot_curves(plotted_summary):
+        style_key = str(curve["style_key"])
+        draw_labeled_zero_shot_curve(
+            ax,
+            curve,
+            value_column="mean",
+            x_offset=EPISODE_LENGTH_X_OFFSETS.get(style_key, 0.0),
+            linestyle=EPISODE_LENGTH_LINESTYLES.get(style_key, "-"),
+        )
+    format_zero_shot_axis(ax, title=None, ylabel="Mean episode length")
+    ax.set_ylim(0, 220)
+    handles, labels = ax.get_legend_handles_labels()
+    failed_tabular = summary[
+        (summary["algorithm"] == "tabular")
+        & summary["encoding"].isin(TABULAR_ENCODINGS)
+        & (summary["mean"] >= 400.0)
+    ]
+    if not failed_tabular.empty:
+        failed_labels = [
+            ENCODING_LABELS.get(encoding, str(encoding))
+            for encoding in TABULAR_ENCODINGS
+            if not failed_tabular[failed_tabular["encoding"] == encoding].empty
+        ]
+        handles.append(
+            Line2D([0], [0], color="#6B7280", linestyle="--", marker="x", linewidth=2.0, markersize=5.5)
+        )
+        labels.append(f"Tabular {' / '.join(failed_labels)} (failed)")
     ax.legend(
+        handles,
+        labels,
         loc="upper center",
         bbox_to_anchor=(0.5, -0.11),
         ncol=2,
@@ -364,7 +403,6 @@ def plot_tabular_neural_summary(
     width = 0.36
     ax.bar(x - width / 2, values[:, 0], width, label="n=1..5 final eval", color="#4C78A8", alpha=0.9)
     ax.bar(x + width / 2, values[:, 1], width, label="n=10/15/20 zero-shot", color="#E45756", alpha=0.9)
-    ax.set_title("In-distribution vs zero-shot success", fontsize=11)
     ax.set_ylabel("Success rate")
     ax.set_ylim(-0.03, 1.08)
     ax.set_xticks(x)
@@ -486,7 +524,6 @@ def draw_curve(ax: plt.Axes, group: pd.DataFrame, *, encoding: str, label: str) 
     group = group.sort_values("training_steps")
     x = group["training_steps"].to_numpy(dtype=float) / 1000.0
     y = group["mean"].to_numpy(dtype=float)
-    std = group["std"].to_numpy(dtype=float)
     ax.plot(
         x,
         y,
@@ -497,7 +534,6 @@ def draw_curve(ax: plt.Axes, group: pd.DataFrame, *, encoding: str, label: str) 
         markersize=4.5,
         label=label,
     )
-    ax.fill_between(x, np.clip(y - std, 0.0, 1.0), np.clip(y + std, 0.0, 1.0), color=COLORS[encoding], alpha=0.16, linewidth=0)
 
 
 def draw_zero_shot_curve(
@@ -524,40 +560,40 @@ def draw_zero_shot_curve(
         markersize=5.5,
         label=label,
     )
-    if "std" in group.columns and group["std"].notna().any():
-        y = group["mean"].to_numpy(dtype=float)
-        std = group["std"].fillna(0.0).to_numpy(dtype=float)
-        ax.fill_between(x, np.clip(y - std, 0.0, 1.0), np.clip(y + std, 0.0, 1.0), color=color, alpha=0.10, linewidth=0)
 
-
-def draw_labeled_zero_shot_curve(ax: plt.Axes, curve: dict[str, object], *, value_column: str) -> None:
+def draw_labeled_zero_shot_curve(
+    ax: plt.Axes,
+    curve: dict[str, object],
+    *,
+    value_column: str,
+    x_offset: float = 0.0,
+    linestyle: str = "-",
+) -> None:
     group = curve["group"].sort_values("eval_n")
     style_key = str(curve["style_key"])
     color = COLORS.get(style_key, "#555555")
     label = f"{curve['algorithm']} {' / '.join(str(label) for label in curve['encoding_labels'])}"
+    x = group["eval_n"].to_numpy(dtype=float) + float(x_offset)
     ax.plot(
-        group["eval_n"],
+        x,
         group[value_column],
         color=color,
         marker=MARKERS.get(style_key, "o"),
+        linestyle=linestyle,
         linewidth=2.0,
         markersize=5.5,
         label=label,
     )
-    if "std" in group.columns and group["std"].notna().any():
-        x = group["eval_n"].to_numpy(dtype=float)
-        y = group[value_column].to_numpy(dtype=float)
-        std = group["std"].fillna(0.0).to_numpy(dtype=float)
-        ax.fill_between(x, y - std, y + std, color=color, alpha=0.12, linewidth=0)
-
 
 def draw_train_range(ax: plt.Axes) -> None:
     ax.axvspan(1, 5, color="#D8D8D8", alpha=0.35, linewidth=0)
     ax.text(3.0, 0.03, "train n=1..5", transform=ax.get_xaxis_transform(), ha="center", va="bottom", fontsize=8, color="#555555")
+    ax.text(15.0, 0.03, "generalisation n=10..20", transform=ax.get_xaxis_transform(), ha="center", va="bottom", fontsize=8, color="#555555")
 
 
-def format_learning_axis(ax: plt.Axes, *, title: str, ylabel: str) -> None:
-    ax.set_title(title)
+def format_learning_axis(ax: plt.Axes, *, title: str | None, ylabel: str) -> None:
+    if title:
+        ax.set_title(title)
     ax.set_xlabel("Training steps (thousands)")
     ax.set_ylabel(ylabel)
     ax.set_ylim(-0.03, 1.03)
@@ -565,8 +601,9 @@ def format_learning_axis(ax: plt.Axes, *, title: str, ylabel: str) -> None:
     ax.set_xlim(left=0)
 
 
-def format_zero_shot_axis(ax: plt.Axes, *, title: str, ylabel: str) -> None:
-    ax.set_title(title)
+def format_zero_shot_axis(ax: plt.Axes, *, title: str | None, ylabel: str) -> None:
+    if title:
+        ax.set_title(title)
     ax.set_xlabel("Evaluation count n")
     ax.set_ylabel(ylabel)
     ax.set_xticks([1, 5, 10, 15, 20])

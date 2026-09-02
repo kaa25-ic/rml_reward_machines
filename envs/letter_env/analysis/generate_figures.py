@@ -59,8 +59,8 @@ ENCODING_LABELS = {
     "semantic_progress": "Semantic progress",
     "learned_gru": "Learned GRU",
     "learned_graph": "Learned GNN",
-    "finite_state_rm": "Finite-state RM",
-    "hidden_monitor_state": "Hidden monitor",
+    "finite_state_rm": "Conventional RM",
+    "hidden_monitor_state": "RMLGym with progress reward",
 }
 EPISODE_LENGTH_LABELS = {
     "ddqn:finite_state_rm": "Double DQN: manual finite-state RM (fails)",
@@ -300,7 +300,7 @@ def plot_learning_by_encoding(learning: pd.DataFrame, config: FigureConfig) -> N
             marker=MARKERS[encoding],
         )
     format_learning_axis(ax, title="Double DQN learning curves by encoding", ylabel="Evaluation success rate")
-    ax.legend(loc="lower right", ncol=1)
+    ax.legend(loc="lower right", bbox_to_anchor=(1.0, 0.08), ncol=1)
     save_figure(fig, config, "learning_by_encoding_success_rate")
 
 

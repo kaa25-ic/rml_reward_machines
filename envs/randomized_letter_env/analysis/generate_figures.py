@@ -262,37 +262,40 @@ def plot_regional_learning_curves(
 ) -> None:
     ddqn_summary = summarize(ddqn_regional, ["training_steps"], "eval_success_rate")
     q_summary = summarize(q_learning, ["training_episodes"], "eval_success_rate")
+    q_step_summary = summarize(q_learning, ["training_episodes"], "training_steps")
+    q_summary = q_summary.merge(
+        q_step_summary[["training_episodes", "mean"]].rename(columns={"mean": "training_steps"}),
+        on="training_episodes",
+        how="left",
+    )
     ddqn_summary.to_csv(config.output_dir / "regional_ddqn_learning_curve.csv", index=False)
     q_summary.to_csv(config.output_dir / "regional_q_learning_curve.csv", index=False)
 
-    fig, axes = plt.subplots(1, 2, figsize=(8.7, 3.8), sharey=True)
+    fig, ax = plt.subplots(figsize=(6.8, 4.2))
     draw_mean_std_curve(
-        axes[0],
+        ax,
         ddqn_summary,
         x_column="training_steps",
         x_scale=1000.0,
         color=COLORS["ddqn"],
         label="DDQN",
     )
-    axes[0].set_title("DDQN")
-    axes[0].set_xlabel("Training steps (thousands)")
-    axes[0].set_ylabel("Evaluation success rate")
 
     draw_mean_std_curve(
-        axes[1],
+        ax,
         q_summary,
-        x_column="training_episodes",
+        x_column="training_steps",
         x_scale=1000.0,
         color=COLORS["q_learning"],
         label="Q-learning",
     )
-    axes[1].set_title("Q-learning")
-    axes[1].set_xlabel("Training episodes (thousands)")
 
-    for ax in axes:
-        ax.set_ylim(-0.03, 1.03)
-        ax.set_yticks(np.linspace(0.0, 1.0, 6))
-        ax.set_xlim(left=0)
+    ax.set_xlabel("Training steps (thousands)")
+    ax.set_ylabel("Evaluation success rate")
+    ax.set_ylim(-0.03, 1.03)
+    ax.set_yticks(np.linspace(0.0, 1.0, 6))
+    ax.set_xlim(left=0)
+    ax.legend(loc="lower right")
     fig.tight_layout()
     save_figure(fig, config, "regional_learning_curves")
 

@@ -1,0 +1,68 @@
+{
+  "experiment": "tabular_reproduction_from_previous_thesis",
+  "created_at_utc": "2026-08-28T16:40:53.026018+00:00",
+  "runtime_seconds": 4.581771292025223,
+  "config": {
+    "encoding": "simple",
+    "max_n": 5,
+    "n_values": [
+      5
+    ],
+    "iterations": 1,
+    "episodes": 1000000,
+    "success_window": 20,
+    "alpha": 0.5,
+    "gamma": 0.9,
+    "epsilon": 0.4,
+    "epsilon_decay": 0.99,
+    "min_epsilon": 0.01,
+    "state_discovery_bonus": 2.0,
+    "seed_base": 1,
+    "heartbeat_episodes": 100,
+    "max_episode_steps": 200,
+    "fixed_n": false,
+    "legacy_transition_bonus": 10.0,
+    "finite_state_rm_max_n": null,
+    "output_dir": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/tabular_n_1_to_5/simple_seed1"
+  },
+  "monitor": {
+    "config_path": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/tabular_n_1_to_5/simple_seed1/monitor_config.yaml",
+    "spec_path": "/Users/khalid/Desktop/rml_reward_machines/envs/letter_env/specs/letter_env_monitor.pl",
+    "uses_external_rml_monitor": true
+  },
+  "episode_count": 188,
+  "condition_count": 1,
+  "converged_condition_count": 1,
+  "final_by_condition": [
+    {
+      "encoding": "simple",
+      "iteration": 0,
+      "n_value": 5,
+      "episode": 188,
+      "seed": 1,
+      "total_reward": 170.0,
+      "final_reward": 110.0,
+      "steps": 21,
+      "epsilon": 0.06107189291036254,
+      "q_state_count": 379,
+      "success": true,
+      "converged": true
+    }
+  ],
+  "saved_policies": [
+    {
+      "encoding": "simple",
+      "iteration": 0,
+      "n_value": 5,
+      "seed": 1,
+      "path": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/tabular_n_1_to_5/simple_seed1/q_tables/simple_iteration0_n5_seed1.pkl",
+      "q_state_count": 379,
+      "epsilon": 0.060461173981258914
+    }
+  ],
+  "artifacts": {
+    "train_metrics": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/tabular_n_1_to_5/simple_seed1/train_metrics.csv",
+    "summary": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/tabular_n_1_to_5/simple_seed1/summary.json",
+    "q_tables": "envs/letter_env/results_and_evaluation/experiments_with_variable_n/tabular_n_1_to_5/simple_seed1/q_tables"
+  }
+}
